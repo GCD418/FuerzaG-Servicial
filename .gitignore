@@ -1,0 +1,13 @@
+bin/
+obj/
+.vs/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+*.user
+*.suo
+.idea/
+.DS_Store
+.DS_Store/
+.DS_Sto*
+
