@@ -8,10 +8,11 @@
 
     <ItemGroup>
       <Folder Include="Application\" />
-      <Folder Include="Domain\Entities\" />
-      <Folder Include="Domain\Ports\" />
       <Folder Include="Domain\Services\" />
-      <Folder Include="Infrastructure\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CommonService\CommonService.csproj" />
     </ItemGroup>
 
 </Project>
