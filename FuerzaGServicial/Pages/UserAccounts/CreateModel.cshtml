@@ -1,0 +1,83 @@
+@page
+@model UserAccountService.Pages.UserAccounts.CreateModel
+@{
+    ViewData["Title"] = "Nuevo Usuario";
+}
+
+<div class="container mt-4 mb-5">
+    <h2>Nuevo Usuario</h2>
+
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Any() == true)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h6 class="alert-heading mb-2"><i class="fas fa-exclamation-triangle"></i> Errores generales:</h6>
+            <ul class="mb-0 small">
+                @foreach (var error in ViewData.ModelState[""].Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form method="post" class="card card-body shadow-sm" id="userAccountForm" novalidate>
+        @await Html.PartialAsync("_UserAccountFields", Model.UserAccount)
+
+        <div class="mt-4">
+            <button type="button" class="btn btn-dark" id="btnOpenModal">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+            <a asp-page="/UserAccounts/Index" class="btn btn-outline-secondary">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+
+        <div class="mt-3">
+            <small class="text-muted">* Campos obligatorios</small>
+        </div>
+    </form>
+
+    @await Html.PartialAsync("_ConfirmSaveModal")
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var form = document.getElementById('userAccountForm');
+
+            $('input[asp-for="UserAccount.PhoneNumber"]').on('keypress', function (e) {
+                if (e.which < 48 || e.which > 57) e.preventDefault();
+            });
+
+            $('input[asp-for="UserAccount.DocumentNumber"]').on('keypress', function (e) {
+                if (e.which < 48 || e.which > 57) e.preventDefault();
+            });
+
+            $('input[asp-for="UserAccount.PhoneNumber"]').on('input', function () {
+                if (this.value.length > 8) this.value = this.value.slice(0, 8);
+            });
+
+            $('input[asp-for="UserAccount.DocumentNumber"]').on('input', function () {
+                if (this.value.length > 9) this.value = this.value.slice(0, 9);
+            });
+
+            $('#btnOpenModal').on('click', function () {
+                if (form.checkValidity()) {
+                    var modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
+                    modal.show();
+                } else {
+                    form.classList.add('was-validated');
+                }
+            });
+
+            $('#confirmSaveBtn').on('click', function () {
+                const confirmBtn = $(this);
+                confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+                var modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
+                modal.hide();
+                form.submit();
+            });
+        });
+    </script>
+}
