@@ -1,10 +1,10 @@
-using System.Data;
+using System.Data.Common;
 
 namespace CommonService.Infrastructure.Connection;
 
 public interface IDbConnectionFactory
 {
-    IDbConnection  CreateConnection();
+    DbConnection  CreateConnection();
 
     string GetProviderName();
     

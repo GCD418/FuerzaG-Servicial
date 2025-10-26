@@ -1,9 +1,9 @@
-using System.Data;
+using System.Data.Common;
 using Npgsql;
 
 namespace CommonService.Infrastructure.Connection;
 
-public class PostgreSqlConnection
+public class PostgreSqlConnection : IDbConnectionFactory
 {
     private readonly DatabaseConnectionManager _connectionManager;
 
@@ -12,7 +12,7 @@ public class PostgreSqlConnection
         _connectionManager = connectionManager;
     }
 
-    public IDbConnection CreateConnection()
+    public DbConnection CreateConnection()
     {
         return new NpgsqlConnection(_connectionManager.ConnectionString);
     }

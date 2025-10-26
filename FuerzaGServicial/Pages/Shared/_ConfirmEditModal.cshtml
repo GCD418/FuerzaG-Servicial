@@ -1,0 +1,38 @@
+<div class="modal fade" id="confirmEditModal" tabindex="-1" aria-labelledby="confirmEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header modal-header-blue text-white">
+                <h5 class="modal-title" id="confirmEditModalLabel">
+                    <i class="fas fa-question-circle"></i> Confirmar edición
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Deseas guardar los cambios realizados en este registro?
+                <p class="small text-muted mb-0">Verifica que la información editada sea correcta antes de confirmar.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="button" id="confirmEditBtn" class="btn btn-dark">
+                    <i class="fas fa-check"></i> Sí, guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-header-blue {
+        background-color: #202C45;
+    }
+
+        .modal-header-blue .modal-title {
+            color: white;
+        }
+
+            .modal-header-blue .modal-title i {
+                color: white;
+            }
+</style>

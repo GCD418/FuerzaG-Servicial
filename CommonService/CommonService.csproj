@@ -8,7 +8,9 @@
 
     <ItemGroup>
       <Folder Include="Application\" />
-      <Folder Include="Domain\" />
+      <Folder Include="Domain\Entities\" />
+      <Folder Include="Domain\Ports\" />
+      <Folder Include="Infrastructure\Persistence\" />
     </ItemGroup>
 
     <ItemGroup>
