@@ -1,5 +1,8 @@
+using CommonService.Domain.Services.Validations;
 using CommonService.Infrastructure.Connection;
+using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
+using OwnerService.Domain.Services;
 using OwnerService.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,7 @@ builder.Services.AddScoped<IDbConnectionFactory, PostgreSqlConnection>();
 
 builder.Services.AddScoped<OwnerService.Application.Services.OwnerService>();
 builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
+builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
 
 #endregion
 

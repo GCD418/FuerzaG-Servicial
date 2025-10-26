@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Domain\Services\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\CommonService\CommonService.csproj" />
     </ItemGroup>
 

@@ -18,10 +18,10 @@ public class DeleteModel : PageModel
     public void OnGet()
     { }
 
-    public IActionResult OnPost(string id)
+    public async Task<IActionResult> OnPost(string id)
     {
         var decryptedId = int.Parse(_protector.Unprotect(id));
-        _ownerService.DeleteById(decryptedId);
+        await _ownerService.DeleteById(decryptedId);
         return RedirectToPage("/Owners/OwnerPage");
     }
 }
