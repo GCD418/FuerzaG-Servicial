@@ -1,39 +1,23 @@
-using FuerzaG.Infrastructure.Connection;
-using FuerzaG.Infrastructure.Persistence.Factories;
-using FuerzaG.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TechnicianService.Domain.Entities;
+using TechnicianService.Domain.Ports;
 
-namespace FuerzaG.Application.Services;
-
-public class TechnicianService
+namespace TechnicianService.Application.Services
 {
-    private readonly DataRepositoryFactory _dataRepositoryFactory;
-    
-    public  TechnicianService(IDbConnectionFactory  connectionFactory)
+    public class TechnicianService
     {
-        _dataRepositoryFactory = new TechnicianRepositoryCreator(connectionFactory);
-    }
+        private readonly ITechnicianRepository _repository;
 
-    public List<Technician> GetAll()
-    {
-        return _dataRepositoryFactory.GetRepository<Technician>().GetAll();
-    }
-    public Technician? GetById(int id)
-    {
-        return _dataRepositoryFactory.GetRepository<Technician>().GetById(id);
-    }
+        public TechnicianService(ITechnicianRepository repository)
+        {
+            _repository = repository;
+        }
 
-    public int Create(Technician technician)
-    {
-        return _dataRepositoryFactory.GetRepository<Technician>().Create(technician);
-    }
-
-    public bool Update(Technician technician)
-    {
-        return _dataRepositoryFactory.GetRepository<Technician>().Update(technician);
-    }
-
-    public bool DeleteById(int id)
-    {
-        return _dataRepositoryFactory.GetRepository<Technician>().DeleteById(id);
+        public Task<IEnumerable<Technician>> GetAll()        => _repository.GetAllAsync();
+        public Task<Technician?> GetById(int id)             => _repository.GetByIdAsync(id);
+        public Task<bool> Create(Technician t)               => _repository.CreateAsync(t);
+        public Task<bool> Update(Technician t)               => _repository.UpdateAsync(t);
+        public Task<bool> DeleteById(int id)                 => _repository.DeleteByIdAsync(id);
     }
 }
