@@ -1,13 +1,53 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
+<meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - FuerzaGServicial</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/FuerzaGServicial.styles.css" asp-append-version="true"/>
+    <title>@ViewData["Title"] - FuerzaG</title>
+    
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Libraries Stylesheet -->
+    <link href="~/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap 5 y CSS del template -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css"/>
+    <!-- <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/> -->
+    <!-- <link rel="stylesheet" href="~/FuerzaG.styles.css" asp-append-version="true"/> -->
+    
+    <style>
+        .top-bar .logo img {
+            width: 100%;
+            height: auto;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        
+        .top-bar .logo a {
+            display: block;
+        }
+        
+        ::placeholder {
+            color: #bcbcbc !important;
+            opacity: 1 !important; 
+            font-weight: normal !important;
+          }
+
+          [data-bs-theme="dark"] ::placeholder {
+            color: #8a8a8a !important;
+            font-weight: normal !important;
+          }
+          
+    </style>
 </head>
 <body>
 <header>
