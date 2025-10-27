@@ -200,22 +200,69 @@
     </div>
 
 
-    <footer class="border-top footer text-muted">
+    <div class="footer" style="margin:0">
         <div class="container">
-            &copy; 2025 - FuerzaGServicial - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-contact">
+                        <h2>Ponte En Contacto</h2>
+                        <p><i class="fa fa-map-marker-alt"></i>Calle 123, Cochabamba, BOL</p>
+                        <p><i class="fa fa-phone-alt"></i>+591 76433066</p>
+                        <p><i class="fa fa-envelope"></i>info@fuerza-G.com</p>
+                        <div class="footer-social">
+                            <a class="btn" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn" href=""><i class="fab fa-instagram"></i></a>
+                            <a class="btn" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-link">
+                        <h2>Enlaces</h2>
+                        <a href="" class="text-decoration-none fw-normal">Sobre nosotros</a>
+                        <a href="" class="text-decoration-none fw-normal">Contáctanos</a>
+                        <a href="" class="text-decoration-none fw-normal">Nuestro servicio</a>
+                        <a href="" class="text-decoration-none fw-normal">Plan de precios</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-link">
+                        <h2>Links útiles</h2>
+                        <a href="" class="text-decoration-none fw-normal">Términos de uso</a>
+                        <a href="" class="text-decoration-none fw-normal">Política de privacidad</a>
+                        <a href="" class="text-decoration-none fw-normal">Ayuda</a>
+                        <a href="" class="text-decoration-none fw-normal">Preguntas frecuentes</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="footer-newsletter">
+                        <h2>Escríbenos</h2>
+                        <form>
+                            <input class="form-control" placeholder="Nombre completo">
+                            <input class="form-control" placeholder="Email">
+                            <button class="btn btn-custom">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </footer>
+        <div class="container copyright">
+            <p>Copyright &copy; FUERZA-G  2025. Designed By <a href="https://htmlcodex.com" class="text-decoration-none fw-normal">HTML Codex</a></p>
+        </div>
+    </div>
 
 
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/lib/easing/easing.min.js"></script>
-        <script src="~/lib/waypoints/waypoints.min.js"></script>
-        <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
-        <script src="~/lib/counterup/counterup.min.js"></script>
-        <script src="~/js/main.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
 
-        @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/lib/counterup/counterup.min.js"></script>
+    <script src="~/js/main.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
     </body>
 </html>
