@@ -28,20 +28,20 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var t in Model.Owners.OrderBy(x => x.FirstLastname + " " + x.SecondLastname + " " + x.Name).Select((item, index) => new { item, index = index + 1 }))
+        @foreach (var owner in Model.Owners.Select((item, index) => new { item, index = index + 1 }))
         {
           <tr>
-            <td class="text-center"><strong>@t.index</strong></td>
-            <td>@t.item.FirstLastname @t.item.SecondLastname @t.item.Name </td>
-            <td class="text-center">@t.item.PhoneNumber</td>
+            <td class="text-center"><strong>@owner.index</strong></td>
+            <td>@owner.item.FullName</td>
+            <td class="text-center">@owner.item.PhoneNumber</td>
             <td class="text-nowrap text-center">
-              <a asp-page="/Owners/EditModel" asp-route-id="@Model.EncryptId(t.item.Id)" class="btn btn-warning btn-sm me-1">
+              <a asp-page="/Owners/EditModel" asp-route-id="@Model.EncryptId(owner.item.Id)" class="btn btn-warning btn-sm me-1">
                 <i class="fas fa-edit"></i> Editar
               </a>
               <button type="button" class="btn btn-sm btn-danger"
                       data-toggle="modal"
-                      data-target="#deleteModal@(t.item.Id)"
-                      data-technician-name="@t.item.Name @t.item.FirstLastname">
+                      data-target="#deleteModal@(owner.item.Id)"
+                      data-technician-name="@owner.item.Name @owner.item.FirstLastname">
                 <i class="bi bi-trash"></i> Eliminar
               </button>
             </td>
@@ -57,13 +57,13 @@
         </tfoot>
       </table>
       
-      @foreach (var t in Model.Owners)
+      @foreach (var owner in Model.Owners)
         {
-            <div class="modal fade" id="deleteModal@(t.Id)" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel@(t.Id)" aria-hidden="true">
+            <div class="modal fade" id="deleteModal@(owner.Id)" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel@(owner.Id)" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-dark text-white border-0">
-                            <h5 class="modal-title text-light" id="deleteModalLabel@(t.Id)">
+                            <h5 class="modal-title text-light" id="deleteModalLabel@(owner.Id)">
                                 <i class="fas fa-exclamation-triangle me-2"></i>  Confirmar eliminación
                             </h5>
                             <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
@@ -72,7 +72,7 @@
                         </div>
                         <div class="modal-body">
                             <p class="mb-3">
-                                ¿Está seguro de que desea eliminar al propietario <strong>@t.Name @t.FirstLastname</strong>?
+                                ¿Está seguro de que desea eliminar al propietario <strong>@owner.Name @owner.FirstLastname</strong>?
                             </p>
                             <p class="text-muted small">
                                 <i class="fas fa-info-circle me-4"></i> Esta acción no se puede deshacer.
@@ -84,7 +84,7 @@
                             </button>
                             <form method="post"
                                   asp-page-handler="Delete"
-                                  asp-route-id="@Model.EncryptId(t.Id)"
+                                  asp-route-id="@Model.EncryptId(owner.Id)"
                                   style="display: inline;">
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fas fa-trash me-2"></i> Eliminar
