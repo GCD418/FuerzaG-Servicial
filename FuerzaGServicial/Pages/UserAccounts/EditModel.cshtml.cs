@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UserAccountService.Domain.Entities;
-using UserAccountService.Application.Services;
 
-namespace UserAccountService.Pages.UserAccounts
+namespace FuerzaGServicial.Pages.UserAccounts
 {
     public class EditModel : PageModel
     {

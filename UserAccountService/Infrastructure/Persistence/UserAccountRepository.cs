@@ -19,7 +19,7 @@ public class UserAccountRepository : IUserAccountRepository
         var userAccounts = new List<UserAccount>();
         await using var connection = _dbConnectionFactory.CreateConnection();
 
-        string query = "SELECT * FROM fn_get_active_userAccounts()";
+        string query = "SELECT * FROM fn_get_active_accounts()";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;         
@@ -110,19 +110,20 @@ public class UserAccountRepository : IUserAccountRepository
     {
         return new UserAccount
         {
-            Id = reader.GetInt32(0),
-            Name = reader.GetString(1),
-            FirstLastName = reader.GetString(2),
-            SecondLastName = reader.IsDBNull(3) ? null : reader.GetString(3),
-            PhoneNumber = reader.GetInt32(4),
-            Email = reader.GetString(5),
-            DocumentNumber = reader.GetString(6),
-            UserName = reader.GetString(7),
-            Password = reader.GetString(8),
-            Role = reader.GetString(9),
-            CreatedAt = reader.GetDateTime(10),
-            UpdatedAt = reader.IsDBNull(11) ? null : reader.GetDateTime(9),
-            IsActive = reader.GetBoolean(12)
+            Id = reader.GetInt32(reader.GetOrdinal("id")),
+            Name = reader.GetString(reader.GetOrdinal("name")),
+            FirstLastName = reader.GetString(reader.GetOrdinal("first_last_name")),
+            SecondLastName = reader.IsDBNull(reader.GetOrdinal("second_last_name")) ? null : reader.GetString(reader.GetOrdinal("second_last_name")),
+            PhoneNumber = reader.IsDBNull(reader.GetOrdinal("phone_number")) ? 0 : reader.GetInt32(reader.GetOrdinal("phone_number")),
+            Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email")),
+            DocumentNumber = reader.IsDBNull(reader.GetOrdinal("document_number")) ? string.Empty : reader.GetString(reader.GetOrdinal("document_number")),
+            UserName = reader.GetString(reader.GetOrdinal("user_name")),
+            Password = reader.GetString(reader.GetOrdinal("password")),
+            Role = reader.GetString(reader.GetOrdinal("role")),
+            CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
+            UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at")) ? null : reader.GetDateTime(reader.GetOrdinal("updated_at")),
+            IsActive = reader.GetBoolean(reader.GetOrdinal("is_active")),
+            ModifiedByUserId = reader.IsDBNull(reader.GetOrdinal("modified_by_user_id")) ? null : reader.GetInt32(reader.GetOrdinal("modified_by_user_id"))
         };
     }
 

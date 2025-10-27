@@ -2,9 +2,8 @@ using CommonService.Domain.Services.Validations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UserAccountService.Domain.Entities;
-using UserAccountService.Application.Services;
 
-namespace UserAccountService.Pages.UserAccounts
+namespace FuerzaGServicial.Pages.UserAccounts
 {
     public class CreateModel : PageModel
     {

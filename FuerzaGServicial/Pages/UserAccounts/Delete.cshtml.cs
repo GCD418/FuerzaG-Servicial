@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using UserAccountService.Application.Services;
 
-namespace UserAccountService.Pages.UserAccounts
+namespace FuerzaGServicial.Pages.UserAccounts
 {
     public class DeleteModel : PageModel
     {
