@@ -58,8 +58,8 @@
       
       @foreach (var owner in Model.Owners)
         {
-            <div class="modal fade" id="deleteModal@(owner.Id)" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel@(owner.Id)" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal fade" id="deleteModal@(owner.Id)" tabindex="-1" aria-labelledby="deleteModalLabel@(owner.Id)" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 shadow">
                         <div class="modal-header bg-dark text-white border-0">
                             <h5 class="modal-title text-light" id="deleteModalLabel@(owner.Id)">
