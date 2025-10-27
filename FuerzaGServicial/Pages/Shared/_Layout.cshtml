@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - FuerzaG</title>
     
@@ -49,28 +49,148 @@
           
     </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">FuerzaGServicial</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="top-bar">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-12">
+                    <div class="logo">
+                        <a href="index.html">
+                            <img src="~/img/logo-fuerzaG.png" alt="Logo">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-7 d-none d-lg-block">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="top-bar-item">
+                                <div class="top-bar-icon">
+                                    <i class="far fa-clock"></i>
+                                </div>
+                                <div class="top-bar-text">
+                                    <h3>Horarios de atención</h3>
+                                    <p>Lun - Sab, 7:00 - 15:00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="top-bar-item">
+                                <div class="top-bar-icon">
+                                    <i class="fa fa-phone-alt"></i>
+                                </div>
+                                <div class="top-bar-text">
+                                    <h3>Contáctanos</h3>
+                                    <p>+591 76433066</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="top-bar-item">
+                                <div class="top-bar-icon">
+                                    <i class="far fa-envelope"></i>
+                                </div>
+                                <div class="top-bar-text">
+                                    <h3>Email</h3>
+                                    <p>info@fuerza-G.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
+        </div>
+    </div>
+    
+    <div class="nav-bar">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+                <a href="#" class="navbar-brand">MENU</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                @{
+                    string currentPage = ViewContext.ActionDescriptor.DisplayName;
+                }
+
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                    <div class="navbar-nav mr-auto">
+                        <a asp-page="/index" class="nav-item nav-link @(currentPage.Contains("/Index") ? "text-danger" : "")"><i class="fas fa-home me-1"></i> INICIO</a>
+                        <a asp-page="/Services/ServicePage" class="nav-item nav-link @(currentPage.Contains("/Services/ServicePage") ? "text-danger" : "")">Servicios</a>
+                        <a asp-page="/Owners/OwnerPage" class="nav-item nav-link @(currentPage.Contains("/Owners/OwnerPage") ? "text-danger" : "")">Clientes</a>
+                        <a asp-page="/UserAccounts/AccountPage" class="nav-item nav-link @(currentPage.Contains("/UserAccounts/AccountPage") ? "text-danger" : "")">Usuarios</a>
+                        <a asp-page="/Technicians/TechnicianPage" class="nav-item nav-link @(currentPage.Contains("/Technicians/TechnicianPage") ? "text-danger" : "")">Técnicos</a>
+                        <!-- Ocultar -->
+                        <!--
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor: pointer">Pages</a>
+                                <div class="dropdown-menu">
+                                    <a asp-page="/Technicians/TechnicianPage" class="dropdown-item" style="cursor: pointer;">Technician</a>
+                                    <a asp-page="/Owners/OwnerPage" class="dropdown-item" style="cursor: pointer;">Owner</a>
+                                    <a asp-page="/UserAccounts/AccountPage" class="dropdown-item" style="cursor: pointer;">User</a>
+                                    <a asp-page="/Services/ServicePage" class="dropdown-item" style="cursor: pointer;">Service</a>
+                                </div>
+                            </div>
+                        } -->
+                        <!-- Ocultar -->
+                        
+                    </div>
+                    
+                    <div class="ml-auto">
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                                var username = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                                var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                                var name = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+                                var firstLastName = User.FindFirst("FirstLastName")?.Value;
+                                var secondLastName = User.FindFirst("SecondLastName")?.Value;
+                                var fullName = $"{name} {firstLastName} {secondLastName}".Trim();
+                            
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown" id="userDropdown" style="cursor: pointer;">
+                                    <i class="fas fa-user-circle fa-lg mr-2"></i>
+                                    <span>@username</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown" style="min-width: 250px;">
+                                    <div class="dropdown-header bg-light py-3">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user-circle fa-3x text-primary mr-3"></i>
+                                            <div>
+                                                <strong class="d-block">@fullName</strong>
+                                                @if (!string.IsNullOrEmpty(role))
+                                                {
+                                                    <small class="text-muted d-block">
+                                                        <i class="fas fa-id-badge"></i> @role
+                                                    </small>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <form method="post" asp-page="/Login" asp-page-handler="Logout" class="m-0">
+                                        <button type="submit" class="dropdown-item text-danger" style="cursor: pointer;">
+                                            <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <a asp-page="/Login" class="btn btn-light px-4">
+                                <i class="fas fa-sign-in-alt mr-2"></i>  Iniciar Sesión
+                            </a>
+                        }
+                    </div>
+
+                </div>
+            </nav>
+        </div>
+    </div>
+
 
 
     <div class="container">
