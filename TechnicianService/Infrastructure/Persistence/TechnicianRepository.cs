@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using CommonService.Infrastructure.Connection;          // igual que Owners
+using CommonService.Infrastructure.Connection;         
 using TechnicianService.Domain.Entities;
 using TechnicianService.Domain.Ports;
 
@@ -19,12 +19,12 @@ namespace TechnicianService.Infrastructure.Persistence
             var list = new List<Technician>();
             await using var conn = _db.CreateConnection();
             await using var cmd  = conn.CreateCommand();
-            cmd.CommandText = "SELECT * FROM fn_get_active_technicians()"; // ajusta al nombre real
+            cmd.CommandText = "SELECT * FROM fn_get_active_technicians()"; 
 
             await conn.OpenAsync();
             await using var r = await cmd.ExecuteReaderAsync();
             while (await r.ReadAsync())
-                list.Add(Map(r));
+                list.Add(MapReaderToModel(r));
             return list;
         }
 
@@ -32,12 +32,12 @@ namespace TechnicianService.Infrastructure.Persistence
         {
             await using var conn = _db.CreateConnection();
             await using var cmd  = conn.CreateCommand();
-            cmd.CommandText = "SELECT * FROM fn_get_technician_by_id(@id)"; // ajusta
+            cmd.CommandText = "SELECT * FROM fn_get_technician_by_id(@id)"; 
             Add(cmd, "@id", id);
 
             await conn.OpenAsync();
             await using var r = await cmd.ExecuteReaderAsync();
-            return await r.ReadAsync() ? Map(r) : null;
+            return await r.ReadAsync() ? MapReaderToModel(r) : null;
         }
 
         public async Task<bool> CreateAsync(Technician t)
@@ -94,7 +94,7 @@ namespace TechnicianService.Infrastructure.Persistence
         {
             await using var conn = _db.CreateConnection();
             await using var cmd  = conn.CreateCommand();
-            cmd.CommandText = "SELECT fn_soft_delete_technician(@id)"; // o la que uses
+            cmd.CommandText = "SELECT fn_soft_delete_technician(@id)";
             Add(cmd, "@id", id);
 
             await conn.OpenAsync();
@@ -102,12 +102,12 @@ namespace TechnicianService.Infrastructure.Persistence
             return Convert.ToBoolean(result);
         }
 
-        private static Technician Map(IDataRecord r) => new()
+        private static Technician MapReaderToModel(IDataReader r) => new()
         {
             Id               = Convert.ToInt32(r["id"]),
             Name             = r["name"] as string,
-            FirstLastName    = r["first_lastname"] as string,
-            SecondLastName   = r["second_lastname"] as string,
+            FirstLastName    = r["first_last_name"] as string,
+            SecondLastName   = r["second_last_name"] as string,
             PhoneNumber      = r["phone_number"] is DBNull ? 0 : Convert.ToInt32(r["phone_number"]),
             Email            = r["email"] as string,
             DocumentNumber   = r["document_number"] as string,

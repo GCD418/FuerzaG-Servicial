@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FuerzaG.Models
+namespace TechnicianService.Domain.Entities
 {
     public class Technician
     {

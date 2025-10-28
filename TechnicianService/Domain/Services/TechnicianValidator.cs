@@ -1,6 +1,7 @@
-﻿using FuerzaG.Models;
+﻿using CommonService.Domain.Services.Validations;
+using TechnicianService.Domain.Entities;
 
-namespace FuerzaG.Domain.Services.Validations
+namespace TechnicianService.Domain.Services
 {
     public class TechnicianValidator : IValidator<Technician>
     {
@@ -65,7 +66,6 @@ namespace FuerzaG.Domain.Services.Validations
 
         private void ValidatePhoneNumber(int value)
         {
-            // Int ya asegura dígitos; validamos rango razonable (Bolivia ~8 dígitos; dejamos genérico 7-12)
             if (value <= 0) { _errors.Add("PhoneNumber|El teléfono es requerido"); return; }
             var len = value.ToString().Length;
             if (len < 7 || len > 12) _errors.Add("PhoneNumber|El teléfono debe tener entre 7 y 12 dígitos");

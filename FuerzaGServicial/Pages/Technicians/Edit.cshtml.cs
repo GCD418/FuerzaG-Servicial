@@ -5,15 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 
-namespace FuerzaG.Pages.Technicians
+namespace FuerzaGServicial.Pages.Technicians
 {
-    [Authorize(Roles = "Manager")]
-    public class EditModel : PageModel
+    public class Edit : PageModel
     {
-        private readonly Service _technicianService;
+        private readonly TechnicianService.Application.Services.TechnicianService _technicianService;
         private readonly IDataProtector _protector;
 
-        public EditModel(Service technicianService, IDataProtectionProvider provider)
+        public Edit(TechnicianService.Application.Services.TechnicianService technicianService, IDataProtectionProvider provider)
         {
             _technicianService = technicianService;
             _protector = provider.CreateProtector("TechnicianProtector");

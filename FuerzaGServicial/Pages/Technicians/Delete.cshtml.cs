@@ -10,10 +10,10 @@ namespace FuerzaG.Pages.Technicians
     [Authorize(Roles = "Manager")]
     public class DeleteModel : PageModel
     {
-        private readonly Service _technicianService;
+        private readonly TechnicianService.Application.Services.TechnicianService _technicianService;
         private readonly IDataProtector _protector;
 
-        public DeleteModel(Service technicianService, IDataProtectionProvider provider)
+        public DeleteModel(TechnicianService.Application.Services.TechnicianService technicianService, IDataProtectionProvider provider)
         {
             _technicianService = technicianService;
             _protector = provider.CreateProtector("TechnicianProtector");
@@ -21,7 +21,6 @@ namespace FuerzaG.Pages.Technicians
 
         public IActionResult OnGet()
         {
-            // Si necesitas mostrar información antes de borrar, cárgala aquí.
             return Page();
         }
 
