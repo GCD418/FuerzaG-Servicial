@@ -1,15 +1,18 @@
 using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
+using UserAccountService.Domain.Ports;
 
 namespace OwnerService.Application.Services;
 
 public class OwnerService
 {
     private readonly IOwnerRepository _repository;
+    private readonly ISessionManager _sessionManager;
     
-    public OwnerService(IOwnerRepository repository)
+    public OwnerService(IOwnerRepository repository, ISessionManager sessionManager)
     {
         _repository = repository;
+        _sessionManager = sessionManager;
     }
 
     public async Task<IEnumerable<Owner>> GetAll()
@@ -29,11 +32,11 @@ public class OwnerService
 
     public async Task<bool> Update(Owner owner)
     {
-        return await _repository.UpdateAsync(owner);
+        return await _repository.UpdateAsync(owner, _sessionManager.UserId ?? 9999);
     }
 
     public async Task<bool> DeleteById(int id)
     {
-        return await _repository.DeleteByIdAsync(id);
+        return await _repository.DeleteByIdAsync(id,  _sessionManager.UserId ?? 9999);
     }
 }

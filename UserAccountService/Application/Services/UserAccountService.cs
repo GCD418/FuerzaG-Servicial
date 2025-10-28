@@ -6,10 +6,12 @@ namespace UserAccountService.Application.Services;
 public class UserAccountService
 {
     private readonly IUserAccountRepository _repository;
-
-    public UserAccountService(IUserAccountRepository repository)
+    private readonly ISessionManager _sessionManager;
+    
+    public UserAccountService(IUserAccountRepository repository, ISessionManager sessionManager)
     {
         _repository = repository;
+        _sessionManager = sessionManager;
     }
 
     public async Task<IEnumerable<UserAccount>> GetAll()
@@ -29,40 +31,33 @@ public class UserAccountService
 
     public async Task<bool> Update(UserAccount userAccount)
     {
-        return await _repository.UpdateAsync(userAccount);
+        return await _repository.UpdateAsync(owner, _sessionManager.UserId ?? 9999);
     }
 
     public async Task<bool> DeleteById(int id)
     {
-        return await _repository.DeleteByIdAsync(id);
+        return await _repository.DeleteByIdAsync(id, _sessionManager.UserId ?? 9999);
     }
 
-    public async Task<string> GenerateUserName(UserAccount userAccount)
+    public async Task<UserAccount?> GetByUserName(string userName)
     {
-        if (string.IsNullOrWhiteSpace(userAccount.Name) ||
-            string.IsNullOrWhiteSpace(userAccount.FirstLastName) ||
-            string.IsNullOrWhiteSpace(userAccount.DocumentNumber) ||
-            userAccount.DocumentNumber.Length < 3)
-            return string.Empty;
-
-        var firstName = userAccount.Name.Split(' ')[0].ToLower();
-        var firstLetter = firstName[0];
-        var firstLastName = userAccount.FirstLastName.ToLower();
-        var last3 = userAccount.DocumentNumber[^3..];
-
-        string baseUsername = $"{firstLetter}{firstLastName}.{last3}";
-        string username = baseUsername;
-        int counter = 1;
-
-        var allUsers = await _repository.GetAllAsync();
-        var existingUsernames = allUsers.Select(u => u.UserName).ToHashSet();
-
-        while (existingUsernames.Contains(username))
-        {
-            username = $"{baseUsername}_{counter}";
-            counter++;
-        }
-
-        return username;
+        return await _repository.GetByUserName(userName);
     }
+
+    public async Task<bool> IsUserNameUsed(string userName)
+    {
+        return await _repository.IsUserNameUsed(userName);
+    }
+    
+    public string GenerateUserName(UserAccount userAccount)
+    {
+        var firstName = userAccount.Name.Split(' ')[0].ToLower();
+        var firstLetter = firstName[0]; 
+        var firstLastName = userAccount.FirstLastName.ToLower();
+        var docNumber = userAccount.DocumentNumber;
+        var last3 = docNumber[^3..];
+
+        return $"{firstLetter}{firstLastName}.{last3}";
+    }
+    
 }
