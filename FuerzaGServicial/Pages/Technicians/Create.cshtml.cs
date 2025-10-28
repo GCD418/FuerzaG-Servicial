@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CommonService.Domain.Services.Validations;
 using TechnicianService.Application;                 // <- CORRECTO
-using TechnicianService.Domain.Entities;
+using TechnicianService.Domain;
 using Microsoft.AspNetCore.Authorization;
 
 
