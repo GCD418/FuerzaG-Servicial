@@ -36,4 +36,14 @@ public class UserAccountService
     {
         return await _repository.DeleteByIdAsync(id);
     }
+
+    public async Task<UserAccount?> GetByUserName(string userName)
+    {
+        return await _repository.GetByUserName(userName);
+    }
+
+    public async Task<bool> IsUserNameUsed(string userName)
+    {
+        return await _repository.IsUserNameUsed(userName);
+    }
 }
