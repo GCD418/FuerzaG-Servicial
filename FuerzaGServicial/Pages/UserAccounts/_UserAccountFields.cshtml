@@ -40,8 +40,9 @@
     <div class="col-md-6">
         <label asp-for="Role" class="form-label">Rol</label>
         <select asp-for="Role" class="form-select">
-            <option value="CEO" selected="@(Model.Role == "CEO")">Propietario</option>
-            <option value="Manager" selected="@(Model.Role == "Manager")">Gerente</option>
+            <option value="">-- Seleccione un rol --</option>
+            <option value="CEO">Propietario</option>
+            <option value="Manager">Gerente</option>
         </select>
         <span asp-validation-for="Role" class="text-danger"></span>
     </div>

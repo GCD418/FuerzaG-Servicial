@@ -31,7 +31,7 @@ public class UserAccountService
 
     public async Task<bool> Update(UserAccount userAccount)
     {
-        return await _repository.UpdateAsync(owner, _sessionManager.UserId ?? 9999);
+        return await _repository.UpdateAsync(userAccount, _sessionManager.UserId ?? 9999);
     }
 
     public async Task<bool> DeleteById(int id)
