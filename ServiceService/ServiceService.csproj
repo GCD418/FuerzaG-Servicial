@@ -9,11 +9,6 @@
   <ItemGroup>
 	  <ProjectReference Include="..\CommonService\CommonService.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Application\Services\" />
-   
-  </ItemGroup>
    
 
   
