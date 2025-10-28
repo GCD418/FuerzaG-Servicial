@@ -16,7 +16,7 @@ public class CurrentUserSession
     public bool IsAuthenticated =>
         _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true;
 
-    public async Task SetUpUserSession(UserAccount userAccount)
+    public async Task Login(UserAccount userAccount)
     {
         var claims = new List<Claim>
         {
@@ -37,6 +37,11 @@ public class CurrentUserSession
             new AuthenticationProperties { IsPersistent = false }
         );
 
+    }
+
+    public async Task Logout()
+    {
+        await _httpContextAccessor.HttpContext.SignOutAsync("GForceAuth");
     }
 
     public int? UserId
