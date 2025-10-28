@@ -14,6 +14,7 @@ public class ServiceRepository : IServiceRepository
         _dbConnectionFactory = dbConnectionFactory;
     }
 
+
     public async Task<IEnumerable<Service>> GetAllAsync()
     {
         var services = new List<Service>();
@@ -51,7 +52,7 @@ public class ServiceRepository : IServiceRepository
     public async Task<bool> CreateAsync(Service service)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        const string query = "SELECT fn_insert_service(@name, @type, @price)";
+        const string query = "SELECT fn_insert_service(@name, @type, @price, @description)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;
@@ -59,6 +60,7 @@ public class ServiceRepository : IServiceRepository
         AddParameter(command, "@name", service.Name);
         AddParameter(command, "@type", service.Type);
         AddParameter(command, "@price", service.Price);
+        AddParameter(command, "@description", service.Description);
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();
@@ -66,10 +68,11 @@ public class ServiceRepository : IServiceRepository
         return Convert.ToInt32(result) > 0;
     }
 
-    public async Task<bool> UpdateAsync(Service service)
+
+    public async Task<bool> UpdateAsync(Service service, int modifiedByUserId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        const string query = "SELECT fn_update_service(@id, @name, @type, @price, @modified_by_user_id)";
+        const string query = "SELECT fn_update_service(@id, @name, @type, @price, @description, @modified_by_user_id)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;
@@ -78,7 +81,8 @@ public class ServiceRepository : IServiceRepository
         AddParameter(command, "@name", service.Name);
         AddParameter(command, "@type", service.Type);
         AddParameter(command, "@price", service.Price);
-        // AddParameter(command, "@modified_by_user_id");
+        AddParameter(command, "@description", service.Description);
+        AddParameter(command, "@modified_by_user_id", modifiedByUserId);
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();
@@ -86,7 +90,8 @@ public class ServiceRepository : IServiceRepository
         return Convert.ToBoolean(result);
     }
 
-    public async Task<bool> DeleteByIdAsync(int id)
+
+    public async Task<bool> DeleteByIdAsync(int id, int modifiedByUserId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_soft_delete_service(@id, @modified_by_user_id)";
@@ -95,13 +100,14 @@ public class ServiceRepository : IServiceRepository
         command.CommandText = query;
 
         AddParameter(command, "@id", id);
-        // AddParameter(command, "@modified_by_user_id");
+        AddParameter(command, "@modified_by_user_id", modifiedByUserId);
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();
 
         return Convert.ToBoolean(result);
     }
+
 
     private Service MapReaderToModel(IDataReader reader)
     {
@@ -111,13 +117,14 @@ public class ServiceRepository : IServiceRepository
             Name = reader.GetString(1),
             Type = reader.GetString(2),
             Price = reader.GetDecimal(3),
-            CreatedAt = reader.GetDateTime(4),
-            UpdatedAt = reader.IsDBNull(5) ? null : reader.GetDateTime(5),
-            IsActive = reader.GetBoolean(6)
+            Description = reader.GetString(4),
+            CreatedAt = reader.GetDateTime(5),
+            UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime(6),
+            IsActive = reader.GetBoolean(7)
         };
     }
 
-    private void AddParameter(IDbCommand command, string name, object value)
+    private static void AddParameter(IDbCommand command, string name, object value)
     {
         var parameter = command.CreateParameter();
         parameter.ParameterName = name;

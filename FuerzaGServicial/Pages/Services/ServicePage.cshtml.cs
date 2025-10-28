@@ -11,7 +11,7 @@ namespace FuerzaGServicial.Pages.Services;
 [Authorize(Roles = "Manager")] 
 public class ServicePage : PageModel
 {
-    public IEnumerable<Service> Services { get; set; }
+    public IEnumerable<Service> Services { get; set; } = Enumerable.Empty<Service>();
     private readonly ServiceService.Application.Services.ServiceService _serviceService;
     private readonly IDataProtector _protector;
 
@@ -34,8 +34,7 @@ public class ServicePage : PageModel
     public async Task<IActionResult> OnPostDeleteAsync(string id)
     {
         var decryptedId = int.Parse(_protector.Unprotect(id));
-        _serviceService.DeleteById(decryptedId);
-        // await _serviceService.DeleteById(decryptedId, 9999);
+        await _serviceService.DeleteById(decryptedId); // ✅
         return RedirectToPage();
     }
 

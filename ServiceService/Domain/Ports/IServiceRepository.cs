@@ -1,12 +1,13 @@
-﻿using ServiceService.Domain.Entities;
+﻿using System.Data;
+using ServiceService.Domain.Entities;
 
 namespace ServiceService.Domain.Ports;
 
 public interface IServiceRepository
 {
-    Task<IEnumerable<Service>> GetAllAsync();
-    Task<Service?> GetByIdAsync(int id);
-    Task<bool> CreateAsync(Service service);
-    Task<bool> UpdateAsync(Service service);
-    Task<bool> DeleteByIdAsync(int id);
+    public Task<IEnumerable<Service>> GetAllAsync();
+    public Task<Service?> GetByIdAsync(int id);
+    public Task<bool> CreateAsync(Service service);
+    public Task<bool> UpdateAsync(Service service, int modifiedByUserId);
+    public Task<bool> DeleteByIdAsync(int id, int modifiedByUserId);
 }
