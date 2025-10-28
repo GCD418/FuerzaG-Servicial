@@ -9,15 +9,18 @@ public class SessionFacade
     private readonly Services.UserAccountService _userAccountService;
     private readonly IMailSender _mailSender;
     private readonly IPasswordService _passwordService;
+    private readonly ISessionManager _sessionManager;
     public SessionFacade(
         Services.UserAccountService userAccountService,
         IMailSender mailSender,
-        IPasswordService passwordService
+        IPasswordService passwordService,
+        ISessionManager sessionManager
         )
     {
         _userAccountService = userAccountService;
         _mailSender = mailSender;
         _passwordService = passwordService;
+        _sessionManager = sessionManager;
     }
 
     public async Task<bool> CreateUserAccount(UserAccount userAccount)
@@ -45,7 +48,15 @@ public class SessionFacade
             return false;
         }
         
+        await _sessionManager.Login(userAccount);
         
+        return true;
+        
+    }
+
+    public async Task Logout()
+    {
+        await _sessionManager.Logout();
     }
 
     private bool VerifyCredentials(UserAccount userAccount, string password)

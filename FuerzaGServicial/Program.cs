@@ -2,6 +2,7 @@ using CommonService.Domain.Ports;
 using CommonService.Domain.Services.Validations;
 using CommonService.Infrastructure;
 using CommonService.Infrastructure.Connection;
+using FuerzaGServicial.Infrastructure.Security;
 using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
 using OwnerService.Domain.Services;
@@ -27,6 +28,7 @@ builder.Services
     });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
 
 #endregion
 

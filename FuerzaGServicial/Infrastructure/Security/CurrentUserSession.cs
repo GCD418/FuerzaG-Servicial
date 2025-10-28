@@ -1,10 +1,11 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using UserAccountService.Domain.Entities;
+using UserAccountService.Domain.Ports;
 
 namespace FuerzaGServicial.Infrastructure.Security;
 
-public class CurrentUserSession
+public class CurrentUserSession : ISessionManager
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
