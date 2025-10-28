@@ -10,9 +10,7 @@
     @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Any() == true)
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <h6 class="alert-heading mb-2">
-                <i class="fas fa-exclamation-triangle"></i> Errores generales:
-            </h6>
+            <h6 class="alert-heading mb-2"><i class="fas fa-exclamation-triangle"></i> Errores generales:</h6>
             <ul class="mb-0 small">
                 @foreach (var error in ViewData.ModelState[""].Errors)
                 {
@@ -25,10 +23,9 @@
 
     <form method="post" class="card card-body shadow-sm" id="userAccountForm" novalidate>
         <div class="row g-3">
-
             <div class="col-md-6">
                 <label asp-for="UserAccount.Name" class="form-label">Nombre *</label>
-                <input asp-for="UserAccount.Name" class="form-control" placeholder="Ingrese nombre"
+                <input asp-for="UserAccount.Name" class="form-control" placeholder="Ingrese el nombre"
                        required minlength="3" maxlength="100" />
                 <span asp-validation-for="UserAccount.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
@@ -37,39 +34,30 @@
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.FirstLastName" class="form-label">Primer Apellido *</label>
-                <input asp-for="UserAccount.FirstLastName" class="form-control" placeholder="Ingrese primer apellido"
+                <label asp-for="UserAccount.FirstLastName" class="form-label">Apellido Paterno *</label>
+                <input asp-for="UserAccount.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
                        required minlength="2" maxlength="100" />
                 <span asp-validation-for="UserAccount.FirstLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El primer apellido debe tener al menos 2 caracteres.
+                    El apellido paterno debe tener al menos 2 caracteres.
                 </div>
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.SecondLastName" class="form-label">Segundo Apellido</label>
-                <input asp-for="UserAccount.SecondLastName" class="form-control"
-                       placeholder="Ingrese segundo apellido (opcional)" minlength="2" maxlength="100" />
+                <label asp-for="UserAccount.SecondLastName" class="form-label">Apellido Materno</label>
+                <input asp-for="UserAccount.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
+                       minlength="2" maxlength="100" />
                 <span asp-validation-for="UserAccount.SecondLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El segundo apellido debe tener al menos 2 caracteres.
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="UserAccount.Email" class="form-label">Correo Electrónico *</label>
-                <input asp-for="UserAccount.Email" class="form-control" type="email"
-                       placeholder="ejemplo@correo.com" required maxlength="255" />
-                <span asp-validation-for="UserAccount.Email" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    Ingrese un correo electrónico válido.
+                    El apellido materno debe tener al menos 2 caracteres.
                 </div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="UserAccount.PhoneNumber" class="form-label">Teléfono *</label>
                 <input asp-for="UserAccount.PhoneNumber" class="form-control" placeholder="Ej: 76543210"
-                       type="tel" pattern="[0-9]{8}" required value="" />
+                       type="tel" pattern="[0-9]{8}" required
+                       value="@(Model.UserAccount.PhoneNumber == 0 ? "" : Model.UserAccount.PhoneNumber.ToString())" />
                 <span asp-validation-for="UserAccount.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
                     El teléfono debe tener exactamente 8 dígitos.
@@ -77,41 +65,49 @@
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.DocumentNumber" class="form-label">Documento de Identidad *</label>
+                <label asp-for="UserAccount.Email" class="form-label">Correo Electrónico *</label>
+                <input asp-for="UserAccount.Email" class="form-control" placeholder="ejemplo@correo.com"
+                       type="email" required maxlength="255" />
+                <span asp-validation-for="UserAccount.Email" class="text-danger small"></span>
+                <div class="invalid-feedback">
+                    Ingrese un correo electrónico válido.
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="UserAccount.DocumentNumber" class="form-label">CI / Documento *</label>
                 <input asp-for="UserAccount.DocumentNumber" class="form-control" placeholder="Ej: 1234567"
                        type="text" minlength="6" maxlength="9" pattern="[0-9]{6,9}" required />
                 <span asp-validation-for="UserAccount.DocumentNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El documento debe contener entre 6 y 9 dígitos.
+                    El CI debe contener entre 6 y 9 dígitos.
                 </div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="UserAccount.Role" class="form-label">Rol *</label>
                 <select asp-for="UserAccount.Role" class="form-select" required>
-                    <option value="">Seleccione un rol...</option>
-                    <option value="CEO" selected="@(Model.UserAccount.Role == "CEO")">Propietario</option>
-                    <option value="Manager" selected="@(Model.UserAccount.Role == "Manager")">Gerente</option>
+                    <option value="">-- Seleccione un rol --</option>
+                    <option value="CEO">Propietario</option>
+                    <option value="Manager">Gerente</option>
                 </select>
                 <span asp-validation-for="UserAccount.Role" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    Seleccione un rol válido.
+                    Seleccione un rol.
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-6">
-                <label asp-for="UserAccount.UserName" class="form-label">Nombre de Usuario</label>
-                <input asp-for="UserAccount.UserName" class="form-control" readonly disabled
-                       placeholder="Se generará automáticamente" />
-            </div>
-
+        <div class="col-md-6 mt-3">
+            <label asp-for="UserAccount.UserName" class="form-label">Nombre de Usuario</label>
+            <input asp-for="UserAccount.UserName" class="form-control" readonly placeholder="Se generará automáticamente" />
         </div>
 
         <div class="mt-4">
             <button type="button" class="btn btn-dark" id="btnOpenModal">
                 <i class="fas fa-save"></i> Guardar
             </button>
-            <a asp-page="/UserAccounts/Index" class="btn btn-outline-secondary">
+            <a asp-page="/UserAccounts/UserPage" class="btn btn-outline-secondary">
                 <i class="fas fa-times"></i> Cancelar
             </a>
         </div>
@@ -125,27 +121,29 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-
     <script>
-        $(document).ready(function () {
-            const form = document.getElementById('userAccountForm');
+        $(document).ready(function() {
+            var form = document.getElementById('userAccountForm');
 
-            $('#btnOpenModal').on('click', function () {
+            $('input[type="tel"], input[asp-for="UserAccount.DocumentNumber"]').on('keypress', function(e) {
+                if (e.which < 48 || e.which > 57) e.preventDefault();
+            });
+
+            $('input[type="tel"]').on('input', function() { if(this.value.length>8) this.value=this.value.slice(0,8); });
+            $('input[asp-for="UserAccount.DocumentNumber"]').on('input', function() { if(this.value.length>9) this.value=this.value.slice(0,9); });
+
+            $('#btnOpenModal').on('click', function() {
                 if (form.checkValidity()) {
-                    var modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
-                    modal.show();
+                    new bootstrap.Modal(document.getElementById('confirmSaveModal')).show();
                 } else {
                     form.classList.add('was-validated');
                 }
             });
 
-            $('#confirmSaveBtn').on('click', function () {
+            $('#confirmSaveBtn').on('click', function() {
                 const confirmBtn = $(this);
-                confirmBtn.prop('disabled', true)
-                    .html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-                var modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
-                modal.hide();
+                confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+                bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal')).hide();
                 form.submit();
             });
 
@@ -158,32 +156,12 @@
                 const nombre = nombreInput.value.trim().toLowerCase();
                 const apellido = apellidoInput.value.trim().toLowerCase();
                 const doc = docInput.value.trim();
-
-                if (nombre && apellido && doc.length >= 3) {
-                    const primeraLetra = nombre.charAt(0);
-                    const ultimos3 = doc.slice(-3);
-                    usernameInput.value = `${primeraLetra}.${apellido}${ultimos3}`;
-                } else {
-                    usernameInput.value = "";
-                }
+                usernameInput.value = (nombre && apellido && doc.length >= 3)
+                    ? `${nombre.charAt(0)}.${apellido}${doc.slice(-3)}`
+                    : "";
             }
 
-            nombreInput.addEventListener("input", generarUsername);
-            apellidoInput.addEventListener("input", generarUsername);
-            docInput.addEventListener("input", generarUsername);
-
-            $('input[type="tel"], input[asp-for="UserAccount.DocumentNumber"]').on('keypress', function (e) {
-                if (e.which < 48 || e.which > 57) e.preventDefault();
-            });
-
-            $('input[type="tel"]').on('input', function () {
-                if (this.value.length > 8) this.value = this.value.slice(0, 8);
-            });
-
-            $('input[asp-for="UserAccount.DocumentNumber"]').on('input', function () {
-                if (this.value.length > 9) this.value = this.value.slice(0, 9);
-            });
-
+            [nombreInput, apellidoInput, docInput].forEach(el => el.addEventListener("input", generarUsername));
         });
     </script>
 }

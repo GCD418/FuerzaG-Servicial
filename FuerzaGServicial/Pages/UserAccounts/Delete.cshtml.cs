@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using UserAccountService.Domain.Entities;
 
-namespace FuerzaGServicial.Pages.UserAccounts
-{
-    public class DeleteModel : PageModel
-    {
+namespace FuerzaGServicial.Pages.UserAccounts;
+[Authorize(Roles = UserRoles.CEO)]
+ public class DeleteModel : PageModel
+ {
         private readonly UserAccountService.Application.Services.UserAccountService _userAccountService;
         private readonly IDataProtector _protector;
 
@@ -24,5 +26,4 @@ namespace FuerzaGServicial.Pages.UserAccounts
             await _userAccountService.DeleteById(decryptedId);
             return RedirectToPage("/UserAccounts/UserPage");
         }
-    }
-}
+ }
