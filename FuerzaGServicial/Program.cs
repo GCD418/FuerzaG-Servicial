@@ -8,6 +8,7 @@ using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 using UserAccountService.Domain.Services;
 using UserAccountService.Infrastructure.Persistence;
+using ServiceService.Domain.Ports;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,14 @@ builder.Services.AddScoped<IDbConnectionFactory, PostgreSqlConnection>();
 #endregion
 
 #region Owner
+
+builder.Services.AddScoped<OwnerService.Application.Services.OwnerService>();
+builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
+builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
+
+#endregion
+
+#region Service
 
 builder.Services.AddScoped<OwnerService.Application.Services.OwnerService>();
 builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
