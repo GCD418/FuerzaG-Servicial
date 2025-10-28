@@ -22,14 +22,14 @@ public class UserAccountService
         return await _repository.GetByIdAsync(id);
     }
 
-    public async Task<bool> Create(UserAccount owner)
+    public async Task<bool> Create(UserAccount userAccount)
     {
-        return await _repository.CreateAsync(owner);
+        return await _repository.CreateAsync(userAccount);
     }
 
-    public async Task<bool> Update(UserAccount owner)
+    public async Task<bool> Update(UserAccount userAccount)
     {
-        return await _repository.UpdateAsync(owner);
+        return await _repository.UpdateAsync(userAccount);
     }
 
     public async Task<bool> DeleteById(int id)

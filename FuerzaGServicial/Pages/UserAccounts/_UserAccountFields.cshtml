@@ -2,35 +2,41 @@
 
 <div class="row g-3">
     <div class="col-md-6">
-        <label asp-for="Name" class="form-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="col-md-6">
-        <label asp-for="FirstLastName" class="form-label"></label>
+        <label asp-for="FirstLastName" class="form-label">Primer Apellido</label>
         <input asp-for="FirstLastName" class="form-control" />
         <span asp-validation-for="FirstLastName" class="text-danger"></span>
     </div>
+
     <div class="col-md-6">
-        <label asp-for="SecondLastName" class="form-label"></label>
+        <label asp-for="SecondLastName" class="form-label">Segundo Apellido</label>
         <input asp-for="SecondLastName" class="form-control" />
         <span asp-validation-for="SecondLastName" class="text-danger"></span>
     </div>
+
     <div class="col-md-6">
-        <label asp-for="PhoneNumber" class="form-label"></label>
+        <label asp-for="Name" class="form-label">Nombre</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="PhoneNumber" class="form-label">Teléfono</label>
         <input asp-for="PhoneNumber" class="form-control" />
         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
+
     <div class="col-md-6">
-        <label asp-for="Email" class="form-label"></label>
+        <label asp-for="Email" class="form-label">Correo electrónico</label>
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
+
     <div class="col-md-6">
-        <label asp-for="DocumentNumber" class="form-label">DocumentNumber</label>
+        <label asp-for="DocumentNumber" class="form-label">CI / Documento de identificación</label>
         <input asp-for="DocumentNumber" class="form-control" />
         <span asp-validation-for="DocumentNumber" class="text-danger"></span>
     </div>
+
     <div class="col-md-6">
         <label asp-for="Role" class="form-label">Rol</label>
         <select asp-for="Role" class="form-select">
@@ -39,5 +45,4 @@
         </select>
         <span asp-validation-for="Role" class="text-danger"></span>
     </div>
-
 </div>
