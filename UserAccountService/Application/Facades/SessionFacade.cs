@@ -43,7 +43,7 @@ public class SessionFacade
     public async Task<bool> Login(string username, string password)
     {
         UserAccount? userAccount = await _userAccountService.GetByUserName(username);
-        if (!VerifyCredentials(userAccount, password))
+        if (userAccount == null || !VerifyCredentials(userAccount, password))
         {
             return false;
         }
@@ -61,11 +61,7 @@ public class SessionFacade
 
     private bool VerifyCredentials(UserAccount userAccount, string password)
     {
-        if (userAccount == null || !_passwordService.VerifyPassword(password, userAccount.Password))
-        {
-            return false;
-        }
-        return true;
+        return _passwordService.VerifyPassword(password, userAccount.Password);
     }
     private async Task SendEmail(string name, string username, string email, string password)
     {
