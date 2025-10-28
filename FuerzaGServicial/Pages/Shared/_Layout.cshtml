@@ -119,7 +119,7 @@
                         <a asp-page="/index" class="nav-item nav-link @(currentPage.Contains("/Index") ? "text-danger" : "")"><i class="fas fa-home me-1"></i> INICIO</a>
                         <a asp-page="/Services/ServicePage" class="nav-item nav-link @(currentPage.Contains("/Services/ServicePage") ? "text-danger" : "")">Servicios</a>
                         <a asp-page="/Owners/OwnerPage" class="nav-item nav-link @(currentPage.Contains("/Owners/OwnerPage") ? "text-danger" : "")">Clientes</a>
-                        <a asp-page="/UserAccounts/AccountPage" class="nav-item nav-link @(currentPage.Contains("/UserAccounts/AccountPage") ? "text-danger" : "")">Usuarios</a>
+                        <a asp-page="/UserAccounts/UserPage" class="nav-item nav-link @(currentPage.Contains("/UserAccounts/UserPage") ? "text-danger" : "")">Usuarios</a>
                         <a asp-page="/Technicians/TechnicianPage" class="nav-item nav-link @(currentPage.Contains("/Technicians/TechnicianPage") ? "text-danger" : "")">Técnicos</a>
                         <!-- Ocultar -->
                         <!--
@@ -130,7 +130,7 @@
                                 <div class="dropdown-menu">
                                     <a asp-page="/Technicians/TechnicianPage" class="dropdown-item" style="cursor: pointer;">Technician</a>
                                     <a asp-page="/Owners/OwnerPage" class="dropdown-item" style="cursor: pointer;">Owner</a>
-                                    <a asp-page="/UserAccounts/AccountPage" class="dropdown-item" style="cursor: pointer;">User</a>
+                                    <a asp-page="/UserAccounts/UserPage" class="dropdown-item" style="cursor: pointer;">User</a>
                                     <a asp-page="/Services/ServicePage" class="dropdown-item" style="cursor: pointer;">Service</a>
                                 </div>
                             </div>

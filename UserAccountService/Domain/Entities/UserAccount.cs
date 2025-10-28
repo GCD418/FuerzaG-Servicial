@@ -30,6 +30,6 @@ public class UserAccount
     public bool IsActive { get; set; } = true;
 
     public int? ModifiedByUserId { get; set; }
-    public string FullName => $"{FirstLastName} {SecondLastName} {Name}";
+    public string FullName => $"{FirstLastName} {(SecondLastName ?? string.Empty)} {Name}";
 
 }
