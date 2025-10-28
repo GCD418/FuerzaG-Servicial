@@ -9,12 +9,12 @@
     <ItemGroup>
       <Folder Include="Application\" />
       <Folder Include="Domain\Entities\" />
-      <Folder Include="Domain\Ports\" />
       <Folder Include="Infrastructure\Persistence\" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Npgsql" Version="9.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,14 @@
 using CommonService.Domain.Services.Validations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OwnerService.Domain.Entities;
+using UserAccountService.Domain.Entities;
 
 namespace FuerzaGServicial.Pages.Owners;
 
+
+[Authorize(Roles = UserRoles.Manager)]
 public class CreateModel : PageModel
 {
     private readonly OwnerService.Application.Services.OwnerService  _ownerService;

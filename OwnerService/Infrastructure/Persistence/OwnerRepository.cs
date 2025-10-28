@@ -68,7 +68,7 @@ public class OwnerRepository : IOwnerRepository
         return Convert.ToInt32(idObj) > 0;
     }
 
-    public async Task<bool> UpdateAsync(Owner owner)
+    public async Task<bool> UpdateAsync(Owner owner, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         string query = "SELECT fn_update_owner(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @address, @modified_by_user_id)";
@@ -83,21 +83,21 @@ public class OwnerRepository : IOwnerRepository
         AddParameter(command, "@email",            owner.Email);
         AddParameter(command, "@document_number",  owner.Ci);
         AddParameter(command, "@address",          owner.Address);
-        AddParameter(command, "@modified_by_user_id", 9999);
+        AddParameter(command, "@modified_by_user_id", userId);
         AddParameter(command, "@id",               owner.Id);
 
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
     }
 
-    public async Task<bool> DeleteByIdAsync(int id)
+    public async Task<bool> DeleteByIdAsync(int id, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_soft_delete_owner(@id, @modified_by_user_id)";
         await using var command = connection.CreateCommand();
         command.CommandText = query;                  
         AddParameter(command, "@id", id);
-        AddParameter(command, "@modified_by_user_id", 8888); //TODO implement real ids
+        AddParameter(command, "@modified_by_user_id", userId);
 
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
