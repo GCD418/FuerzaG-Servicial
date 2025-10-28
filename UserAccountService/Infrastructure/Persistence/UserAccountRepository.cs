@@ -105,6 +105,32 @@ public class UserAccountRepository : IUserAccountRepository
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
     }
+    
+    public async  Task<UserAccount?> GetByUserName(string userName)
+    {
+        await using var connection = _dbConnectionFactory.CreateConnection();
+        string query = "SELECT * FROM fn_get_account_by_username(@user_name)";
+
+        await using var command = connection.CreateCommand();
+        command.CommandText = query;
+        AddParameter(command, "@user_name", userName);
+
+        await connection.OpenAsync();
+        await using var reader = await command.ExecuteReaderAsync();
+        return await reader.ReadAsync() ? MapReaderToModel(reader) : null;
+    }
+
+    public async Task<bool> IsUserNameUsed(string userName)
+    {
+        await using var connection = _dbConnectionFactory.CreateConnection();
+        string query = "SELECT fn_account_exists_by_username(@user_name)";
+        await using var command = connection.CreateCommand();
+        command.CommandText = query;
+        AddParameter(command, "@user_name", userName);
+
+        await connection.OpenAsync();
+        return Convert.ToBoolean(await command.ExecuteScalarAsync());
+    }
 
     private UserAccount MapReaderToModel(IDataReader reader)
     {
