@@ -1,5 +1,8 @@
+using CommonService.Domain.Ports;
 using CommonService.Domain.Services.Validations;
+using CommonService.Infrastructure;
 using CommonService.Infrastructure.Connection;
+using FuerzaGServicial.Infrastructure.Security;
 using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
 using OwnerService.Domain.Services;
@@ -8,10 +11,16 @@ using TechnicianService.Domain.Entities;
 using TechnicianService.Domain.Ports;
 using TechnicianService.Domain.Services;
 using TechnicianService.Infrastructure.Persistence;
+using UserAccountService.Application.Facades;
+using UserAccountService.Domain.Entities;
+using UserAccountService.Domain.Ports;
+using UserAccountService.Domain.Services;
+using UserAccountService.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Authentication management
+#region AuthenticationAndPasswords
+
 builder.Services
     .AddAuthentication("GForceAuth")
     .AddCookie("GForceAuth", options =>
@@ -22,6 +31,12 @@ builder.Services
         options.LogoutPath = "/Logout"; //TODO
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
+builder.Services.AddScoped<SessionFacade>();
+
+#endregion
 
 #region DatabaseConnection
 
@@ -41,11 +56,26 @@ builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
 #endregion
 
 
-#region
+#region Technician
 
 builder.Services.AddScoped<TechnicianService.Application.Services.TechnicianService>();
 builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
 builder.Services.AddScoped<IValidator<Technician>, TechnicianValidator>();
+
+#endregion
+
+#region UserAccount
+
+builder.Services.AddScoped<UserAccountService.Application.Services.UserAccountService>();
+builder.Services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+builder.Services.AddScoped<IValidator<UserAccount>, UserAccountValidator>();
+
+#endregion
+
+#region MailSettings
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IMailSender, SmtpEmailSender>();
 
 #endregion
 
@@ -62,6 +92,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+//For session
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

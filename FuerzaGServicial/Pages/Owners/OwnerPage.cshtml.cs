@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OwnerService.Domain.Entities;
+using UserAccountService.Domain.Entities;
 
 namespace FuerzaGServicial.Pages.Owners;
 
+[Authorize(Roles = UserRoles.Manager)]
 public class OwnerPage : PageModel
 {
     public IEnumerable<Owner> Owners { get; set; }
