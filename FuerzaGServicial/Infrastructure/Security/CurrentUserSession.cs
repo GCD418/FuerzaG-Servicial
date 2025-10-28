@@ -1,14 +1,14 @@
 using System.Security.Claims;
-using CommonService.Domain.Ports;
 using Microsoft.AspNetCore.Authentication;
+using UserAccountService.Domain.Entities;
 
 namespace FuerzaGServicial.Infrastructure.Security;
 
-public class CurrentUser : ICurrentUser
+public class CurrentUserSession
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CurrentUser(IHttpContextAccessor httpContextAccessor)
+    public CurrentUserSession(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
@@ -16,16 +16,16 @@ public class CurrentUser : ICurrentUser
     public bool IsAuthenticated =>
         _httpContextAccessor.HttpContext?.User?.Identity?.IsAuthenticated == true;
 
-    public async Task SetUpUserSession(IUserAccountSession session)
+    public async Task SetUpUserSession(UserAccount userAccount)
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, session.Id.ToString()),
-            new Claim(ClaimTypes.Name, session.UserName), 
-            new Claim(ClaimTypes.Role, session.Role),
-            new Claim("FirstLastName", session.FirstLastName),
-            new Claim("SecondLastName", session.SecondLastName ?? string.Empty),
-            new Claim(ClaimTypes.Email, session.Email ?? string.Empty) 
+            new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
+            new Claim(ClaimTypes.Name, userAccount.UserName), 
+            new Claim(ClaimTypes.Role, userAccount.Role),
+            new Claim("FirstLastName", userAccount.FirstLastName),
+            new Claim("SecondLastName", userAccount.SecondLastName ?? string.Empty),
+            new Claim(ClaimTypes.Email, userAccount.Email ?? string.Empty) 
         };
 
         var identity = new ClaimsIdentity(claims, "GForceAuth", ClaimTypes.Name, ClaimTypes.Role);
