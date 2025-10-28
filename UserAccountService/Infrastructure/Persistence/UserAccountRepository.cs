@@ -70,7 +70,7 @@ public class UserAccountRepository : IUserAccountRepository
         return Convert.ToInt32(idObj) > 0;
     }
 
-    public async Task<bool> UpdateAsync(UserAccount userAccount)
+    public async Task<bool> UpdateAsync(UserAccount userAccount, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         string query = "SELECT fn_update_account(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @password, @role, @modified_by_user_id)";
@@ -86,21 +86,21 @@ public class UserAccountRepository : IUserAccountRepository
         AddParameter(command, "@document_number", userAccount.DocumentNumber);
         AddParameter(command, "@role", userAccount.Role);
         AddParameter(command, "@passowrd", userAccount.Password);
-        AddParameter(command, "@modified_by_user_id", 9999);
+        AddParameter(command, "@modified_by_user_id", userId);
         AddParameter(command, "@id", userAccount.Id);
 
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
     }
 
-    public async Task<bool> DeleteByIdAsync(int id)
+    public async Task<bool> DeleteByIdAsync(int id, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_soft_delete_account(@id, @modified_by_user_id)";
         await using var command = connection.CreateCommand();
         command.CommandText = query;                  
         AddParameter(command, "@id", id);
-        AddParameter(command, "@modified_by_user_id", 8888); 
+        AddParameter(command, "@modified_by_user_id", userId); 
 
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
