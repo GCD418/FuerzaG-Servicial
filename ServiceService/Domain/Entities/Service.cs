@@ -1,5 +1,5 @@
-﻿namespace ServiceService.Domain.Entities;
-
+using System.ComponentModel.DataAnnotations;
+namespace ServiceService.Domain.Entities;
 
 public class Service
 {
@@ -20,4 +20,4 @@ public class Service
     public int? ModifiedByUserId { get; set; }
     public int? CreatedByUserId { get; set; }
 
-}   
+}

@@ -1,0 +1,163 @@
+@page
+@model FuerzaGServicial.Pages.Services.CreateModel
+@{
+    ViewData["Title"] = "Nuevo Servicio";
+}
+
+<div class="container mt-4 mb-5">
+    <h2 class="mb-4">Nuevo Servicio</h2>
+
+    @if (Model.ValidationErrors.Any())
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h6 class="alert-heading mb-2">
+                <i class="fas fa-exclamation-triangle me-1"></i> Errores de validación:
+            </h6>
+            <ul class="mb-0 small">
+                @foreach (var error in Model.ValidationErrors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    }
+
+    <form method="post" class="card card-body shadow-sm" id="serviceForm" novalidate>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Service.Name" class="form-label">Nombre del servicio *</label>
+                <input asp-for="Service.Name"
+                       class="form-control"
+                       placeholder="Ej: Cambio de aceite"
+                       required
+                       minlength="3"
+                       maxlength="100" />
+                <span asp-validation-for="Service.Name" class="text-danger small"></span>
+                <div class="invalid-feedback">
+                    El nombre es obligatorio y debe tener al menos 3 caracteres.
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Service.Type" class="form-label">Tipo *</label>
+                <select asp-for="Service.Type" class="form-select" required>
+                    <option value="">-- Selecciona el tipo --</option>
+                    <option value="Preventivo">Preventivo</option>
+                    <option value="Correctivo">Correctivo</option>
+                </select>
+                <span asp-validation-for="Service.Type" class="text-danger small"></span>
+                <div class="invalid-feedback">
+                    Debes seleccionar un tipo de servicio.
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Service.Price" class="form-label">Precio *</label>
+
+                <!-- Input group (opcional) para mostrar moneda en BS5 -->
+                <div class="input-group">
+                    <span class="input-group-text">Bs</span>
+                    <input asp-for="Service.Price"
+                           class="form-control"
+                           type="text"
+                           inputmode="decimal"
+                           placeholder="Ej: 1,200.50"
+                           value=""
+                           required />
+                </div>
+
+                <span asp-validation-for="Service.Price" class="text-danger small"></span>
+                <div class="invalid-feedback d-block">
+                    El precio es obligatorio y debe ser mayor que 0.
+                </div>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Service.Description" class="form-label">Descripción *</label>
+                <textarea asp-for="Service.Description"
+                          class="form-control"
+                          rows="3"
+                          placeholder="Detalles del servicio"
+                          required
+                          minlength="3"
+                          maxlength="255"></textarea>
+                <span asp-validation-for="Service.Description" class="text-danger small"></span>
+                <div class="invalid-feedback">
+                    La descripción es obligatoria y debe tener al menos 3 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="button" class="btn btn-dark" id="btnOpenModal">
+                <i class="fas fa-save me-1"></i> Guardar
+            </button>
+            <a asp-page="/Services/ServicePage" class="btn btn-outline-secondary">
+                <i class="fas fa-times me-1"></i> Cancelar
+            </a>
+        </div>
+
+        <div class="mt-3">
+            <small class="text-muted">* Campos obligatorios</small>
+        </div>
+    </form>
+
+    @await Html.PartialAsync("_ConfirmSaveModal")
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('serviceForm');
+            const priceInput = document.getElementById('Service_Price');
+            const descriptionInput = document.getElementById('Service_Description');
+
+            if (priceInput) {
+                priceInput.addEventListener('input', function () {
+                    if (this.value.startsWith('-')) this.value = this.value.replace('-', '');
+                });
+            }
+
+            document.getElementById('btnOpenModal').addEventListener('click', function () {
+                priceInput.classList.remove('is-invalid');
+                descriptionInput.classList.remove('is-invalid');
+
+                let valid = true;
+
+                // Normaliza: quita comas de miles
+                let priceStr = priceInput.value.replace(/,/g, '').trim();
+                let price = parseFloat(priceStr);
+
+                if (isNaN(price) || price <= 0) {
+                    priceInput.classList.add('is-invalid');
+                    valid = false;
+                }
+
+                const description = descriptionInput.value.trim();
+                if (!description) {
+                    descriptionInput.classList.add('is-invalid');
+                    valid = false;
+                }
+
+                if (valid && form.checkValidity()) {
+                    const modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
+                    modal.show();
+                } else {
+                    form.classList.add('was-validated');
+                }
+            });
+
+            document.getElementById('confirmSaveBtn').addEventListener('click', function () {
+                const confirmBtn = this;
+                confirmBtn.disabled = true;
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
+                modal.hide();
+
+                form.submit();
+            });
+        });
+    </script>
+}

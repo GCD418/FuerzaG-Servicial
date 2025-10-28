@@ -40,6 +40,10 @@ builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
 
 #endregion
 
+#region Service
+builder.Services.AddScoped<ServiceService.Application.Services.ServiceService>();
+#endregion
+
 #region UserAccount
 
 builder.Services.AddScoped<UserAccountService.Application.Services.UserAccountService>();
