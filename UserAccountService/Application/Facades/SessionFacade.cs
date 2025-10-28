@@ -1,4 +1,5 @@
 using CommonService.Domain.Ports;
+using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 
 namespace UserAccountService.Application.Facades;
@@ -18,6 +19,21 @@ public class SessionFacade
         _mailSender = mailSender;
         _passwordService = passwordService;
     }
+
+    public async Task<bool> CreateUserAccount(UserAccount userAccount)
+    {
+        userAccount.UserName = _userAccountService.GenerateUserName(userAccount);
+        if (await _userAccountService.IsUserNameUsed(userAccount.UserName))
+        {
+            return false;
+        }
+
+        var password = _passwordService.GenerateRandomPassword();
+        userAccount.Password = _passwordService.HashPassword(password);
+        
+    }
+    
+    
     
     
 }

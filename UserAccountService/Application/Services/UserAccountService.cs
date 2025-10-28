@@ -46,4 +46,16 @@ public class UserAccountService
     {
         return await _repository.IsUserNameUsed(userName);
     }
+    
+    public string GenerateUserName(UserAccount userAccount)
+    {
+        var firstName = userAccount.Name.Split(' ')[0].ToLower();
+        var firstLetter = firstName[0]; 
+        var firstLastName = userAccount.FirstLastName.ToLower();
+        var docNumber = userAccount.DocumentNumber;
+        var last3 = docNumber[^3..];
+
+        return $"{firstLetter}{firstLastName}.{last3}";
+    }
+    
 }
