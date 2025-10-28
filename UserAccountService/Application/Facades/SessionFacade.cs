@@ -37,7 +37,25 @@ public class SessionFacade
 
     }
 
+    public async Task<bool> Login(string username, string password)
+    {
+        UserAccount? userAccount = await _userAccountService.GetByUserName(username);
+        if (!VerifyCredentials(userAccount, password))
+        {
+            return false;
+        }
+        
+        
+    }
 
+    private bool VerifyCredentials(UserAccount userAccount, string password)
+    {
+        if (userAccount == null || !_passwordService.VerifyPassword(password, userAccount.Password))
+        {
+            return false;
+        }
+        return true;
+    }
     private async Task SendEmail(string name, string username, string email, string password)
     {
         string subject = "Bienvenido a FuerzaG";
