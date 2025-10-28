@@ -6,7 +6,7 @@ namespace UserAccountService.Application.Services;
 public class UserAccountService
 {
     private readonly IUserAccountRepository _repository;
-    
+
     public UserAccountService(IUserAccountRepository repository)
     {
         _repository = repository;
@@ -35,5 +35,34 @@ public class UserAccountService
     public async Task<bool> DeleteById(int id)
     {
         return await _repository.DeleteByIdAsync(id);
+    }
+
+    public async Task<string> GenerateUserName(UserAccount userAccount)
+    {
+        if (string.IsNullOrWhiteSpace(userAccount.Name) ||
+            string.IsNullOrWhiteSpace(userAccount.FirstLastName) ||
+            string.IsNullOrWhiteSpace(userAccount.DocumentNumber) ||
+            userAccount.DocumentNumber.Length < 3)
+            return string.Empty;
+
+        var firstName = userAccount.Name.Split(' ')[0].ToLower();
+        var firstLetter = firstName[0];
+        var firstLastName = userAccount.FirstLastName.ToLower();
+        var last3 = userAccount.DocumentNumber[^3..];
+
+        string baseUsername = $"{firstLetter}{firstLastName}.{last3}";
+        string username = baseUsername;
+        int counter = 1;
+
+        var allUsers = await _repository.GetAllAsync();
+        var existingUsernames = allUsers.Select(u => u.UserName).ToHashSet();
+
+        while (existingUsernames.Contains(username))
+        {
+            username = $"{baseUsername}_{counter}";
+            counter++;
+        }
+
+        return username;
     }
 }
