@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using UserAccountService.Domain.Entities;
 
 namespace FuerzaGServicial.Pages.Owners;
 
+
+[Authorize(Roles = UserRoles.Manager)]
 public class DeleteModel : PageModel
 {
     private readonly OwnerService.Application.Services.OwnerService  _ownerService;

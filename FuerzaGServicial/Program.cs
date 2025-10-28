@@ -1,9 +1,13 @@
+using CommonService.Domain.Ports;
 using CommonService.Domain.Services.Validations;
+using CommonService.Infrastructure;
 using CommonService.Infrastructure.Connection;
+using FuerzaGServicial.Infrastructure.Security;
 using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
 using OwnerService.Domain.Services;
 using OwnerService.Infrastructure.Persistence;
+using UserAccountService.Application.Facades;
 using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 using UserAccountService.Domain.Services;
@@ -12,7 +16,8 @@ using ServiceService.Domain.Ports;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Authentication management
+#region AuthenticationAndPasswords
+
 builder.Services
     .AddAuthentication("GForceAuth")
     .AddCookie("GForceAuth", options =>
@@ -23,6 +28,12 @@ builder.Services
         options.LogoutPath = "/Logout"; //TODO
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
+builder.Services.AddScoped<SessionFacade>();
+
+#endregion
 
 #region DatabaseConnection
 
@@ -57,6 +68,13 @@ builder.Services.AddScoped<IValidator<UserAccount>, UserAccountValidator>();
 
 #endregion
 
+#region MailSettings
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IMailSender, SmtpEmailSender>();
+
+#endregion
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -70,6 +88,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+//For session
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
