@@ -66,7 +66,7 @@ public class ServiceRepository : IServiceRepository
         return Convert.ToInt32(result) > 0;
     }
 
-    public async Task<bool> UpdateAsync(Service service, int userId)
+    public async Task<bool> UpdateAsync(Service service)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_update_service(@id, @name, @type, @price, @modified_by_user_id)";
@@ -78,7 +78,7 @@ public class ServiceRepository : IServiceRepository
         AddParameter(command, "@name", service.Name);
         AddParameter(command, "@type", service.Type);
         AddParameter(command, "@price", service.Price);
-        AddParameter(command, "@modified_by_user_id", userId);
+        // AddParameter(command, "@modified_by_user_id");
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();
@@ -86,7 +86,7 @@ public class ServiceRepository : IServiceRepository
         return Convert.ToBoolean(result);
     }
 
-    public async Task<bool> DeleteByIdAsync(int id, int userId)
+    public async Task<bool> DeleteByIdAsync(int id)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_soft_delete_service(@id, @modified_by_user_id)";
@@ -95,7 +95,7 @@ public class ServiceRepository : IServiceRepository
         command.CommandText = query;
 
         AddParameter(command, "@id", id);
-        AddParameter(command, "@modified_by_user_id", userId);
+        // AddParameter(command, "@modified_by_user_id");
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();

@@ -27,13 +27,13 @@ public class ServiceService
         return await _repository.CreateAsync(service);
     }
 
-    public async Task<bool> Update(Service service, int userId)
+    public async Task<bool> Update(Service service)
     {
-        return await _repository.UpdateAsync(service, userId);
+        return await _repository.UpdateAsync(service);
     }
 
-    public async Task<bool> DeleteById(int id, int userId)
+    public async Task<bool> DeleteById(int id)
     {
-        return await _repository.DeleteByIdAsync(id, userId);
+        return await _repository.DeleteByIdAsync(id);
     }
 }

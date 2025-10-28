@@ -8,6 +8,9 @@ using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 using UserAccountService.Domain.Services;
 using UserAccountService.Infrastructure.Persistence;
+using ServiceService.Domain.Ports;
+using ServiceService.Infrastructure.Persistence;   
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +45,8 @@ builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
 
 #region Service
 builder.Services.AddScoped<ServiceService.Application.Services.ServiceService>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+
 #endregion
 
 #region UserAccount
@@ -64,7 +69,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
