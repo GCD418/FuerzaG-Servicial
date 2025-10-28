@@ -1,19 +1,14 @@
 using System.Collections.Generic;
-using FuerzaG.Application.Services;
-using FuerzaG.Domain.Entities;
+using TechnicianService.Application.Services;
+using TechnicianService.Domain.Entities;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using FuerzaG.Infrastructure.Connection;
-using FuerzaG.Infrastructure.Persistence.Factories;
-using FuerzaG.Models;
-using FuerzaG.Pages.Shared;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FuerzaG.Pages.Technicians
 {
-    
-    [Authorize(Roles = UserRoles.Manager)]
+    [Authorize(Roles = "Manager")]
     public class TechnicianPageModel : PageModel
     {
         public List<Technician> Technicians { get; set; } = new();
@@ -26,21 +21,18 @@ namespace FuerzaG.Pages.Technicians
             _protector = provider.CreateProtector("TechnicianProtector");
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Technicians = _technicianService.GetAll();
+            Technicians = (await _technicianService.GetAll()).ToList();
             return Page();
         }
-        
-        public string EncryptId(int id)
-        {
-            return _protector.Protect(id.ToString());
-        }
 
-        public IActionResult OnPostDelete(string id)
+        public string EncryptId(int id) => _protector.Protect(id.ToString());
+
+        public async Task<IActionResult> OnPostDeleteAsync(string id)
         {
             var decryptedId = int.Parse(_protector.Unprotect(id));
-            _technicianService.DeleteById(decryptedId);
+            await _technicianService.DeleteById(decryptedId);
             return RedirectToPage("/Technicians/TechnicianPage");
         }
     }

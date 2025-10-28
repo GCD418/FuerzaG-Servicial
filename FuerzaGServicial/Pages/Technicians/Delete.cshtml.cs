@@ -1,37 +1,49 @@
-using FuerzaG.Application.Services;
-using FuerzaG.Domain.Entities;
+using TechnicianService.Application;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using FuerzaG.Infrastructure.Connection;
-using FuerzaG.Infrastructure.Persistence.Factories;
-using FuerzaG.Pages.Shared;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace FuerzaG.Pages.Technicians
 {
-    
-    [Authorize(Roles = UserRoles.Manager)]
+    [Authorize(Roles = "Manager")]
     public class DeleteModel : PageModel
     {
-        private readonly TechnicianService  _technicianService;
+        private readonly Service _technicianService;
         private readonly IDataProtector _protector;
 
-        public DeleteModel(TechnicianService technicianService, IDataProtectionProvider provider)
+        public DeleteModel(Service technicianService, IDataProtectionProvider provider)
         {
             _technicianService = technicianService;
             _protector = provider.CreateProtector("TechnicianProtector");
         }
 
-        public void OnGet()
-        { }
-        
-        public IActionResult OnPost(string id)
+        public IActionResult OnGet()
         {
-            var decryptedId = int.Parse(_protector.Unprotect(id));
-            _technicianService.DeleteById(decryptedId);
-            return RedirectToPage("/Technicians/TechnicianPage");
+            // Si necesitas mostrar información antes de borrar, cárgala aquí.
+            return Page();
+        }
 
+        public async Task<IActionResult> OnPostAsync(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Id inválido.");
+            }
+
+            int decryptedId;
+            try
+            {
+                decryptedId = int.Parse(_protector.Unprotect(id));
+            }
+            catch
+            {
+                return BadRequest("Id no válido o manipulado.");
+            }
+
+            await _technicianService.DeleteById(decryptedId);
+            return RedirectToPage("/Technicians/TechnicianPage");
         }
     }
 }
