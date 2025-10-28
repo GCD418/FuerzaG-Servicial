@@ -22,10 +22,9 @@ public class UserAccountRepository : IUserAccountRepository
         string query = "SELECT * FROM fn_get_active_accounts()";
 
         await using var command = connection.CreateCommand();
-        command.CommandText = query;         
-        
-        await connection.OpenAsync();
+        command.CommandText = query;
 
+        await connection.OpenAsync();
         await using var reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())
             userAccounts.Add(MapReaderToModel(reader));
@@ -39,7 +38,7 @@ public class UserAccountRepository : IUserAccountRepository
         string query = "SELECT * FROM fn_get_account_by_id(@id)";
 
         await using var command = connection.CreateCommand();
-        command.CommandText = query;   
+        command.CommandText = query;
         AddParameter(command, "@id", id);
 
         await connection.OpenAsync();
@@ -49,10 +48,10 @@ public class UserAccountRepository : IUserAccountRepository
 
     public async Task<bool> CreateAsync(UserAccount userAccount)
     {
-        using var connection = _dbConnectionFactory.CreateConnection();
+        await using var connection = _dbConnectionFactory.CreateConnection();
         string query = "SELECT fn_insert_account(@name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @user_name, @password, @role)";
 
-        using var command = connection.CreateCommand();
+        await using var command = connection.CreateCommand();
         command.CommandText = query;
 
         AddParameter(command, "@name", userAccount.Name);
@@ -66,18 +65,21 @@ public class UserAccountRepository : IUserAccountRepository
         AddParameter(command, "@role", userAccount.Role);
 
         await connection.OpenAsync();
-        var idObj = await command.ExecuteScalarAsync();        
+        var idObj = await command.ExecuteScalarAsync();
         return Convert.ToInt32(idObj) > 0;
     }
 
     public async Task<bool> UpdateAsync(UserAccount userAccount, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        string query = "SELECT fn_update_account(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @password, @role, @modified_by_user_id)";
+
+        // No se actualiza password
+        string query = "SELECT fn_update_account_no_password(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @role, @modified_by_user_id)";
 
         await using var command = connection.CreateCommand();
-        command.CommandText = query;           
+        command.CommandText = query;
 
+        AddParameter(command, "@id", userAccount.Id);
         AddParameter(command, "@name", userAccount.Name);
         AddParameter(command, "@first_last_name", userAccount.FirstLastName);
         AddParameter(command, "@second_last_name", userAccount.SecondLastName);
@@ -85,9 +87,7 @@ public class UserAccountRepository : IUserAccountRepository
         AddParameter(command, "@email", userAccount.Email);
         AddParameter(command, "@document_number", userAccount.DocumentNumber);
         AddParameter(command, "@role", userAccount.Role);
-        AddParameter(command, "@passowrd", userAccount.Password);
         AddParameter(command, "@modified_by_user_id", userId);
-        AddParameter(command, "@id", userAccount.Id);
 
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
@@ -97,16 +97,17 @@ public class UserAccountRepository : IUserAccountRepository
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_soft_delete_account(@id, @modified_by_user_id)";
+
         await using var command = connection.CreateCommand();
-        command.CommandText = query;                  
+        command.CommandText = query;
         AddParameter(command, "@id", id);
-        AddParameter(command, "@modified_by_user_id", userId); 
+        AddParameter(command, "@modified_by_user_id", userId);
 
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
     }
-    
-    public async  Task<UserAccount?> GetByUserName(string userName)
+
+    public async Task<UserAccount?> GetByUserName(string userName)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         string query = "SELECT * FROM fn_get_account_by_username(@user_name)";
@@ -124,6 +125,7 @@ public class UserAccountRepository : IUserAccountRepository
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         string query = "SELECT fn_account_exists_by_username(@user_name)";
+
         await using var command = connection.CreateCommand();
         command.CommandText = query;
         AddParameter(command, "@user_name", userName);
@@ -144,7 +146,7 @@ public class UserAccountRepository : IUserAccountRepository
             Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email")),
             DocumentNumber = reader.IsDBNull(reader.GetOrdinal("document_number")) ? string.Empty : reader.GetString(reader.GetOrdinal("document_number")),
             UserName = reader.GetString(reader.GetOrdinal("user_name")),
-            Password = reader.GetString(reader.GetOrdinal("password")),
+            Password = reader.IsDBNull(reader.GetOrdinal("password")) ? null : reader.GetString(reader.GetOrdinal("password")), // Para crear usuarios, existe; en edición puede ser NULL
             Role = reader.GetString(reader.GetOrdinal("role")),
             CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
             UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at")) ? null : reader.GetDateTime(reader.GetOrdinal("updated_at")),
