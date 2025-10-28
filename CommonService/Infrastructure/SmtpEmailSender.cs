@@ -24,7 +24,7 @@ public class SmtpEmailSender : IMailSender
         _settings = settings.Value;
     }
 
-    public void SendEmail(string email, string subject, string htmlMessage)
+    public async Task SendEmail(string email, string subject, string htmlMessage)
     {
         try
         {
@@ -43,7 +43,7 @@ public class SmtpEmailSender : IMailSender
             
             mailMessage.To.Add(email);
 
-            smtpClient.Send(mailMessage);
+            await smtpClient.SendMailAsync(mailMessage);
         }
         catch (Exception ex)
         {
