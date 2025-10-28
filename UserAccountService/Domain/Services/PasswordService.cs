@@ -1,6 +1,8 @@
+using UserAccountService.Domain.Ports;
+
 namespace UserAccountService.Domain.Services;
 
-public class PasswordService
+public class PasswordService : IPasswordService
 {
     public string HashPassword(string password)
     {

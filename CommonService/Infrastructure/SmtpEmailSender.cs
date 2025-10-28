@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Mail;
 using CommonService.Domain.Ports;
+using Microsoft.Extensions.Options;
 
 namespace CommonService.Infrastructure;
 
