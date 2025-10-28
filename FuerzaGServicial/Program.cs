@@ -7,6 +7,7 @@ using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
 using OwnerService.Domain.Services;
 using OwnerService.Infrastructure.Persistence;
+using UserAccountService.Application.Facades;
 using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 using UserAccountService.Domain.Services;
@@ -29,6 +30,7 @@ builder.Services
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
+builder.Services.AddScoped<SessionFacade>();
 
 #endregion
 

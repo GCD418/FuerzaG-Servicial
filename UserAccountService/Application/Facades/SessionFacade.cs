@@ -58,6 +58,10 @@ public class SessionFacade
     {
         await _sessionManager.Logout();
     }
+    
+    public bool IsAuthenticated => _sessionManager.IsAuthenticated;
+    
+    public int ? UserId => _sessionManager.UserId;
 
     private bool VerifyCredentials(UserAccount userAccount, string password)
     {
