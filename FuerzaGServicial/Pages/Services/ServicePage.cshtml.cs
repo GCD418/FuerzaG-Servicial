@@ -34,7 +34,7 @@ public class ServicePage : PageModel
     public async Task<IActionResult> OnPostDeleteAsync(string id)
     {
         var decryptedId = int.Parse(_protector.Unprotect(id));
-        await _serviceService.DeleteById(decryptedId); // ✅
+        await _serviceService.DeleteById(decryptedId);
         return RedirectToPage();
     }
 

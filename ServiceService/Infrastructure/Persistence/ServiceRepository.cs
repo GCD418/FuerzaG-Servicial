@@ -49,7 +49,7 @@ public class ServiceRepository : IServiceRepository
         return await reader.ReadAsync() ? MapReaderToModel(reader) : null;
     }
 
-    public async Task<bool> CreateAsync(Service service)
+    public async Task<bool> CreateAsync(Service service,  int createdByUserId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_insert_service(@name, @type, @price, @description)";
@@ -61,6 +61,7 @@ public class ServiceRepository : IServiceRepository
         AddParameter(command, "@type", service.Type);
         AddParameter(command, "@price", service.Price);
         AddParameter(command, "@description", service.Description);
+        AddParameter(command, "@created_by_user_id", createdByUserId);
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();

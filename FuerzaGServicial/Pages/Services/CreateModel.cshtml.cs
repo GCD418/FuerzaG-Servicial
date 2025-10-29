@@ -29,12 +29,7 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        // evitamos errores de DataAnnotations en paralelo al validador
         ModelState.Clear();
-
-        // (opcional) si llega como texto y deseas normalizar precio:
-        // if (Request.Form.TryGetValue("Service.Price", out var raw) &&
-        //     decimal.TryParse(raw, out var parsed)) Service.Price = parsed;
 
         var validation = _validator.Validate(Service);
         if (validation.IsFailure)

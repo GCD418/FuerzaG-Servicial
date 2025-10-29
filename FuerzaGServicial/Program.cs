@@ -58,6 +58,10 @@ builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
 builder.Services.AddScoped<ServiceService.Application.Services.ServiceService>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
+
+
 #endregion
 
 #region UserAccount

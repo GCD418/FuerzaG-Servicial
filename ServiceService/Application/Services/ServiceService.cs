@@ -2,6 +2,7 @@
 using ServiceService.Domain.Ports;
 using UserAccountService.Domain.Ports;
 
+
 namespace ServiceService.Application.Services;
 
 public class ServiceService
@@ -27,7 +28,7 @@ public class ServiceService
 
     public async Task<bool> Create(Service service)
     {
-        return await _repository.CreateAsync(service);
+        return await _repository.CreateAsync(service, _sessionManager.UserId ?? 9999);
     }
 
     public async Task<bool> Update(Service service)

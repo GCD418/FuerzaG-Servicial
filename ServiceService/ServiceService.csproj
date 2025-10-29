@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CommonService\CommonService.csproj" />
+      <ProjectReference Include="..\UserAccountService\UserAccountService.csproj" />
+
     </ItemGroup>
 
 </Project>
