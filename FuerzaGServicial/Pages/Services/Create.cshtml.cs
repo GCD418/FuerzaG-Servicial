@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ServiceService.Application.Services;
 using ServiceService.Domain.Entities;
 
+
+
 namespace FuerzaGServicial.Pages.Services;
 
-[Authorize(Roles = "Manager")]
-public class CreateModel : PageModel
+// [Authorize(Roles = "Manager")]
+public class Create : PageModel
 {
     private readonly ServiceService.Application.Services.ServiceService _serviceService;
     private readonly IValidator<Service> _validator;
@@ -17,7 +19,7 @@ public class CreateModel : PageModel
 
     [BindProperty] public Service Service { get; set; } = new();
 
-    public CreateModel(
+    public Create(
         ServiceService.Application.Services.ServiceService serviceService,
         IValidator<Service> validator)
     {

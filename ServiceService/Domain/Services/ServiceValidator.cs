@@ -2,7 +2,7 @@
 using CommonService.Domain.Services.Validations;
 using ServiceService.Domain.Entities;
 
-namespace ServiceService.Domain.Services;
+namespace ServiceService.Domain.Services.Validations;
 
 public class ServiceValidator : IValidator<Service>
 {
@@ -26,7 +26,7 @@ public class ServiceValidator : IValidator<Service>
             : Result.Failure(_errors);
     }
 
-    // 🔹 Validación del nombre del servicio
+
     private void ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -57,7 +57,7 @@ public class ServiceValidator : IValidator<Service>
         }
     }
 
-    // 🔹 Validación del tipo de servicio
+
     private void ValidateType(string type)
     {
         if (string.IsNullOrWhiteSpace(type))
@@ -88,7 +88,7 @@ public class ServiceValidator : IValidator<Service>
         }
     }
 
-    // 🔹 Validación del precio
+
     private void ValidatePrice(decimal price)
     {
         if (price <= 0)
@@ -103,7 +103,7 @@ public class ServiceValidator : IValidator<Service>
         }
     }
 
-    // 🔹 Validación de la descripción
+
     private void ValidateDescription(string description)
     {
         if (string.IsNullOrWhiteSpace(description))

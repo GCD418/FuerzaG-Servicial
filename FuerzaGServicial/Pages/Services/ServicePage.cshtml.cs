@@ -8,7 +8,7 @@ using ServiceService.Domain.Entities;
 namespace FuerzaGServicial.Pages.Services;
 
 
-[Authorize(Roles = "Manager")] 
+// [Authorize(Roles = "Manager")] 
 public class ServicePage : PageModel
 {
     public IEnumerable<Service> Services { get; set; } = Enumerable.Empty<Service>();

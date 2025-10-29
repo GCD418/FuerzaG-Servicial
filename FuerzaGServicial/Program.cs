@@ -13,6 +13,7 @@ using UserAccountService.Domain.Ports;
 using UserAccountService.Domain.Services;
 using UserAccountService.Infrastructure.Persistence;
 using ServiceService.Domain.Ports;
+using ServiceService.Domain.Services.Validations;
 using ServiceService.Infrastructure.Persistence;   
 
 
@@ -57,10 +58,7 @@ builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
 #region Service
 builder.Services.AddScoped<ServiceService.Application.Services.ServiceService>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
-
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
-
+builder.Services.AddScoped<IValidator<Service>, ServiceValidator>();
 
 #endregion
 

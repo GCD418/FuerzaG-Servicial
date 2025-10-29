@@ -1,11 +1,11 @@
-@page
-@model FuerzaGServicial.Pages.Services.CreateModel
+@page "{id}"
+@model FuerzaGServicial.Pages.Services.Edit
 @{
-    ViewData["Title"] = "Nuevo Servicio";
+    ViewData["Title"] = "Editar Servicio";
 }
 
 <div class="container mt-4 mb-5">
-    <h2 class="mb-4">Nuevo Servicio</h2>
+    <h2 class="mb-4">Editar Servicio</h2>
 
     @if (Model.ValidationErrors.Any())
     {
@@ -24,6 +24,9 @@
     }
 
     <form method="post" class="card card-body shadow-sm" id="serviceForm" novalidate>
+        
+        <input type="hidden" asp-for="Service.Id" />
+
         <div class="row g-3">
             <div class="col-md-6">
                 <label asp-for="Service.Name" class="form-label">Nombre del servicio *</label>
@@ -32,7 +35,8 @@
                        placeholder="Ej: Cambio de aceite"
                        required
                        minlength="3"
-                       maxlength="100" />
+                       maxlength="100"
+                       autocomplete="off" />
                 <span asp-validation-for="Service.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
                     El nombre es obligatorio y debe tener al menos 3 caracteres.
@@ -54,8 +58,6 @@
 
             <div class="col-md-6">
                 <label asp-for="Service.Price" class="form-label">Precio *</label>
-
-                <!-- Input group (opcional) para mostrar moneda en BS5 -->
                 <div class="input-group">
                     <span class="input-group-text">Bs</span>
                     <input asp-for="Service.Price"
@@ -63,10 +65,10 @@
                            type="text"
                            inputmode="decimal"
                            placeholder="Ej: 1,200.50"
-                           value=""
-                           required />
+                           value="@(Model.Service.Price == 0 ? "" : Model.Service.Price.ToString("F2"))"
+                           required
+                           autocomplete="off" />
                 </div>
-
                 <span asp-validation-for="Service.Price" class="text-danger small"></span>
                 <div class="invalid-feedback d-block">
                     El precio es obligatorio y debe ser mayor que 0.
@@ -81,7 +83,8 @@
                           placeholder="Detalles del servicio"
                           required
                           minlength="3"
-                          maxlength="255"></textarea>
+                          maxlength="255"
+                          autocomplete="off"></textarea>
                 <span asp-validation-for="Service.Description" class="text-danger small"></span>
                 <div class="invalid-feedback">
                     La descripción es obligatoria y debe tener al menos 3 caracteres.
@@ -90,8 +93,8 @@
         </div>
 
         <div class="mt-4 d-flex gap-2">
-            <button type="button" class="btn btn-dark" id="btnOpenModal">
-                <i class="fas fa-save me-1"></i> Guardar
+            <button type="button" class="btn btn-dark" id="btnOpenEditModal">
+                <i class="fas fa-save me-1"></i> Actualizar
             </button>
             <a asp-page="/Services/ServicePage" class="btn btn-outline-secondary">
                 <i class="fas fa-times me-1"></i> Cancelar
@@ -103,7 +106,7 @@
         </div>
     </form>
 
-    @await Html.PartialAsync("_ConfirmSaveModal")
+    @await Html.PartialAsync("_ConfirmEditModal")
 </div>
 
 @section Scripts {
@@ -115,44 +118,59 @@
 
             if (priceInput) {
                 priceInput.addEventListener('input', function () {
+                    // Sólo dígitos, . y , ; sin signo negativo
+                    this.value = this.value.replace(/[^0-9.,]/g, '');
                     if (this.value.startsWith('-')) this.value = this.value.replace('-', '');
+
+                    const priceStr = this.value.replace(/,/g, '').trim();
+                    const price = parseFloat(priceStr);
+                    if (!isNaN(price) && price > 0) {
+                        this.classList.remove('is-invalid');
+                    }
                 });
             }
 
-            document.getElementById('btnOpenModal').addEventListener('click', function () {
+            if (descriptionInput) {
+                descriptionInput.addEventListener('input', function () {
+                    if (this.value.trim().length >= 3) {
+                        this.classList.remove('is-invalid');
+                    }
+                });
+            }
+
+            document.getElementById('btnOpenEditModal').addEventListener('click', function () {
                 priceInput.classList.remove('is-invalid');
                 descriptionInput.classList.remove('is-invalid');
 
                 let valid = true;
-                
-                let priceStr = priceInput.value.replace(/,/g, '').trim();
-                let price = parseFloat(priceStr);
 
+                const priceStr = priceInput.value.replace(/,/g, '').trim();
+                const price = parseFloat(priceStr);
                 if (isNaN(price) || price <= 0) {
                     priceInput.classList.add('is-invalid');
                     valid = false;
                 }
 
                 const description = descriptionInput.value.trim();
-                if (!description) {
+                if (description.length < 3) {
                     descriptionInput.classList.add('is-invalid');
                     valid = false;
                 }
 
                 if (valid && form.checkValidity()) {
-                    const modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
+                    const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
                     modal.show();
                 } else {
                     form.classList.add('was-validated');
                 }
             });
 
-            document.getElementById('confirmSaveBtn').addEventListener('click', function () {
+            document.getElementById('confirmEditBtn').addEventListener('click', function () {
                 const confirmBtn = this;
                 confirmBtn.disabled = true;
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
 
-                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
+                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmEditModal'));
                 modal.hide();
 
                 form.submit();

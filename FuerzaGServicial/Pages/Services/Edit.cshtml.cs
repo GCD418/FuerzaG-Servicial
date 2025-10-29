@@ -8,7 +8,7 @@ using ServiceService.Domain.Entities;
 
 namespace FuerzaGServicial.Pages.Services;
 
-public class EditModel : PageModel
+public class Edit : PageModel
 {
     private readonly ServiceService.Application.Services.ServiceService _serviceService;
     private readonly IValidator<Service> _validator;
@@ -16,7 +16,7 @@ public class EditModel : PageModel
 
     public List<string> ValidationErrors { get; set; } = [];
 
-    public EditModel(
+    public Edit(
         ServiceService.Application.Services.ServiceService serviceService,
         IValidator<Service> validator,
         IDataProtectionProvider provider)
