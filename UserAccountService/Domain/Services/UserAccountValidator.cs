@@ -174,9 +174,9 @@ public class UserAccountValidator : IValidator<UserAccount>
             _errors.Add("El carnet de identidad debe tener al menos 6 caracteres");
         }
 
-        if (documentNumberClean.Length > 9)
+        if (documentNumberClean.Length > 14)
         {
-            _errors.Add("El carnet de identidad no puede superar los 9 caracteres");
+            _errors.Add("El carnet de identidad no puede superar los 14 caracteres");
         }
         
         if (!Regex.IsMatch(documentNumber, @"^[0-9\s\-]+$"))

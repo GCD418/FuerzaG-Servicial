@@ -1,97 +1,104 @@
 using CommonService.Domain.Services.Validations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UserAccountService.Domain.Entities;
+using UserAccountService.Domain.Ports;
 
-namespace FuerzaGServicial.Pages.UserAccounts
+namespace FuerzaGServicial.Pages.UserAccounts;
+
+[Authorize(Roles = UserRoles.CEO)]
+public class EditModel : PageModel
 {
-    public class EditModel : PageModel
+    private readonly UserAccountService.Application.Services.UserAccountService _userAccountService;
+    private readonly IValidator<UserAccount> _validator;
+    private readonly IDataProtector _protector;
+    private readonly ISessionManager _sessionManager;
+
+    [BindProperty]
+    public UserAccount UserAccount { get; set; } = new();
+
+    public List<string> ValidationErrors { get; set; } = new();
+
+    public EditModel(
+        UserAccountService.Application.Services.UserAccountService userAccountService,
+        IValidator<UserAccount> validator,
+        IDataProtectionProvider provider,
+        ISessionManager sessionManager)
     {
-        private readonly UserAccountService.Application.Services.UserAccountService _userAccountService;
-        private readonly IValidator<UserAccount> _validator;
-        private readonly IDataProtector _protector;
+        _userAccountService = userAccountService;
+        _validator = validator;
+        _protector = provider.CreateProtector("UserAccountProtector");
+        _sessionManager = sessionManager;
+    }
 
-        public List<string> ValidationErrors { get; set; } = new();
+    public async Task<IActionResult> OnGetAsync(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return RedirectToPage("/UserAccounts/UserPage");
 
-        public EditModel(UserAccountService.Application.Services.UserAccountService userAccountService, IValidator<UserAccount> validator, IDataProtectionProvider provider)
+        if (!int.TryParse(_protector.Unprotect(id), out var decryptedId))
+            return RedirectToPage("/UserAccounts/UserPage");
+
+        var user = await _userAccountService.GetById(decryptedId);
+        if (user == null)
+            return RedirectToPage("/UserAccounts/UserPage");
+
+        UserAccount = user;
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        ModelState.Clear();
+
+        var validationResult = _validator.Validate(UserAccount);
+
+        if (validationResult.IsFailure)
         {
-            _userAccountService = userAccountService;
-            _validator = validator;
-            _protector = provider.CreateProtector("UserAccountProtector");
-        }
+            ValidationErrors = validationResult.Errors;
 
-        [BindProperty] public UserAccount UserAccount { get; set; } = new();
+            foreach (var error in validationResult.Errors)
+            {
+                var fieldName = MapErrorToField(error);
+                if (!string.IsNullOrEmpty(fieldName))
+                    ModelState.AddModelError($"UserAccount.{fieldName}", error);
+                else
+                    ModelState.AddModelError(string.Empty, error);
+            }
 
-        public async Task<IActionResult> OnGetAsync(string id)
-        {
-            var decryptedId = int.Parse(_protector.Unprotect(id));
-            var userAccount = await _userAccountService.GetById(decryptedId);
-            if (userAccount is null) return RedirectToPage("/UserAccounts/UserPage");
-
-            UserAccount = userAccount;
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        // Mantener UserName existente
+        var existingUser = await _userAccountService.GetById(UserAccount.Id);
+        if (existingUser != null)
+            UserAccount.UserName = existingUser.UserName;
+
+        var isSuccess = await _userAccountService.Update(UserAccount, _sessionManager.UserId ?? 9999);
+        if (!isSuccess)
         {
-            ModelState.Clear();
-
-            var validationResult = _validator.Validate(UserAccount);
-            if (validationResult.IsFailure)
-            {
-                ValidationErrors = validationResult.Errors;
-
-                foreach (var error in validationResult.Errors)
-                {
-                    var fieldName = MapErrorToField(error);
-                    if (!string.IsNullOrEmpty(fieldName))
-                        ModelState.AddModelError($"UserAccount.{fieldName}", error);
-                    else
-                        ModelState.AddModelError(string.Empty, error);
-                }
-
-                return Page();
-            }
-
-            var isSuccess = await _userAccountService.Update(UserAccount);
-
-            if (!isSuccess)
-            {
-                ModelState.AddModelError(string.Empty, "No se pudo actualizar el registro.");
-                return Page();
-            }
-
-            return RedirectToPage("/UserAccounts/UserPage");
+            ModelState.AddModelError(string.Empty, "No se pudo actualizar el usuario.");
+            return Page();
         }
 
-        private string MapErrorToField(string error)
-        {
-            var errorLower = error.ToLower();
+        TempData["SuccessMessage"] = "Usuario actualizado correctamente.";
+        return RedirectToPage("/UserAccounts/UserPage");
+    }
 
-            if (errorLower.Contains("apellido paterno"))
-                return "FirstLastName";
+    private string MapErrorToField(string error)
+    {
+        var errorLower = error.ToLowerInvariant();
 
-            if (errorLower.Contains("apellido materno"))
-                return "SecondLastName";
+        if (errorLower.Contains("nombre") && !errorLower.Contains("apellido")) return "Name";
+        if (errorLower.Contains("primer apellido")) return "FirstLastName";
+        if (errorLower.Contains("segundo apellido")) return "SecondLastName";
+        if (errorLower.Contains("correo") || errorLower.Contains("email")) return "Email";
+        if (errorLower.Contains("teléfono") || errorLower.Contains("telefono")) return "PhoneNumber";
+        if (errorLower.Contains("documento") || errorLower.Contains("ci") || errorLower.Contains("carnet")) return "DocumentNumber";
+        if (errorLower.Contains("rol")) return "Role";
 
-            if (errorLower.Contains("nombre") && !errorLower.Contains("apellido"))
-                return "Name";
-
-            if (errorLower.Contains("teléfono"))
-                return "PhoneNumber";
-
-            if (errorLower.Contains("correo") || errorLower.Contains("email"))
-                return "Email";
-
-            if (errorLower.Contains("documento") || errorLower.Contains("ci") ||
-                errorLower.Contains("identidad"))
-                return "DocumentNumber";
-
-            if (errorLower.Contains("rol"))
-                return "Role";
-
-            return string.Empty;
-        }
+        return string.Empty; // errores generales
     }
 }

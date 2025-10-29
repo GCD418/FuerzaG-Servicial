@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnerService", "OwnerServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonService", "CommonService\CommonService.csproj", "{0DF818D6-3D56-45B3-9440-575B418EC6D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechnicianService", "TechnicianService\TechnicianService.csproj", "{FD7A5DFF-556F-4A27-8568-99B4750DA928}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAccountService", "UserAccountService\UserAccountService.csproj", "{DBC9DEBD-8F9D-1A2D-5D1A-D89D5CFEE3E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceService", "ServiceService\ServiceService.csproj", "{DF49F3B3-F1AB-47B9-AD68-0FE424583E43}"

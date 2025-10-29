@@ -7,12 +7,9 @@ namespace OwnerService.Application.Services;
 public class OwnerService
 {
     private readonly IOwnerRepository _repository;
-    private readonly ISessionManager _sessionManager;
-    
-    public OwnerService(IOwnerRepository repository, ISessionManager sessionManager)
+    public OwnerService(IOwnerRepository repository)
     {
         _repository = repository;
-        _sessionManager = sessionManager;
     }
 
     public async Task<IEnumerable<Owner>> GetAll()
@@ -30,13 +27,13 @@ public class OwnerService
         return await _repository.CreateAsync(owner);
     }
 
-    public async Task<bool> Update(Owner owner)
+    public async Task<bool> Update(Owner owner, int userId)
     {
-        return await _repository.UpdateAsync(owner, _sessionManager.UserId ?? 9999);
+        return await _repository.UpdateAsync(owner, userId);
     }
 
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(int id, int userId)
     {
-        return await _repository.DeleteByIdAsync(id,  _sessionManager.UserId ?? 9999);
+        return await _repository.DeleteByIdAsync(id,  userId);
     }
 }
