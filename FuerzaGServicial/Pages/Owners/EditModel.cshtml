@@ -9,7 +9,9 @@
     @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Any() == true)
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <h6 class="alert-heading mb-2"><i class="fas fa-exclamation-triangle"></i> Errores generales:</h6>
+            <h6 class="alert-heading mb-2">
+                <i class="fas fa-exclamation-triangle"></i> Errores generales:
+            </h6>
             <ul class="mb-0 small">
                 @foreach (var error in ViewData.ModelState[""].Errors)
                 {
@@ -24,12 +26,11 @@
         <input type="hidden" asp-for="Owner.Id" />
 
         <div class="row g-3">
-
             <div class="col-md-6">
                 <label asp-for="Owner.Name" class="form-label">Nombre *</label>
                 <input asp-for="Owner.Name" class="form-control"
                        required minlength="3" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ ]+$"
                        title="Solo se permiten letras y espacios." />
                 <span asp-validation-for="Owner.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
@@ -41,7 +42,7 @@
                 <label asp-for="Owner.FirstLastname" class="form-label">Apellido Paterno *</label>
                 <input asp-for="Owner.FirstLastname" class="form-control"
                        required minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ ]+$"
                        title="Solo se permiten letras y espacios." />
                 <span asp-validation-for="Owner.FirstLastname" class="text-danger small"></span>
                 <div class="invalid-feedback">
@@ -53,7 +54,7 @@
                 <label asp-for="Owner.SecondLastname" class="form-label">Apellido Materno</label>
                 <input asp-for="Owner.SecondLastname" class="form-control"
                        minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]*$"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ ]*$"
                        title="Solo se permiten letras y espacios si se llena." />
                 <span asp-validation-for="Owner.SecondLastname" class="text-danger small"></span>
                 <div class="invalid-feedback">
@@ -91,7 +92,7 @@
                           required minlength="5" maxlength="100"
                           placeholder="Ingrese la dirección completa (se permiten caracteres especiales)"></textarea>
                 <span asp-validation-for="Owner.Address" class="text-danger small"></span>
-                <div class="invalid-feedback">La dirección debe tener al menos 5 caracteres y 100 caracteres maximos.</div>
+                <div class="invalid-feedback">La dirección debe tener al menos 5 caracteres y un máximo de 100.</div>
             </div>
         </div>
 
@@ -110,45 +111,51 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
-          var form = document.getElementById('ownerForm');
+        $(document).ready(function () {
+            const form = document.getElementById('ownerForm');
 
-          $('input[type="tel"], input[asp-for="Owner.Ci"]').on('keypress', function(e) {
-            if (e.which < 48 || e.which > 57) e.preventDefault();
-          });
+            $('input[type="tel"], input[asp-for="Owner.Ci"]').on('keypress', function (e) {
+                if (e.which < 48 || e.which > 57) e.preventDefault();
+            });
 
-          $('input[type="tel"]').on('input', function() {
-            if (this.value.length > 8) this.value = this.value.slice(0, 8);
-          });
+            $('input[type="tel"]').on('input', function () {
+                if (this.value.length > 8) this.value = this.value.slice(0, 8);
+            });
 
-          $('input[asp-for="Owner.Ci"]').on('input', function() {
-            if (this.value.length > 9) this.value = this.value.slice(0, 9);
-          });
+            $('input[asp-for="Owner.Ci"]').on('input', function () {
+                if (this.value.length > 9) this.value = this.value.slice(0, 9);
+            });
 
-          $('input[asp-for="Owner.Name"], input[asp-for="Owner.FirstLastname"], input[asp-for="Owner.SecondLastname"]').on('keypress', function (e) {
-            const char = String.fromCharCode(e.which);
-            const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]$/;
-            if (!regex.test(char)) {
-              e.preventDefault();
+            function letraPermitida(e) {
+                const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]$/;
+                const ch = String.fromCharCode(e.which);
+                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
+                    e.preventDefault();
+                }
             }
-          });
 
-          $('#btnOpenEditModal').on('click', function() {
-            if (form.checkValidity()) {
-              var modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
-              modal.show();
-            } else {
-              form.classList.add('was-validated');
-            }
-          });
+            const nombreInput = document.getElementById("Owner_Name");
+            const apellidoInput = document.getElementById("Owner_FirstLastname");
+            const segundoApellidoInput = document.getElementById("Owner_SecondLastname");
 
-          $('#confirmEditBtn').on('click', function() {
-            const confirmBtn = $(this);
-            confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-            var modal = bootstrap.Modal.getInstance(document.getElementById('confirmEditModal'));
-            modal.hide();
-            form.submit();
-          });
+            [nombreInput, apellidoInput, segundoApellidoInput].forEach(el => el && el.addEventListener("keypress", letraPermitida));
+
+            $('#btnOpenEditModal').on('click', function () {
+                if (form.checkValidity()) {
+                    var modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
+                    modal.show();
+                } else {
+                    form.classList.add('was-validated');
+                }
+            });
+
+            $('#confirmEditBtn').on('click', function () {
+                const confirmBtn = $(this);
+                confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+                var modal = bootstrap.Modal.getInstance(document.getElementById('confirmEditModal'));
+                modal.hide();
+                form.submit();
+            });
         });
     </script>
 }

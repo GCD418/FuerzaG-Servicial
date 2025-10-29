@@ -27,7 +27,7 @@
                 <label asp-for="UserAccount.Name" class="form-label">Nombre *</label>
                 <input asp-for="UserAccount.Name" class="form-control" placeholder="Ingrese el nombre"
                        required minlength="3" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s'-]+$"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
                        title="Solo letras, espacios, guiones y apóstrofos. No se permiten números ni símbolos." />
                 <span asp-validation-for="UserAccount.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
@@ -39,7 +39,7 @@
                 <label asp-for="UserAccount.FirstLastName" class="form-label">Apellido Paterno *</label>
                 <input asp-for="UserAccount.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
                        required minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s'-]+$"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
                        title="Solo letras, espacios, guiones y apóstrofos. No se permiten números ni símbolos." />
                 <span asp-validation-for="UserAccount.FirstLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
@@ -51,7 +51,7 @@
                 <label asp-for="UserAccount.SecondLastName" class="form-label">Apellido Materno</label>
                 <input asp-for="UserAccount.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
                        minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s'-]*$"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
                        title="Si lo rellena, use solo letras, espacios, guiones y apóstrofos." />
                 <span asp-validation-for="UserAccount.SecondLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
@@ -149,7 +149,7 @@
             $(docInput).on('input', function () { if (this.value.length > 9) this.value = this.value.slice(0, 9); });
 
             function letraYCaracteresPermitidos(e) {
-                const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s'\-]$/;
+                const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]$/;
                 const ch = String.fromCharCode(e.which);
                 if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
                     e.preventDefault();
