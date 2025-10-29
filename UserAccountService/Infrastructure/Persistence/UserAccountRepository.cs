@@ -159,7 +159,7 @@ public class UserAccountRepository : IUserAccountRepository
             Password = reader.IsDBNull(reader.GetOrdinal("password"))
                 ? null
                 : reader.GetString(
-                    reader.GetOrdinal("password")), // Para crear usuarios, existe; en edici�n puede ser NULL
+                    reader.GetOrdinal("password")),
             Role = reader.GetString(reader.GetOrdinal("role")),
             CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
             UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at"))
@@ -168,7 +168,8 @@ public class UserAccountRepository : IUserAccountRepository
             IsActive = reader.GetBoolean(reader.GetOrdinal("is_active")),
             ModifiedByUserId = reader.IsDBNull(reader.GetOrdinal("modified_by_user_id"))
                 ? null
-                : reader.GetInt32(reader.GetOrdinal("modified_by_user_id"))
+                : reader.GetInt32(reader.GetOrdinal("modified_by_user_id")),
+            IsFirstLogin = reader.GetBoolean(reader.GetOrdinal("is_first_login"))
         };
     }
 
