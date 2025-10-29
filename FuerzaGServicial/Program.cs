@@ -17,9 +17,9 @@ using UserAccountService.Domain.Ports;
 using UserAccountService.Domain.Services;
 using UserAccountService.Infrastructure.Persistence;
 using ServiceService.Domain.Ports;
-using ServiceService.Domain.Services.Validations;
 using ServiceService.Infrastructure.Persistence;   
-
+using ServiceService.Domain.Entities;
+using ServiceService.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

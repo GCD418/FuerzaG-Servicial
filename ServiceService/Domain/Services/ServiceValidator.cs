@@ -2,7 +2,7 @@
 using CommonService.Domain.Services.Validations;
 using ServiceService.Domain.Entities;
 
-namespace ServiceService.Domain.Services.Validations;
+namespace ServiceService.Domain.Services; 
 
 public class ServiceValidator : IValidator<Service>
 {

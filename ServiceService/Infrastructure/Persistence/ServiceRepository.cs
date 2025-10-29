@@ -14,7 +14,6 @@ public class ServiceRepository : IServiceRepository
         _dbConnectionFactory = dbConnectionFactory;
     }
 
-
     public async Task<IEnumerable<Service>> GetAllAsync()
     {
         var services = new List<Service>();
@@ -49,10 +48,10 @@ public class ServiceRepository : IServiceRepository
         return await reader.ReadAsync() ? MapReaderToModel(reader) : null;
     }
 
-    public async Task<bool> CreateAsync(Service service,  int createdByUserId)
+    public async Task<bool> CreateAsync(Service service, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        const string query = "SELECT fn_insert_service(@name, @type, @price, @description)";
+        const string query = "SELECT fn_insert_service(@name, @type, @price, @description, @created_by_user_id)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;
@@ -61,16 +60,16 @@ public class ServiceRepository : IServiceRepository
         AddParameter(command, "@type", service.Type);
         AddParameter(command, "@price", service.Price);
         AddParameter(command, "@description", service.Description);
-        AddParameter(command, "@created_by_user_id", createdByUserId);
+        AddParameter(command, "@created_by_user_id", userId);
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();
 
         return Convert.ToInt32(result) > 0;
+        
     }
 
-
-    public async Task<bool> UpdateAsync(Service service, int modifiedByUserId)
+    public async Task<bool> UpdateAsync(Service service, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_update_service(@id, @name, @type, @price, @description, @modified_by_user_id)";
@@ -83,7 +82,7 @@ public class ServiceRepository : IServiceRepository
         AddParameter(command, "@type", service.Type);
         AddParameter(command, "@price", service.Price);
         AddParameter(command, "@description", service.Description);
-        AddParameter(command, "@modified_by_user_id", modifiedByUserId);
+        AddParameter(command, "@modified_by_user_id", userId);
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();
@@ -91,8 +90,7 @@ public class ServiceRepository : IServiceRepository
         return Convert.ToBoolean(result);
     }
 
-
-    public async Task<bool> DeleteByIdAsync(int id, int modifiedByUserId)
+    public async Task<bool> DeleteByIdAsync(int id, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_soft_delete_service(@id, @modified_by_user_id)";
@@ -101,7 +99,7 @@ public class ServiceRepository : IServiceRepository
         command.CommandText = query;
 
         AddParameter(command, "@id", id);
-        AddParameter(command, "@modified_by_user_id", modifiedByUserId);
+        AddParameter(command, "@modified_by_user_id", userId);
 
         await connection.OpenAsync();
         var result = await command.ExecuteScalarAsync();
@@ -109,19 +107,23 @@ public class ServiceRepository : IServiceRepository
         return Convert.ToBoolean(result);
     }
 
-
     private Service MapReaderToModel(IDataReader reader)
     {
         return new Service
         {
-            Id = reader.GetInt32(0),
-            Name = reader.GetString(1),
-            Type = reader.GetString(2),
-            Price = reader.GetDecimal(3),
-            Description = reader.GetString(4),
-            CreatedAt = reader.GetDateTime(5),
-            UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime(6),
-            IsActive = reader.GetBoolean(7)
+            Id = reader.GetInt32(reader.GetOrdinal("id")),
+            Name = reader.GetString(reader.GetOrdinal("name")),
+            Type = reader.GetString(reader.GetOrdinal("type")),
+            Price = reader.GetDecimal(reader.GetOrdinal("price")),
+            Description = reader.GetString(reader.GetOrdinal("description")),
+            CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
+            UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at"))
+                ? null
+                : reader.GetDateTime(reader.GetOrdinal("updated_at")),
+            IsActive = reader.GetBoolean(reader.GetOrdinal("is_active")),
+            ModifiedByUserId = reader.IsDBNull(reader.GetOrdinal("modified_by_user_id"))
+                ? null
+                : reader.GetInt32(reader.GetOrdinal("modified_by_user_id"))
         };
     }
 
