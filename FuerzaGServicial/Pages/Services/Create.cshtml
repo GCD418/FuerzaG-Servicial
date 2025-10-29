@@ -8,86 +8,62 @@
 <div class="container mt-4 mb-5">
     <h2 class="mb-4">Nuevo Servicio</h2>
 
-    @if (Model.ValidationErrors.Any())
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <h6 class="alert-heading mb-2">
-                <i class="fas fa-exclamation-triangle me-1"></i> Errores de validación:
-            </h6>
-            <ul class="mb-0 small">
-                @foreach (var error in Model.ValidationErrors)
-                {
-                    <li>@error</li>
-                }
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-        </div>
-    }
-
     <form method="post" class="card card-body shadow-sm" id="serviceForm" novalidate>
         <div class="row g-3">
+
             <div class="col-md-6">
                 <label asp-for="Service.Name" class="form-label">Nombre del servicio *</label>
                 <input asp-for="Service.Name"
-                       class="form-control"
+                       class="form-control @(ViewData.ModelState["Service.Name"]?.Errors.Count > 0 ? "is-invalid" : (ViewData.ModelState["Service.Name"]?.AttemptedValue != null ? "is-valid" : ""))"
                        placeholder="Ej: Cambio de aceite"
                        required
                        minlength="3"
                        maxlength="100" />
                 <span asp-validation-for="Service.Name" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El nombre es obligatorio y debe tener al menos 3 caracteres.
-                </div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="Service.Type" class="form-label">Tipo *</label>
-                <select asp-for="Service.Type" class="form-select" required>
+                <select asp-for="Service.Type"
+                        class="form-select @(ViewData.ModelState["Service.Type"]?.Errors.Count > 0 ? "is-invalid" : (ViewData.ModelState["Service.Type"]?.AttemptedValue != null ? "is-valid" : ""))"
+                        required>
                     <option value="">-- Selecciona el tipo --</option>
                     <option value="Preventivo">Preventivo</option>
                     <option value="Correctivo">Correctivo</option>
                 </select>
                 <span asp-validation-for="Service.Type" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    Debes seleccionar un tipo de servicio.
-                </div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="Service.Price" class="form-label">Precio *</label>
-
-                <!-- Input group (opcional) para mostrar moneda en BS5 -->
                 <div class="input-group">
                     <span class="input-group-text">Bs</span>
                     <input asp-for="Service.Price"
-                           class="form-control"
                            type="text"
                            inputmode="decimal"
-                           placeholder="Ej: 1,200.50"
-                           value=""
-                           required />
+                           pattern="^\d+(\.\d{1,2})?$"
+                           placeholder="Ej: 1250.50"
+                           required
+                           class="form-control @(ViewData.ModelState["Service.Price"]?.Errors.Count > 0 ? "is-invalid" : (ViewData.ModelState["Service.Price"]?.AttemptedValue != null ? "is-valid" : ""))"
+                           id="Service_Price"
+                           autocomplete="off"
+                           oninput="this.value=this.value.replace(/[^0-9.]/g,'');" />
                 </div>
-
                 <span asp-validation-for="Service.Price" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El precio es obligatorio y debe ser mayor que 0.
-                </div>
             </div>
 
             <div class="col-12">
                 <label asp-for="Service.Description" class="form-label">Descripción *</label>
                 <textarea asp-for="Service.Description"
-                          class="form-control"
+                          class="form-control @(ViewData.ModelState["Service.Description"]?.Errors.Count > 0 ? "is-invalid" : (ViewData.ModelState["Service.Description"]?.AttemptedValue != null ? "is-valid" : ""))"
                           rows="3"
                           placeholder="Detalles del servicio"
                           required
-                          minlength="3"
-                          maxlength="255"></textarea>
+                          minlength="5"
+                          maxlength="100"></textarea>
                 <span asp-validation-for="Service.Description" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    La descripción es obligatoria y debe tener al menos 3 caracteres.
-                </div>
             </div>
+
         </div>
 
         <div class="mt-4 d-flex gap-2">
@@ -113,32 +89,82 @@
             const form = document.getElementById('serviceForm');
             const priceInput = document.getElementById('Service_Price');
             const descriptionInput = document.getElementById('Service_Description');
+            const nameInput = document.getElementById('Service_Name');
+            const typeSelect = document.getElementById('Service_Type');
 
-            if (priceInput) {
-                priceInput.addEventListener('input', function () {
-                    if (this.value.startsWith('-')) this.value = this.value.replace('-', '');
-                });
-            }
+            const nameErrorSpan = document.querySelector('[data-valmsg-for="Service.Name"]');
+            const typeErrorSpan = document.querySelector('[data-valmsg-for="Service.Type"]');
+            const priceErrorSpan = document.querySelector('[data-valmsg-for="Service.Price"]');
+            const descriptionErrorSpan = document.querySelector('[data-valmsg-for="Service.Description"]');
+
+            priceInput.addEventListener('input', function () {
+                this.value = this.value.replace(/[^0-9.]/g, '');
+                const priceStr = this.value.trim();
+                const price = parseFloat(priceStr);
+                const pricePattern = /^\d+(\.\d{1,2})?$/;
+
+                if (!priceStr || isNaN(price) || price <= 0 || !pricePattern.test(priceStr)) {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                    priceErrorSpan.textContent = "Ingrese un precio válido mayor a 0 con hasta 2 decimales";
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                    priceErrorSpan.textContent = "";
+                }
+            });
+
+            nameInput.addEventListener('input', function () {
+                const nameValue = this.value.trim();
+                const nameRegex = /^[a-zA-Z0-9\s]+$/;
+                if (!nameValue || nameValue.length < 3 || !nameRegex.test(nameValue)) {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                    nameErrorSpan.textContent = "El nombre debe tener al menos 3 caracteres y solo letras/números";
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                    nameErrorSpan.textContent = "";
+                }
+            });
+
+            typeSelect.addEventListener('change', function () {
+                if (!this.value) {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                    typeErrorSpan.textContent = "Debe seleccionar un tipo de servicio";
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                    typeErrorSpan.textContent = "";
+                }
+            });
+
+            descriptionInput.addEventListener('input', function () {
+                const description = this.value.trim();
+                const prohibitedChars = /[<>\/\\|]/;
+                if (!description || description.length < 5 || description.length > 100 || prohibitedChars.test(description)) {
+                    this.classList.add('is-invalid');
+                    this.classList.remove('is-valid');
+                    descriptionErrorSpan.textContent = "La descripción debe tener entre 5 y 100 caracteres y no contener <>/\\|";
+                } else {
+                    this.classList.remove('is-invalid');
+                    this.classList.add('is-valid');
+                    descriptionErrorSpan.textContent = "";
+                }
+            });
 
             document.getElementById('btnOpenModal').addEventListener('click', function () {
-                priceInput.classList.remove('is-invalid');
-                descriptionInput.classList.remove('is-invalid');
-
                 let valid = true;
-                
-                let priceStr = priceInput.value.replace(/,/g, '').trim();
-                let price = parseFloat(priceStr);
 
-                if (isNaN(price) || price <= 0) {
-                    priceInput.classList.add('is-invalid');
-                    valid = false;
-                }
+                nameInput.dispatchEvent(new Event('input'));
+                priceInput.dispatchEvent(new Event('input'));
+                typeSelect.dispatchEvent(new Event('change'));
+                descriptionInput.dispatchEvent(new Event('input'));
 
-                const description = descriptionInput.value.trim();
-                if (!description) {
-                    descriptionInput.classList.add('is-invalid');
-                    valid = false;
-                }
+                [nameInput, typeSelect, priceInput, descriptionInput].forEach(el => {
+                    if (el.classList.contains('is-invalid')) valid = false;
+                });
 
                 if (valid && form.checkValidity()) {
                     const modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
@@ -152,10 +178,8 @@
                 const confirmBtn = this;
                 confirmBtn.disabled = true;
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
-
                 const modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
                 modal.hide();
-
                 form.submit();
             });
         });

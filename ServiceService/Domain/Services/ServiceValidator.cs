@@ -18,7 +18,7 @@ public class ServiceValidator : IValidator<Service>
 
         ValidateName(entity.Name);
         ValidateType(entity.Type);
-        ValidatePrice(entity.Price);
+        ValidatePrice(entity.Price.Value);
         ValidateDescription(entity.Description);
 
         return _errors.Count == 0
@@ -122,10 +122,10 @@ public class ServiceValidator : IValidator<Service>
             _errors.Add("La descripción no puede superar los 500 caracteres");
         }
 
-        var prohibitedCharacters = new[] { '<', '>', '/', '\\', '|', '@', '#', '$', '%' };
+        var prohibitedCharacters = new[] { '<', '>', '/', '\\', '|' };
         if (description.Any(c => prohibitedCharacters.Contains(c)))
         {
-            _errors.Add("La descripción contiene caracteres no permitidos");
+            _errors.Add("La descripción contiene caracteres no permitidos: < > / \\ |");
         }
     }
 }

@@ -38,7 +38,7 @@
                         <td>@s.index</td>
                         <td>@s.service.Name</td>
                         <td>@s.service.Type</td>
-                        <td>@s.service.Price.ToString("C2")</td>
+                        <td>@(s.service.Price?.ToString("C2") ?? "-")</td>
                         <td>@s.service.Description</td>
                         <td class="text-nowrap text-center">
                             <a asp-page="/Services/Edit"
