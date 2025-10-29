@@ -66,7 +66,7 @@ namespace TechnicianService.Infrastructure.Persistence
             await using var conn = _db.CreateConnection();
             await using var cmd = conn.CreateCommand();
             cmd.CommandText =
-                "SELECT fn_update_technician(@id,@name,@first_last_name,@second_last_name, @phone_number,@email,@document_number,@address,@base_salary,@modified_by)";
+                "SELECT fn_update_technician(@id,@name,@first_last_name,@second_last_name, @phone_number,@email,@document_number,@address,@base_salary,@modified_by_user_id)";
 
             AddParameter(cmd, "@id", t.Id);
             AddParameter(cmd, "@name", t.Name);
