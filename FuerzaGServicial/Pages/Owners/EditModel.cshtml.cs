@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OwnerService.Domain.Entities;
 using UserAccountService.Domain.Entities;
+using UserAccountService.Domain.Ports;
 
 namespace FuerzaGServicial.Pages.Owners;
 
@@ -14,14 +15,19 @@ public class EditModel : PageModel
     private readonly OwnerService.Application.Services.OwnerService  _ownerService;
     private readonly IValidator<Owner> _validator;
     private readonly IDataProtector _protector;
+    private readonly ISessionManager _sessionManager;
     
     public List<string> ValidationErrors { get; set; } = [];
 
-    public EditModel(OwnerService.Application.Services.OwnerService ownerService, IValidator<Owner> validator, IDataProtectionProvider provider)
+    public EditModel(OwnerService.Application.Services.OwnerService ownerService, 
+        IValidator<Owner> validator, 
+        IDataProtectionProvider provider,
+        ISessionManager sessionManager)
     {
         _ownerService = ownerService;
         _validator = validator;
         _protector = provider.CreateProtector("OwnerProtector");
+        _sessionManager = sessionManager;
     }
 
     
@@ -57,7 +63,7 @@ public class EditModel : PageModel
             return Page();
         }
 
-        var isSuccess = await _ownerService.Update(Owner);
+        var isSuccess = await _ownerService.Update(Owner, _sessionManager.UserId ?? 9999);
 
         if (!isSuccess)
         {

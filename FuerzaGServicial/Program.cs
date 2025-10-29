@@ -7,6 +7,10 @@ using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
 using OwnerService.Domain.Services;
 using OwnerService.Infrastructure.Persistence;
+using TechnicianService.Domain.Entities;
+using TechnicianService.Domain.Ports;
+using TechnicianService.Domain.Services;
+using TechnicianService.Infrastructure.Persistence;
 using UserAccountService.Application.Facades;
 using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
@@ -48,6 +52,15 @@ builder.Services.AddScoped<IDbConnectionFactory, PostgreSqlConnection>();
 builder.Services.AddScoped<OwnerService.Application.Services.OwnerService>();
 builder.Services.AddScoped<IOwnerRepository, OwnerRepository>();
 builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
+
+#endregion
+
+
+#region Technician
+
+builder.Services.AddScoped<TechnicianService.Application.Services.TechnicianService>();
+builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
+builder.Services.AddScoped<IValidator<Technician>, TechnicianValidator>();
 
 #endregion
 

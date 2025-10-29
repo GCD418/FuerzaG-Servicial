@@ -6,12 +6,10 @@ namespace UserAccountService.Application.Services;
 public class UserAccountService
 {
     private readonly IUserAccountRepository _repository;
-    private readonly ISessionManager _sessionManager;
     
-    public UserAccountService(IUserAccountRepository repository, ISessionManager sessionManager)
+    public UserAccountService(IUserAccountRepository repository)
     {
         _repository = repository;
-        _sessionManager = sessionManager;
     }
 
     public async Task<IEnumerable<UserAccount>> GetAll()
@@ -29,14 +27,14 @@ public class UserAccountService
         return await _repository.CreateAsync(userAccount);
     }
 
-    public async Task<bool> Update(UserAccount userAccount)
+    public async Task<bool> Update(UserAccount userAccount, int userId)
     {
-        return await _repository.UpdateAsync(userAccount, _sessionManager.UserId ?? 9999);
+        return await _repository.UpdateAsync(userAccount, userId);
     }
 
-    public async Task<bool> DeleteById(int id)
+    public async Task<bool> DeleteById(int id, int userId)
     {
-        return await _repository.DeleteByIdAsync(id, _sessionManager.UserId ?? 9999);
+        return await _repository.DeleteByIdAsync(id, userId);
     }
 
     public async Task<UserAccount?> GetByUserName(string userName)

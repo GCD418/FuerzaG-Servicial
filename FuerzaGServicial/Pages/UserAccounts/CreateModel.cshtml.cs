@@ -7,7 +7,6 @@ using UserAccountService.Domain.Entities;
 namespace UserAccountService.Pages.UserAccounts;
 
 [Authorize(Roles = UserRoles.CEO)]
-
 public class CreateModel : PageModel
 {
     private readonly UserAccountService.Application.Services.UserAccountService _userAccountService;

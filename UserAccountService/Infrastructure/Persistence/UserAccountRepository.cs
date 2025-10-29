@@ -49,7 +49,8 @@ public class UserAccountRepository : IUserAccountRepository
     public async Task<bool> CreateAsync(UserAccount userAccount)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        string query = "SELECT fn_insert_account(@name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @user_name, @password, @role)";
+        string query =
+            "SELECT fn_insert_account(@name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @user_name, @password, @role)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;
@@ -74,7 +75,8 @@ public class UserAccountRepository : IUserAccountRepository
         await using var connection = _dbConnectionFactory.CreateConnection();
 
         // No se actualiza password
-        string query = "SELECT fn_update_account_no_password(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @role, @modified_by_user_id)";
+        string query =
+            "SELECT fn_update_account_no_password(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @role, @modified_by_user_id)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;
@@ -141,17 +143,32 @@ public class UserAccountRepository : IUserAccountRepository
             Id = reader.GetInt32(reader.GetOrdinal("id")),
             Name = reader.GetString(reader.GetOrdinal("name")),
             FirstLastName = reader.GetString(reader.GetOrdinal("first_last_name")),
-            SecondLastName = reader.IsDBNull(reader.GetOrdinal("second_last_name")) ? null : reader.GetString(reader.GetOrdinal("second_last_name")),
-            PhoneNumber = reader.IsDBNull(reader.GetOrdinal("phone_number")) ? 0 : reader.GetInt32(reader.GetOrdinal("phone_number")),
-            Email = reader.IsDBNull(reader.GetOrdinal("email")) ? string.Empty : reader.GetString(reader.GetOrdinal("email")),
-            DocumentNumber = reader.IsDBNull(reader.GetOrdinal("document_number")) ? string.Empty : reader.GetString(reader.GetOrdinal("document_number")),
+            SecondLastName = reader.IsDBNull(reader.GetOrdinal("second_last_name"))
+                ? null
+                : reader.GetString(reader.GetOrdinal("second_last_name")),
+            PhoneNumber = reader.IsDBNull(reader.GetOrdinal("phone_number"))
+                ? 0
+                : reader.GetInt32(reader.GetOrdinal("phone_number")),
+            Email = reader.IsDBNull(reader.GetOrdinal("email"))
+                ? string.Empty
+                : reader.GetString(reader.GetOrdinal("email")),
+            DocumentNumber = reader.IsDBNull(reader.GetOrdinal("document_number"))
+                ? string.Empty
+                : reader.GetString(reader.GetOrdinal("document_number")),
             UserName = reader.GetString(reader.GetOrdinal("user_name")),
-            Password = reader.IsDBNull(reader.GetOrdinal("password")) ? null : reader.GetString(reader.GetOrdinal("password")), // Para crear usuarios, existe; en edición puede ser NULL
+            Password = reader.IsDBNull(reader.GetOrdinal("password"))
+                ? null
+                : reader.GetString(
+                    reader.GetOrdinal("password")), // Para crear usuarios, existe; en ediciï¿½n puede ser NULL
             Role = reader.GetString(reader.GetOrdinal("role")),
             CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
-            UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at")) ? null : reader.GetDateTime(reader.GetOrdinal("updated_at")),
+            UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at"))
+                ? null
+                : reader.GetDateTime(reader.GetOrdinal("updated_at")),
             IsActive = reader.GetBoolean(reader.GetOrdinal("is_active")),
-            ModifiedByUserId = reader.IsDBNull(reader.GetOrdinal("modified_by_user_id")) ? null : reader.GetInt32(reader.GetOrdinal("modified_by_user_id"))
+            ModifiedByUserId = reader.IsDBNull(reader.GetOrdinal("modified_by_user_id"))
+                ? null
+                : reader.GetInt32(reader.GetOrdinal("modified_by_user_id"))
         };
     }
 

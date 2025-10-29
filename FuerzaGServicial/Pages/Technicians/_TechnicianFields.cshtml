@@ -1,0 +1,51 @@
+﻿@using TechnicianService.Domain.Entities
+@model Technician
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="FirstLastName" class="form-label"></label>
+        <input asp-for="FirstLastName" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="SecondLastName" class="form-label"></label>
+        <input asp-for="SecondLastName" class="form-control" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="PhoneNumber" class="form-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="DocumentNumber" class="form-label"></label>
+        <input asp-for="DocumentNumber" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="BaseSalary" class="form-label"></label>
+        <input asp-for="BaseSalary" class="form-control" />
+    </div>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Address" class="form-label"></label>
+    <input asp-for="Address" class="form-control" />
+</div>
+
+<div class="form-check mb-3">
+    <input asp-for="IsActive" class="form-check-input" />
+    <label asp-for="IsActive" class="form-check-label"></label>
+</div>

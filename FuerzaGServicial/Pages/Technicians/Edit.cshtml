@@ -1,0 +1,111 @@
+﻿@page
+@model FuerzaGServicial.Pages.Technicians.Edit
+@{
+    ViewData["Title"] = "Editar Técnico";
+}
+
+<div class="container mt-4 mb-5">
+    <h2 class="mb-3">Editar Técnico</h2>
+
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Any() == true)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h6 class="alert-heading mb-2"><i class="fas fa-exclamation-triangle"></i> Errores generales:</h6>
+            <ul class="mb-0 small">
+                @foreach (var error in ViewData.ModelState[""].Errors)
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form method="post" class="card card-body shadow-sm" id="technicianForm" novalidate>
+        <input type="hidden" asp-for="EncryptedId" />
+        <input type="hidden" asp-for="Form.Id" />
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Form.Name" class="form-label">Nombre *</label>
+                <input asp-for="Form.Name" class="form-control" required minlength="3" maxlength="100" />
+                <span asp-validation-for="Form.Name" class="text-danger small"></span>
+                <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Form.FirstLastName" class="form-label">Apellido Paterno *</label>
+                <input asp-for="Form.FirstLastName" class="form-control" required minlength="2" maxlength="100" />
+                <span asp-validation-for="Form.FirstLastName" class="text-danger small"></span>
+                <div class="invalid-feedback">El apellido paterno debe tener al menos 2 caracteres.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Form.SecondLastName" class="form-label">Apellido Materno</label>
+                <input asp-for="Form.SecondLastName" class="form-control" minlength="2" maxlength="100" />
+                <span asp-validation-for="Form.SecondLastName" class="text-danger small"></span>
+                <div class="invalid-feedback">El apellido materno debe tener al menos 2 caracteres.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Form.PhoneNumber" class="form-label">Teléfono *</label>
+                <input asp-for="Form.PhoneNumber" class="form-control" type="tel" pattern="[0-9]{8}" required />
+                <span asp-validation-for="Form.PhoneNumber" class="text-danger small"></span>
+                <div class="invalid-feedback">El teléfono debe tener exactamente 8 dígitos.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Form.Email" class="form-label">Correo Electrónico *</label>
+                <input asp-for="Form.Email" class="form-control" type="email" required maxlength="255" />
+                <span asp-validation-for="Form.Email" class="text-danger small"></span>
+                <div class="invalid-feedback">Ingrese un correo electrónico válido.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Form.DocumentNumber" class="form-label">Carnet de Identidad *</label>
+                <input asp-for="Form.DocumentNumber" class="form-control" type="text"
+                       minlength="6" maxlength="9" pattern="[0-9]{6,9}" required />
+                <span asp-validation-for="Form.DocumentNumber" class="text-danger small"></span>
+                <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Form.Address" class="form-label">Dirección *</label>
+                <textarea asp-for="Form.Address" class="form-control" rows="2"
+                          required minlength="5" maxlength="100"></textarea>
+                <span asp-validation-for="Form.Address" class="text-danger small"></span>
+                <div class="invalid-feedback">La dirección debe tener al menos 5 caracteres.</div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Form.BaseSalary" class="form-label">Salario Base *</label>
+                <input asp-for="Form.BaseSalary" class="form-control" type="number" step="0.01" min="0" required />
+                <span asp-validation-for="Form.BaseSalary" class="text-danger small"></span>
+                <div class="invalid-feedback">Ingrese un salario válido mayor o igual a 0.</div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-dark" type="submit"><i class="fas fa-save"></i> Actualizar</button>
+            <a asp-page="/Technicians/TechnicianPage" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+          $('input[type="tel"], input[asp-for="Form.DocumentNumber"]').on('keypress', function (e) {
+            if (e.which < 48 || e.which > 57) e.preventDefault();
+          });
+
+          $('input[type="tel"]').on('input', function () {
+            if (this.value.length > 8) this.value = this.value.slice(0, 8);
+          });
+
+          $('input[asp-for="Form.DocumentNumber"]').on('input', function () {
+            if (this.value.length > 9) this.value = this.value.slice(0, 9);
+          });
+        });
+    </script>
+}
