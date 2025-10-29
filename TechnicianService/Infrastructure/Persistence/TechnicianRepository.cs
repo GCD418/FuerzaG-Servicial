@@ -33,7 +33,7 @@ namespace TechnicianService.Infrastructure.Persistence
             await using var conn = _db.CreateConnection();
             await using var cmd  = conn.CreateCommand();
             cmd.CommandText = "SELECT * FROM fn_get_technician_by_id(@id)"; 
-            Add(cmd, "@id", id);
+            AddParameter(cmd, "@id", id);
 
             await conn.OpenAsync();
             await using var r = await cmd.ExecuteReaderAsync();
@@ -45,57 +45,52 @@ namespace TechnicianService.Infrastructure.Persistence
             await using var conn = _db.CreateConnection();
             await using var cmd  = conn.CreateCommand();
             cmd.CommandText =
-                "SELECT fn_insert_technician(@name,@first_lastname,@second_lastname,@phone,@email,@doc,@address,@base_salary,@created_at,@updated_at,@is_active,@modified_by)";
+                "SELECT fn_insert_technician(@name,@first_lastname,@second_lastname,@phone,@email,@doc,@address,@base_salary)";
 
-            Add(cmd, "@name",            t.Name);
-            Add(cmd, "@first_lastname",  t.FirstLastName);
-            Add(cmd, "@second_lastname", t.SecondLastName);
-            Add(cmd, "@phone",           t.PhoneNumber);
-            Add(cmd, "@email",           t.Email);
-            Add(cmd, "@doc",             t.DocumentNumber);
-            Add(cmd, "@address",         t.Address);
-            Add(cmd, "@base_salary",     t.BaseSalary);
-            Add(cmd, "@created_at",      t.CreatedAt);
-            Add(cmd, "@updated_at",      t.UpdatedAt);
-            Add(cmd, "@is_active",       t.IsActive);
-            Add(cmd, "@modified_by",     t.ModifiedByUserId);
+            AddParameter(cmd, "@name",            t.Name);
+            AddParameter(cmd, "@first_lastname",  t.FirstLastName);
+            AddParameter(cmd, "@second_lastname", t.SecondLastName);
+            AddParameter(cmd, "@phone",           t.PhoneNumber);
+            AddParameter(cmd, "@email",           t.Email);
+            AddParameter(cmd, "@doc",             t.DocumentNumber);
+            AddParameter(cmd, "@address",         t.Address);
+            AddParameter(cmd, "@base_salary",     t.BaseSalary);
 
             await conn.OpenAsync();
             var result = await cmd.ExecuteScalarAsync();
             return Convert.ToInt32(result) > 0;
         }
 
-        public async Task<bool> UpdateAsync(Technician t)
+        public async Task<bool> UpdateAsync(Technician t, int userId)
         {
             await using var conn = _db.CreateConnection();
             await using var cmd  = conn.CreateCommand();
             cmd.CommandText =
-                "SELECT fn_update_technician(@id,@name,@first_lastname,@second_lastname,@phone,@email,@doc,@address,@base_salary,@updated_at,@is_active,@modified_by)";
+                "SELECT fn_update_technician(@id,@name,@first_last_name,@second_last_name, @phone_number,@email,@document_number,@address,@base_salary,@modified_by)";
 
-            Add(cmd, "@id",              t.Id);
-            Add(cmd, "@name",            t.Name);
-            Add(cmd, "@first_lastname",  t.FirstLastName);
-            Add(cmd, "@second_lastname", t.SecondLastName);
-            Add(cmd, "@phone",           t.PhoneNumber);
-            Add(cmd, "@email",           t.Email);
-            Add(cmd, "@doc",             t.DocumentNumber);
-            Add(cmd, "@address",         t.Address);
-            Add(cmd, "@base_salary",     t.BaseSalary);
-            Add(cmd, "@updated_at",      t.UpdatedAt);
-            Add(cmd, "@is_active",       t.IsActive);
-            Add(cmd, "@modified_by",     t.ModifiedByUserId);
+            AddParameter(cmd, "@id",              t.Id);
+            AddParameter(cmd, "@name",            t.Name);
+            AddParameter(cmd, "@first_last_name",  t.FirstLastName);
+            AddParameter(cmd, "@second_last_name", t.SecondLastName);
+            AddParameter(cmd, "@phone_number",           t.PhoneNumber);
+            AddParameter(cmd, "@email",           t.Email);
+            AddParameter(cmd, "@document_number",             t.DocumentNumber);
+            AddParameter(cmd, "@address",         t.Address);
+            AddParameter(cmd, "@base_salary",     t.BaseSalary);
+            AddParameter(cmd, "@modified_by_user_id",     userId);
 
             await conn.OpenAsync();
             var result = await cmd.ExecuteScalarAsync();
             return Convert.ToBoolean(result);
         }
 
-        public async Task<bool> DeleteByIdAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id, int userId)
         {
             await using var conn = _db.CreateConnection();
             await using var cmd  = conn.CreateCommand();
-            cmd.CommandText = "SELECT fn_soft_delete_technician(@id)";
-            Add(cmd, "@id", id);
+            cmd.CommandText = "SELECT fn_soft_delete_technician(@id, @modified_by_user_id)";
+            AddParameter(cmd, "@id", id);
+            AddParameter(cmd, "@modified_by_user_id", userId);
 
             await conn.OpenAsync();
             var result = await cmd.ExecuteScalarAsync();
@@ -119,7 +114,7 @@ namespace TechnicianService.Infrastructure.Persistence
             ModifiedByUserId = r["modified_by_user_id"] is DBNull ? null : (int?)Convert.ToInt32(r["modified_by_user_id"])
         };
 
-        private static void Add(IDbCommand cmd, string name, object? value)
+        private static void AddParameter(IDbCommand cmd, string name, object? value)
         {
             var p = cmd.CreateParameter();
             p.ParameterName = name;

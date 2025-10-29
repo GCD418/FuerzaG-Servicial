@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TechnicianService.Domain.Entities;
 using UserAccountService.Domain.Entities;
+using UserAccountService.Domain.Ports;
 
 namespace FuerzaGServicial.Pages.Technicians;
 
@@ -12,16 +13,19 @@ public class CreateModel : PageModel
 {
     private readonly IValidator<Technician> _validator;
     private readonly TechnicianService.Application.Services.TechnicianService _technicianService;
+    private readonly ISessionManager _sessionManager;
 
     public List<string> ValidationErrors { get; set; } = new();
 
     [BindProperty] public Technician Form { get; set; } = new();
 
     public CreateModel(IValidator<Technician> validator,
-        TechnicianService.Application.Services.TechnicianService technicianService)
+        TechnicianService.Application.Services.TechnicianService technicianService,
+        ISessionManager sessionManager)
     {
         _validator = validator;
         _technicianService = technicianService;
+        _sessionManager = sessionManager;
     }
 
     public void OnGet()
