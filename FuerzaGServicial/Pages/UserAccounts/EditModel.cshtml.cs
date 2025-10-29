@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UserAccountService.Domain.Entities;
+using UserAccountService.Domain.Ports;
 
 namespace FuerzaGServicial.Pages.UserAccounts;
 
@@ -13,6 +14,7 @@ public class EditModel : PageModel
     private readonly UserAccountService.Application.Services.UserAccountService _userAccountService;
     private readonly IValidator<UserAccount> _validator;
     private readonly IDataProtector _protector;
+    private readonly ISessionManager _sessionManager;
 
     [BindProperty]
     public UserAccount UserAccount { get; set; } = new();
@@ -22,11 +24,13 @@ public class EditModel : PageModel
     public EditModel(
         UserAccountService.Application.Services.UserAccountService userAccountService,
         IValidator<UserAccount> validator,
-        IDataProtectionProvider provider)
+        IDataProtectionProvider provider,
+        ISessionManager sessionManager)
     {
         _userAccountService = userAccountService;
         _validator = validator;
         _protector = provider.CreateProtector("UserAccountProtector");
+        _sessionManager = sessionManager;
     }
 
     public async Task<IActionResult> OnGetAsync(string id)
@@ -72,7 +76,7 @@ public class EditModel : PageModel
         if (existingUser != null)
             UserAccount.UserName = existingUser.UserName;
 
-        var isSuccess = await _userAccountService.Update(UserAccount);
+        var isSuccess = await _userAccountService.Update(UserAccount, _sessionManager.UserId ?? 9999);
         if (!isSuccess)
         {
             ModelState.AddModelError(string.Empty, "No se pudo actualizar el usuario.");

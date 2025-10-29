@@ -6,8 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
 using CommonService.Domain.Services.Validations;
+using UserAccountService.Domain.Entities;
+
 namespace FuerzaGServicial.Pages.Technicians;
 
+[Authorize(Roles = UserRoles.Manager)]
 public class TechnicianPage : PageModel
 {
     public List<Technician> Technicians { get; set; } = new();
