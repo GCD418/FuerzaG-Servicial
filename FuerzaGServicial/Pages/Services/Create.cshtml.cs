@@ -2,18 +2,18 @@ using CommonService.Domain.Services.Validations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ServiceService.Application.Services;
 using ServiceService.Domain.Entities;
-
+using UserAccountService.Domain.Ports;
 
 
 namespace FuerzaGServicial.Pages.Services;
 
-// [Authorize(Roles = "Manager")]
+[Authorize(Roles = "Manager")]
 public class Create : PageModel
 {
     private readonly ServiceService.Application.Services.ServiceService _serviceService;
     private readonly IValidator<Service> _validator;
+    private readonly ISessionManager _sessionManager;
 
     public List<string> ValidationErrors { get; set; } = [];
 
@@ -21,10 +21,12 @@ public class Create : PageModel
 
     public Create(
         ServiceService.Application.Services.ServiceService serviceService,
-        IValidator<Service> validator)
+        IValidator<Service> validator,
+        ISessionManager sessionManager)
     {
         _serviceService = serviceService;
         _validator = validator;
+        _sessionManager = sessionManager;
     }
 
     public void OnGet() { }
@@ -50,7 +52,7 @@ public class Create : PageModel
             return Page();
         }
 
-        var ok = await _serviceService.Create(Service);
+        var ok = await _serviceService.Create(Service, _sessionManager.UserId ?? 9999);
         if (!ok)
         {
             ModelState.AddModelError(string.Empty, "No se pudo crear el registro.");
