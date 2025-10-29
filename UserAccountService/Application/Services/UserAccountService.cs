@@ -46,6 +46,11 @@ public class UserAccountService
     {
         return await _repository.IsUserNameUsed(userName);
     }
+
+    public async Task<bool> ChangePassword(int userId, string newPassword)
+    {
+        return await _repository.ChangePassword(userId, newPassword);
+    }
     
     public string GenerateUserName(UserAccount userAccount)
     {

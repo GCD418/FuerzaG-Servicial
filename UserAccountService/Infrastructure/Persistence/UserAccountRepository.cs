@@ -173,6 +173,24 @@ public class UserAccountRepository : IUserAccountRepository
         };
     }
 
+    public async Task<bool> ChangePassword(int userId, string newPassword)
+    {
+        await using var connection = _dbConnectionFactory.CreateConnection();
+
+        string query =
+            "SELECT fn_update_password_account(@id, @password, @modified_by_user_id)";
+
+        await using var command = connection.CreateCommand();
+        command.CommandText = query;
+
+        AddParameter(command, "@id", userId);
+        AddParameter(command, "@password", newPassword);
+        AddParameter(command, "@modified_by_user_id", userId);
+
+        await connection.OpenAsync();
+        return Convert.ToBoolean(await command.ExecuteScalarAsync());       
+    }
+
     private void AddParameter(IDbCommand command, string name, object value)
     {
         var parameter = command.CreateParameter();
