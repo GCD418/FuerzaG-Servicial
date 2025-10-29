@@ -6,12 +6,10 @@ namespace UserAccountService.Application.Services;
 public class UserAccountService
 {
     private readonly IUserAccountRepository _repository;
-    private readonly ISessionManager _sessionManager;
     
-    public UserAccountService(IUserAccountRepository repository, ISessionManager sessionManager)
+    public UserAccountService(IUserAccountRepository repository)
     {
         _repository = repository;
-        _sessionManager = sessionManager;
     }
 
     public async Task<IEnumerable<UserAccount>> GetAll()

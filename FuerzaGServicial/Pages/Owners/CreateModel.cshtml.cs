@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using OwnerService.Domain.Entities;
 using UserAccountService.Domain.Entities;
+using UserAccountService.Domain.Ports;
 
 namespace FuerzaGServicial.Pages.Owners;
 
@@ -13,14 +14,18 @@ public class CreateModel : PageModel
 {
     private readonly OwnerService.Application.Services.OwnerService  _ownerService;
     private readonly IValidator<Owner> _validator;
+    private readonly ISessionManager _sessionManager;
     public List<string> ValidationErrors { get; set; } = [];
 
     [BindProperty] public Owner Owner { get; set; } = new();
 
-    public CreateModel(OwnerService.Application.Services.OwnerService ownerService, IValidator<Owner> validator)
+    public CreateModel(OwnerService.Application.Services.OwnerService ownerService, 
+        IValidator<Owner> validator,
+        ISessionManager sessionManager)
     {
         _ownerService = ownerService;
         _validator = validator;
+        _sessionManager = sessionManager;
     }
     
     public void OnGet()
