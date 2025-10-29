@@ -28,35 +28,49 @@
         <div class="row g-3">
             <div class="col-md-6">
                 <label asp-for="Form.Name" class="form-label">Nombre *</label>
-                <input asp-for="Form.Name" class="form-control" required minlength="3" maxlength="100" />
+                <input asp-for="Form.Name" class="form-control" placeholder="Ingrese nombre"
+                       required minlength="3" maxlength="100"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$" />
                 <span asp-validation-for="Form.Name" class="text-danger small"></span>
-                <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres.</div>
+                <div class="invalid-feedback">
+                    El nombre debe tener al menos 3 caracteres y sólo letras.
+                </div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="Form.FirstLastName" class="form-label">Apellido Paterno *</label>
-                <input asp-for="Form.FirstLastName" class="form-control" required minlength="2" maxlength="100" />
+                <input asp-for="Form.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
+                       required minlength="2" maxlength="100"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$" />
                 <span asp-validation-for="Form.FirstLastName" class="text-danger small"></span>
-                <div class="invalid-feedback">El apellido paterno debe tener al menos 2 caracteres.</div>
+                <div class="invalid-feedback">
+                    El apellido paterno debe tener al menos 2 caracteres y sólo letras.
+                </div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="Form.SecondLastName" class="form-label">Apellido Materno</label>
-                <input asp-for="Form.SecondLastName" class="form-control" minlength="2" maxlength="100" />
+                <input asp-for="Form.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
+                       minlength="2" maxlength="100"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]*$" />
                 <span asp-validation-for="Form.SecondLastName" class="text-danger small"></span>
-                <div class="invalid-feedback">El apellido materno debe tener al menos 2 caracteres.</div>
+                <div class="invalid-feedback">
+                    El apellido materno debe tener al menos 2 caracteres y sólo letras.
+                </div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="Form.PhoneNumber" class="form-label">Teléfono *</label>
-                <input asp-for="Form.PhoneNumber" class="form-control" type="tel" pattern="[0-9]{8}" required />
+                <input asp-for="Form.PhoneNumber" class="form-control" type="tel"
+                       pattern="[0-9]{8}" required />
                 <span asp-validation-for="Form.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">El teléfono debe tener exactamente 8 dígitos.</div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="Form.Email" class="form-label">Correo Electrónico *</label>
-                <input asp-for="Form.Email" class="form-control" type="email" required maxlength="255" />
+                <input asp-for="Form.Email" class="form-control" type="email"
+                       required maxlength="255" />
                 <span asp-validation-for="Form.Email" class="text-danger small"></span>
                 <div class="invalid-feedback">Ingrese un correo electrónico válido.</div>
             </div>
@@ -69,6 +83,18 @@
                 <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
             </div>
 
+            <div class="col-md-6">
+                <label asp-for="Form.BaseSalary" class="form-label">Salario Base *</label>
+                <input asp-for="Form.BaseSalary" class="form-control" placeholder="Ej: 2500.00"
+                       required pattern="^\d+(\.\d{1,2})?$"
+                       title="Solo se permiten números y un punto decimal (hasta dos decimales)."
+                       inputmode="decimal" />
+                <span asp-validation-for="Form.BaseSalary" class="text-danger small"></span>
+                <div class="invalid-feedback">
+                    Ingrese un salario válido (solo números y hasta dos decimales).
+                </div>
+            </div>
+
             <div class="col-12">
                 <label asp-for="Form.Address" class="form-label">Dirección *</label>
                 <textarea asp-for="Form.Address" class="form-control" rows="2"
@@ -76,18 +102,15 @@
                 <span asp-validation-for="Form.Address" class="text-danger small"></span>
                 <div class="invalid-feedback">La dirección debe tener al menos 5 caracteres.</div>
             </div>
-
-            <div class="col-md-6">
-                <label asp-for="Form.BaseSalary" class="form-label">Salario Base *</label>
-                <input asp-for="Form.BaseSalary" class="form-control" type="number" step="0.01" min="0" required />
-                <span asp-validation-for="Form.BaseSalary" class="text-danger small"></span>
-                <div class="invalid-feedback">Ingrese un salario válido mayor o igual a 0.</div>
-            </div>
         </div>
 
         <div class="mt-4">
-            <button class="btn btn-dark" type="submit"><i class="fas fa-save"></i> Actualizar</button>
-            <a asp-page="/Technicians/TechnicianPage" class="btn btn-outline-secondary"><i class="fas fa-times"></i> Cancelar</a>
+            <button class="btn btn-dark" type="submit">
+                <i class="fas fa-save"></i> Actualizar
+            </button>
+            <a asp-page="/Technicians/TechnicianPage" class="btn btn-outline-secondary">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
         </div>
     </form>
 </div>
@@ -95,17 +118,55 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-          $('input[type="tel"], input[asp-for="Form.DocumentNumber"]').on('keypress', function (e) {
-            if (e.which < 48 || e.which > 57) e.preventDefault();
-          });
 
-          $('input[type="tel"]').on('input', function () {
-            if (this.value.length > 8) this.value = this.value.slice(0, 8);
-          });
+            function letraPermitida(e) {
+                const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]$/;
+                const ch = String.fromCharCode(e.which);
+                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
+                    e.preventDefault();
+                }
+            }
 
-          $('input[asp-for="Form.DocumentNumber"]').on('input', function () {
-            if (this.value.length > 9) this.value = this.value.slice(0, 9);
-          });
+            const nombreInput = document.getElementById("Form_Name");
+            const apellidoPInput = document.getElementById("Form_FirstLastName");
+            const apellidoMInput = document.getElementById("Form_SecondLastName");
+
+            [nombreInput, apellidoPInput, apellidoMInput].forEach(el => el && el.addEventListener("keypress", letraPermitida));
+
+            $('input[type="tel"], input[asp-for="Form.DocumentNumber"]').on('keypress', function (e) {
+                if (e.which < 48 || e.which > 57) e.preventDefault();
+            });
+
+            $('input[type="tel"]').on('input', function () {
+                if (this.value.length > 8) this.value = this.value.slice(0, 8);
+            });
+
+            $('input[asp-for="Form.DocumentNumber"]').on('input', function () {
+                if (this.value.length > 9) this.value = this.value.slice(0, 9);
+            });
+
+            const baseSalaryInput = document.getElementById("Form_BaseSalary");
+
+            if (baseSalaryInput) {
+                baseSalaryInput.addEventListener("keypress", function (e) {
+                    const ch = String.fromCharCode(e.which);
+                    const allowed = /^[0-9.]$/;
+
+                    if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    if (ch === '.' && this.value.includes('.')) {
+                        e.preventDefault();
+                    }
+                });
+
+                baseSalaryInput.addEventListener("input", function () {
+                    const match = this.value.match(/^(\d+(\.\d{0,2})?)?/);
+                    if (match) this.value = match[0];
+                });
+            }
         });
     </script>
 }

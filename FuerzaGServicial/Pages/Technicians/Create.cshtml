@@ -28,11 +28,12 @@
                 <div class="input-group has-validation position-relative">
                     <input asp-for="Form.Name" class="form-control" placeholder="Ingrese nombre"
                            required minlength="3" maxlength="100"
-                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" />
+                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
+                           title="Solo se permiten letras y espacios." />
                     <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none"><i class="fas fa-check-circle"></i></span>
                     <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none"><i class="fas fa-times-circle"></i></span>
                     <div class="invalid-feedback">
-                        El nombre solo puede contener letras y acentos (sin números ni caracteres especiales).
+                        El nombre debe tener al menos 3 caracteres y sólo letras..
                     </div>
                 </div>
                 <span asp-validation-for="Form.Name" class="text-danger small"></span>
@@ -43,11 +44,12 @@
                 <div class="input-group has-validation position-relative">
                     <input asp-for="Form.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
                            required minlength="2" maxlength="100"
-                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$" />
+                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
+                           title="Solo se permiten letras y espacios." />
                     <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none"><i class="fas fa-check-circle"></i></span>
                     <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none"><i class="fas fa-times-circle"></i></span>
                     <div class="invalid-feedback">
-                        El apellido paterno solo puede contener letras y acentos (sin números ni caracteres especiales).
+                        El apellido paterno debe tener al menos 2 caracteres y sólo letras.
                     </div>
                 </div>
                 <span asp-validation-for="Form.FirstLastName" class="text-danger small"></span>
@@ -58,11 +60,12 @@
                 <div class="input-group has-validation position-relative">
                     <input asp-for="Form.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
                            minlength="2" maxlength="100"
-                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]*$" />
+                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]*$"
+                           title="Solo se permiten letras y espacios si se llena." />
                     <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none"><i class="fas fa-check-circle"></i></span>
                     <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none"><i class="fas fa-times-circle"></i></span>
                     <div class="invalid-feedback">
-                        El apellido materno solo puede contener letras y acentos (sin números ni caracteres especiales).
+                        El apellido materno debe tener al menos 2 caracteres y sólo letras.
                     </div>
                 </div>
                 <span asp-validation-for="Form.SecondLastName" class="text-danger small"></span>
@@ -71,7 +74,7 @@
             <div class="col-md-6">
                 <label asp-for="Form.PhoneNumber" class="form-label">Teléfono *</label>
                 <input asp-for="Form.PhoneNumber" class="form-control" placeholder="Ej: 76543210"
-                       type="tel" pattern="[0-9]{8}" required value="" />
+                       type="tel" pattern="[0-9]{8}" required value=""/>
                 <span asp-validation-for="Form.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
                     El teléfono debe tener exactamente 8 dígitos.
@@ -100,11 +103,22 @@
 
             <div class="col-md-6">
                 <label asp-for="Form.BaseSalary" class="form-label">Salario Base *</label>
-                <input asp-for="Form.BaseSalary" class="form-control" placeholder="Ej: 2500.00" required />
-                <span asp-validation-for="Form.BaseSalary" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El salario base es obligatorio.
+                <div class="input-group has-validation position-relative">
+                    <input asp-for="Form.BaseSalary" class="form-control" placeholder="Ej: 2500.00"
+                           required pattern="^\d+(\.\d{1,2})?$"
+                           title="Solo se permiten números y un punto decimal (hasta dos decimales)."
+                           inputmode="decimal" />
+                    <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none">
+                        <i class="fas fa-check-circle"></i>
+                    </span>
+                    <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none">
+                        <i class="fas fa-times-circle"></i>
+                    </span>
+                    <div class="invalid-feedback">
+                        Ingrese un salario válido (solo números y hasta dos decimales).
+                    </div>
                 </div>
+                <span asp-validation-for="Form.BaseSalary" class="text-danger small"></span>
             </div>
 
             <div class="col-12">
@@ -131,13 +145,14 @@
             <small class="text-muted">* Campos obligatorios</small>
         </div>
     </form>
+
     @await Html.PartialAsync("_ConfirmSaveModal")
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
-            var form = document.getElementById('technicianForm');
+            const form = document.getElementById('technicianForm');
 
             $('input[type="tel"], input[asp-for="Form.DocumentNumber"]').on('keypress', function (e) {
                 if (e.which < 48 || e.which > 57) e.preventDefault();
@@ -149,6 +164,41 @@
             $('input[asp-for="Form.DocumentNumber"]').on('input', function () {
                 if (this.value.length > 10) this.value = this.value.slice(0, 10);
             });
+
+            function letraPermitida(e) {
+                const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]$/;
+                const ch = String.fromCharCode(e.which);
+                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) e.preventDefault();
+            }
+
+            const nameInput = document.getElementById("Form_Name");
+            const firstLastNameInput = document.getElementById("Form_FirstLastName");
+            const secondLastNameInput = document.getElementById("Form_SecondLastName");
+
+            [nameInput, firstLastNameInput, secondLastNameInput].forEach(el => el && el.addEventListener("keypress", letraPermitida));
+
+            const baseSalaryInput = document.getElementById("Form_BaseSalary");
+
+            if (baseSalaryInput) {
+                baseSalaryInput.addEventListener("keypress", function (e) {
+                    const ch = String.fromCharCode(e.which);
+                    const allowed = /^[0-9.]$/;
+
+                    if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    if (ch === '.' && this.value.includes('.')) {
+                        e.preventDefault();
+                    }
+                });
+
+                baseSalaryInput.addEventListener("input", function () {
+                    const match = this.value.match(/^(\d+(\.\d{0,2})?)?/);
+                    if (match) this.value = match[0];
+                });
+            }
 
             $('input, textarea').on('input', function () {
                 const field = $(this);
