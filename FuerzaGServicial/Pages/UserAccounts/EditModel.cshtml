@@ -27,23 +27,35 @@
         <div class="row g-3">
             <div class="col-md-6">
                 <label asp-for="UserAccount.Name" class="form-label">Nombre *</label>
-                <input asp-for="UserAccount.Name" class="form-control @(ViewData.ModelState["UserAccount.Name"]?.Errors.Count > 0 ? "is-invalid" : "")" placeholder="Ingrese el nombre" required minlength="3" maxlength="100" />
+                <input asp-for="UserAccount.Name" class="form-control @(ViewData.ModelState["UserAccount.Name"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                       placeholder="Ingrese el nombre"
+                       required minlength="3" maxlength="100"
+                       pattern="^[A-Za-z¡…Õ”⁄·ÈÌÛ˙—Ò¸‹\s'-]+$"
+                       title="Solo letras, espacios, guiones y apÛstrofos. No se permiten n˙meros ni sÌmbolos." />
                 <span asp-validation-for="UserAccount.Name" class="text-danger small"></span>
-                <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres.</div>
+                <div class="invalid-feedback">El nombre debe tener al menos 3 caracteres y solo letras.</div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="UserAccount.FirstLastName" class="form-label">Apellido Paterno *</label>
-                <input asp-for="UserAccount.FirstLastName" class="form-control @(ViewData.ModelState["UserAccount.FirstLastName"]?.Errors.Count > 0 ? "is-invalid" : "")" placeholder="Ingrese apellido paterno" required minlength="2" maxlength="100" />
+                <input asp-for="UserAccount.FirstLastName" class="form-control @(ViewData.ModelState["UserAccount.FirstLastName"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                       placeholder="Ingrese apellido paterno"
+                       required minlength="2" maxlength="100"
+                       pattern="^[A-Za-z¡…Õ”⁄·ÈÌÛ˙—Ò¸‹\s'-]+$"
+                       title="Solo letras, espacios, guiones y apÛstrofos. No se permiten n˙meros ni sÌmbolos." />
                 <span asp-validation-for="UserAccount.FirstLastName" class="text-danger small"></span>
-                <div class="invalid-feedback">El apellido paterno debe tener al menos 2 caracteres.</div>
+                <div class="invalid-feedback">El apellido paterno debe tener al menos 2 caracteres y solo letras.</div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="UserAccount.SecondLastName" class="form-label">Apellido Materno</label>
-                <input asp-for="UserAccount.SecondLastName" class="form-control @(ViewData.ModelState["UserAccount.SecondLastName"]?.Errors.Count > 0 ? "is-invalid" : "")" placeholder="Ingrese apellido materno" minlength="2" maxlength="100" />
+                <input asp-for="UserAccount.SecondLastName" class="form-control @(ViewData.ModelState["UserAccount.SecondLastName"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                       placeholder="Ingrese apellido materno (opcional)"
+                       minlength="2" maxlength="100"
+                       pattern="^[A-Za-z¡…Õ”⁄·ÈÌÛ˙—Ò¸‹\s'-]*$"
+                       title="Si lo rellena, use solo letras, espacios, guiones y apÛstrofos." />
                 <span asp-validation-for="UserAccount.SecondLastName" class="text-danger small"></span>
-                <div class="invalid-feedback">El apellido materno debe tener al menos 2 caracteres.</div>
+                <div class="invalid-feedback">El apellido materno debe tener al menos 2 caracteres y solo letras.</div>
             </div>
 
             <div class="col-md-6">
@@ -104,12 +116,32 @@
         $(document).ready(function () {
             var form = document.getElementById('userAccountForm');
 
-            $('input[type="tel"], input[asp-for="UserAccount.DocumentNumber"]').on('keypress', function(e) {
+            const nombreInput = document.getElementById("UserAccount_Name");
+            const apellidoInput = document.getElementById("UserAccount_FirstLastName");
+            const segundoApellidoInput = document.getElementById("UserAccount_SecondLastName");
+            const docInput = document.getElementById("UserAccount.DocumentNumber");
+            const phoneInput = document.getElementById("UserAccount_PhoneNumber");
+
+            $(phoneInput).on('keypress', function (e) {
+                if (e.which < 48 || e.which > 57) e.preventDefault();
+            });
+            $(docInput).on('keypress', function (e) {
                 if (e.which < 48 || e.which > 57) e.preventDefault();
             });
 
-            $('input[type="tel"]').on('input', function() { if(this.value.length>8) this.value=this.value.slice(0,8); });
-            $('input[asp-for="UserAccount.DocumentNumber"]').on('input', function() { if(this.value.length>9) this.value=this.value.slice(0,9); });
+            $(phoneInput).on('input', function () { if (this.value.length > 8) this.value = this.value.slice(0, 8); });
+            $(docInput).on('input', function () { if (this.value.length > 9) this.value = this.value.slice(0, 9); });
+
+            function letraYCaracteresPermitidos(e) {
+                const allowed = /^[A-Za-z¡…Õ”⁄·ÈÌÛ˙—Ò¸‹\s'\-]$/;
+                const ch = String.fromCharCode(e.which);
+                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
+                    e.preventDefault();
+                }
+            }
+            $(nombreInput).on('keypress', letraYCaracteresPermitidos);
+            $(apellidoInput).on('keypress', letraYCaracteresPermitidos);
+            $(segundoApellidoInput).on('keypress', letraYCaracteresPermitidos);
 
             $('#btnOpenEditModal').on('click', function () {
                 if (form.checkValidity()) {
