@@ -1,0 +1,114 @@
+@page
+@model FuerzaGServicial.Pages.Services.ServicePage
+
+@{
+    ViewData["Title"] = "Servicios";
+}
+
+<section id="services" class="section bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="fw-bold">Listado de Servicios</h2>
+            <p class="text-muted">Gestiona los registros de los servicios disponibles</p>
+        </div>
+
+        <div class="d-flex justify-content-end mb-4">
+            <a asp-page="/Services/Create" class="btn btn-custom">
+                <i class="fas fa-plus-circle me-2"></i> Nuevo Servicio
+            </a>
+        </div>
+        
+
+        <div class="table-responsive shadow-sm rounded-3">
+            <table class="table align-middle text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width:5%;">#</th>
+                        <th style="width:20%;">Nombre</th>
+                        <th style="width:15%;">Tipo</th>
+                        <th style="width:10%;">Precio</th>
+                        <th style="width:30%;">Descripción</th>
+                        <th style="width:10%;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var s in Model.Services.Select((service, index) => new { service, index = index + 1 }))
+                {
+                    <tr>
+                        <td>@s.index</td>
+                        <td>@s.service.Name</td>
+                        <td>@s.service.Type</td>
+                        <td>@s.service.Price.ToString("C2")</td>
+                        <td>@s.service.Description</td>
+                        <td class="text-nowrap text-center">
+                            <a asp-page="/Services/Edit"
+                               asp-route-id="@Model.EncryptId(s.service.Id)"
+                               class="btn btn-warning btn-sm me-1">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal@(s.service.Id)">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="7" class="text-end" style="font-weight: 400 !important;">
+                            <strong>@Model.Services.Count()</strong> registro(s) encontrado(s)
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            @foreach (var s in Model.Services)
+            {
+                <div class="modal fade" id="deleteModal@(s.Id)" tabindex="-1"
+                     aria-labelledby="deleteModalLabel@(s.Id)" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow">
+                            <div class="modal-header bg-dark text-white border-0">
+                                <h5 class="modal-title text-light" id="deleteModalLabel@(s.Id)">
+                                    <i class="fas fa-exclamation-triangle me-2"></i> Confirmar eliminación
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p class="mb-3">
+                                    ¿Está seguro de que desea eliminar el servicio
+                                    <strong>@s.Name</strong>?
+                                </p>
+                                <p class="text-muted small">
+                                    <i class="fas fa-info-circle me-2"></i> Esta acción no se puede deshacer.
+                                </p>
+                            </div>
+
+                            <div class="modal-footer border-0">
+                                <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-2"></i> Cancelar
+                                </button>
+
+                                <form method="post"
+                                      asp-page-handler="Delete"
+                                      asp-route-id="@Model.EncryptId(s.Id)"
+                                      class="d-inline">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash me-2"></i> Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

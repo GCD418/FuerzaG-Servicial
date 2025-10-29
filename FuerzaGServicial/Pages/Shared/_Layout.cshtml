@@ -142,7 +142,7 @@
                     <div class="ml-auto">
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
-                                var username = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                                var username = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
                                 var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
                                 var name = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
                                 var firstLastName = User.FindFirst("FirstLastName")?.Value;
@@ -154,7 +154,7 @@
                                     <i class="fas fa-user-circle fa-lg mr-2"></i>
                                     <span>@username</span>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown" style="min-width: 250px;">
+                                <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown" style="min-width: 250px; transform: translateX(-60px);">
                                     <div class="dropdown-header bg-light py-3">
                                         <div class="d-flex align-items-center">
                                             <i class="fas fa-user-circle fa-3x text-primary mr-3"></i>
