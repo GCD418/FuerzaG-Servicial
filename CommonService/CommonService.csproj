@@ -10,6 +10,7 @@
       <Folder Include="Application\" />
       <Folder Include="Domain\Entities\" />
       <Folder Include="Infrastructure\Persistence\" />
+      <Folder Include="Infrastructure\Reports\Builders\" />
     </ItemGroup>
 
     <ItemGroup>
