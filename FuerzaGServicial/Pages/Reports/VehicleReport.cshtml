@@ -1,0 +1,102 @@
+@page
+@model FuerzaGServicial.Pages.Reports.VehicleReportModel
+@{
+    ViewData["Title"] = "Reporte de Vehículos";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-car"></i> Reporte de Vehículos por Rango de Años
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle"></i> @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" asp-page-handler="Generate">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="YearFrom" class="form-label fw-bold">
+                                    <i class="fas fa-calendar-alt"></i> Año Desde
+                                </label>
+                                <input asp-for="YearFrom" class="form-control" type="number" 
+                                       min="1900" max="@DateTime.Now.Year" required />
+                                <span asp-validation-for="YearFrom" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="YearTo" class="form-label fw-bold">
+                                    <i class="fas fa-calendar-alt"></i> Año Hasta
+                                </label>
+                                <input asp-for="YearTo" class="form-control" type="number" 
+                                       min="1900" max="@(DateTime.Now.Year + 1)" required />
+                                <span asp-validation-for="YearTo" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-file-download"></i> Formato de Reporte
+                            </label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" asp-for="Format" 
+                                           value="pdf" id="formatPdf" checked />
+                                    <label class="form-check-label" for="formatPdf">
+                                        <i class="fas fa-file-pdf text-danger"></i> PDF
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" asp-for="Format" 
+                                           value="excel" id="formatExcel" />
+                                    <label class="form-check-label" for="formatExcel">
+                                        <i class="fas fa-file-excel text-success"></i> Excel
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Información:</strong> Este reporte muestra el listado de vehículos registrados 
+                            incluyendo propietario, placa, marca, modelo y año del vehículo.
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-page="/Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-file-download"></i> Generar Reporte
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-question-circle"></i> Información del Reporte</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success"></i> Muestra propietario, placa, marca, modelo y año</li>
+                        <li><i class="fas fa-check text-success"></i> Filtrado por rango de años</li>
+                        <li><i class="fas fa-check text-success"></i> Incluye estadísticas en el pie del reporte</li>
+                        <li><i class="fas fa-check text-success"></i> Disponible en formato PDF y Excel</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
