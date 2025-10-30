@@ -2,14 +2,15 @@ using CommonService.Domain.Services.Validations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using UserAccountService.Application.Facades;
 using UserAccountService.Domain.Entities;
 
-namespace UserAccountService.Pages.UserAccounts;
+namespace FuerzaGServicial.Pages.UserAccounts;
 
 [Authorize(Roles = UserRoles.CEO)]
 public class CreateModel : PageModel
 {
-    private readonly UserAccountService.Application.Services.UserAccountService _userAccountService;
+    private readonly SessionFacade _sessionFacade;
     private readonly IValidator<UserAccount> _validator;
 
     public List<string> ValidationErrors { get; set; } = new();
@@ -18,10 +19,10 @@ public class CreateModel : PageModel
     public UserAccount UserAccount { get; set; } = new();
 
     public CreateModel(
-        UserAccountService.Application.Services.UserAccountService userAccountService,
+        SessionFacade sessionFacade,
         IValidator<UserAccount> validator)
     {
-        _userAccountService = userAccountService;
+        _sessionFacade = sessionFacade;
         _validator = validator;
     }
 
@@ -52,9 +53,7 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        UserAccount.UserName = _userAccountService.GenerateUserName(UserAccount);
-
-        var isSuccess = await _userAccountService.Create(UserAccount);
+        var isSuccess = await _sessionFacade.CreateUserAccount(UserAccount);
         if (!isSuccess)
         {
             ModelState.AddModelError(string.Empty, "No se pudo crear el usuario.");

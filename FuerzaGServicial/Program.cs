@@ -35,6 +35,7 @@ builder.Services
         options.LogoutPath = "/Logout"; //TODO
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
+builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
