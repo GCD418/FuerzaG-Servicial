@@ -1,3 +1,4 @@
+using CommonService.Domain.Entities;
 using CommonService.Domain.Ports;
 using CommonService.Domain.Services.Validations;
 using CommonService.Infrastructure;
@@ -35,6 +36,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
 builder.Services.AddScoped<SessionFacade>();
+builder.Services.AddScoped<IValidator<CommonService.Domain.Entities.ChangePasswordInput>, ChangePasswordInputValidator>();
 
 #endregion
 
