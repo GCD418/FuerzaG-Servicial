@@ -112,31 +112,51 @@
                 
                 @{
                     string currentPage = ViewContext.ActionDescriptor.DisplayName;
+                    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                    bool isAuthenticated = User?.Identity?.IsAuthenticated == true;
+                    bool isManager = isAuthenticated && userRole == "Manager";
+                    bool isCEO = isAuthenticated && userRole == "CEO";
                 }
 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto">
-                        <a asp-page="/index" class="nav-item nav-link @(currentPage.Contains("/Index") ? "text-danger" : "")"><i class="fas fa-home me-1"></i> INICIO</a>
-                        <a asp-page="/Services/ServicePage" class="nav-item nav-link @(currentPage.Contains("/Services/ServicePage") ? "text-danger" : "")">Servicios</a>
-                        <a asp-page="/Owners/OwnerPage" class="nav-item nav-link @(currentPage.Contains("/Owners/OwnerPage") ? "text-danger" : "")">Clientes</a>
-                        <a asp-page="/UserAccounts/UserPage" class="nav-item nav-link @(currentPage.Contains("/UserAccounts/UserPage") ? "text-danger" : "")">Usuarios</a>
-                        <a asp-page="/Technicians/TechnicianPage" class="nav-item nav-link @(currentPage.Contains("/Technicians/TechnicianPage") ? "text-danger" : "")">Técnicos</a>
-                        <!-- Ocultar -->
-                        <!--
-                        @if (User?.Identity?.IsAuthenticated == true)
-                        {
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="cursor: pointer">Pages</a>
-                                <div class="dropdown-menu">
-                                    <a asp-page="/Technicians/TechnicianPage" class="dropdown-item" style="cursor: pointer;">Technician</a>
-                                    <a asp-page="/Owners/OwnerPage" class="dropdown-item" style="cursor: pointer;">Owner</a>
-                                    <a asp-page="/UserAccounts/UserPage" class="dropdown-item" style="cursor: pointer;">User</a>
-                                    <a asp-page="/Services/ServicePage" class="dropdown-item" style="cursor: pointer;">Service</a>
-                                </div>
-                            </div>
-                        } -->
-                        <!-- Ocultar -->
+                        <!-- INICIO - Visible para todos -->
+                        <a asp-page="/index" class="nav-item nav-link @(currentPage.Contains("/Index") ? "text-danger" : "")">
+                            <i class="fas fa-home me-1"></i> INICIO
+                        </a>
                         
+                        @if (isAuthenticated)
+                        {
+                            @if (isManager)
+                            {
+                                <!-- Navegación para Manager: Reportes, Técnicos, Clientes, Servicios -->
+                                <a asp-page="/Reports/Index" class="nav-item nav-link @(currentPage.Contains("/Reports/") ? "text-danger" : "")">
+                                    Reportes
+                                </a>
+                                <a asp-page="/Technicians/TechnicianPage" class="nav-item nav-link @(currentPage.Contains("/Technicians/TechnicianPage") ? "text-danger" : "")">
+                                    Técnicos
+                                </a>
+                                <a asp-page="/Owners/OwnerPage" class="nav-item nav-link @(currentPage.Contains("/Owners/OwnerPage") ? "text-danger" : "")">
+                                    Clientes
+                                </a>
+                                <a asp-page="/Services/ServicePage" class="nav-item nav-link @(currentPage.Contains("/Services/ServicePage") ? "text-danger" : "")">
+                                    Servicios
+                                </a>
+                            }
+                            else if (isCEO)
+                            {
+                                <!-- Navegación para CEO: Servicios, Usuarios, Reportes -->
+                                <a asp-page="/Services/ServicePage" class="nav-item nav-link @(currentPage.Contains("/Services/ServicePage") ? "text-danger" : "")">
+                                    Servicios
+                                </a>
+                                <a asp-page="/UserAccounts/UserPage" class="nav-item nav-link @(currentPage.Contains("/UserAccounts/UserPage") ? "text-danger" : "")">
+                                    Usuarios
+                                </a>
+                                <a asp-page="/Reports/Index" class="nav-item nav-link @(currentPage.Contains("/Reports/") ? "text-danger" : "")">
+                                    Reportes
+                                </a>
+                            }
+                        }
                     </div>
                     
                     <div class="ml-auto">

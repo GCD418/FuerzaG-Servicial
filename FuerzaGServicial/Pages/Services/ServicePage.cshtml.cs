@@ -8,7 +8,7 @@ using UserAccountService.Domain.Ports;
 namespace FuerzaGServicial.Pages.Services;
 
 
-[Authorize(Roles = "Manager")] 
+[Authorize(Roles = "Manager,CEO")]
 public class ServicePage : PageModel
 {
     public IEnumerable<Service> Services { get; set; } = Enumerable.Empty<Service>();
