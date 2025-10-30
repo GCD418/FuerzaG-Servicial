@@ -1,5 +1,5 @@
 @page
-@model UserAccountService.Pages.UserAccounts.CreateModel
+@model CreateModel
 @{
     ViewData["Title"] = "Nuevo Usuario";
 }
@@ -27,11 +27,11 @@
                 <label asp-for="UserAccount.Name" class="form-label">Nombre *</label>
                 <input asp-for="UserAccount.Name" class="form-control" placeholder="Ingrese el nombre"
                        required minlength="3" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
-                       title="Solo letras, espacios, guiones y apóstrofos. No se permiten números ni símbolos." />
+                       pattern="^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\s]+$"
+                       title="Solo letras, espacios, guiones y apï¿½strofos. No se permiten nï¿½meros ni sï¿½mbolos." />
                 <span asp-validation-for="UserAccount.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El nombre debe tener al menos 3 caracteres y sólo letras.
+                    El nombre debe tener al menos 3 caracteres y sï¿½lo letras.
                 </div>
             </div>
 
@@ -39,11 +39,11 @@
                 <label asp-for="UserAccount.FirstLastName" class="form-label">Apellido Paterno *</label>
                 <input asp-for="UserAccount.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
                        required minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
-                       title="Solo letras, espacios, guiones y apóstrofos. No se permiten números ni símbolos." />
+                       pattern="^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\s]+$"
+                       title="Solo letras, espacios, guiones y apï¿½strofos. No se permiten nï¿½meros ni sï¿½mbolos." />
                 <span asp-validation-for="UserAccount.FirstLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido paterno debe tener al menos 2 caracteres y sólo letras.
+                    El apellido paterno debe tener al menos 2 caracteres y sï¿½lo letras.
                 </div>
             </div>
 
@@ -51,32 +51,32 @@
                 <label asp-for="UserAccount.SecondLastName" class="form-label">Apellido Materno</label>
                 <input asp-for="UserAccount.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
                        minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
-                       title="Si lo rellena, use solo letras, espacios, guiones y apóstrofos." />
+                       pattern="^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\s]+$"
+                       title="Si lo rellena, use solo letras, espacios, guiones y apï¿½strofos." />
                 <span asp-validation-for="UserAccount.SecondLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido materno debe tener al menos 2 caracteres y sólo letras.
+                    El apellido materno debe tener al menos 2 caracteres y sï¿½lo letras.
                 </div>
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.PhoneNumber" class="form-label">Teléfono *</label>
+                <label asp-for="UserAccount.PhoneNumber" class="form-label">Telï¿½fono *</label>
                 <input asp-for="UserAccount.PhoneNumber" class="form-control" placeholder="Ej: 76543210"
                        type="tel" pattern="[0-9]{8}" required
                        value="@(Model.UserAccount.PhoneNumber == 0 ? "" : Model.UserAccount.PhoneNumber.ToString())" />
                 <span asp-validation-for="UserAccount.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El teléfono debe tener exactamente 8 dígitos.
+                    El telï¿½fono debe tener exactamente 8 dï¿½gitos.
                 </div>
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.Email" class="form-label">Correo Electrónico *</label>
+                <label asp-for="UserAccount.Email" class="form-label">Correo Electrï¿½nico *</label>
                 <input asp-for="UserAccount.Email" class="form-control" placeholder="ejemplo@correo.com"
                        type="email" required maxlength="255" />
                 <span asp-validation-for="UserAccount.Email" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    Ingrese un correo electrónico válido.
+                    Ingrese un correo electrï¿½nico vï¿½lido.
                 </div>
             </div>
 
@@ -86,7 +86,7 @@
                        type="text" minlength="6" maxlength="9" pattern="[0-9]{6,9}" required />
                 <span asp-validation-for="UserAccount.DocumentNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El CI debe contener entre 6 y 9 dígitos.
+                    El CI debe contener entre 6 y 9 dï¿½gitos.
                 </div>
             </div>
 
@@ -105,7 +105,7 @@
 
             <div class="col-md-6 mt-3">
                 <label asp-for="UserAccount.UserName" class="form-label">Nombre de Usuario</label>
-                <input asp-for="UserAccount.UserName" class="form-control" readonly placeholder="Se generará automáticamente" />
+                <input asp-for="UserAccount.UserName" class="form-control" readonly placeholder="Se generarï¿½ automï¿½ticamente" />
             </div>
         </div>
 
@@ -149,7 +149,7 @@
             $(docInput).on('input', function () { if (this.value.length > 9) this.value = this.value.slice(0, 9); });
 
             function letraYCaracteresPermitidos(e) {
-                const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]$/;
+                const allowed = /^[A-Za-zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\s]$/;
                 const ch = String.fromCharCode(e.which);
                 if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
                     e.preventDefault();
