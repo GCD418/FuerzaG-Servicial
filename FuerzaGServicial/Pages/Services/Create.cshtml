@@ -18,7 +18,8 @@
                        placeholder="Ej: Cambio de aceite"
                        required
                        minlength="3"
-                       maxlength="100" />
+                       maxlength="100" 
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$" />
                 <span asp-validation-for="Service.Name" class="text-danger small"></span>
             </div>
 
@@ -60,6 +61,7 @@
                           placeholder="Detalles del servicio"
                           required
                           minlength="5"
+                          pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
                           maxlength="100"></textarea>
                 <span asp-validation-for="Service.Description" class="text-danger small"></span>
             </div>
@@ -116,7 +118,7 @@
 
             nameInput.addEventListener('input', function () {
                 const nameValue = this.value.trim();
-                const nameRegex = /^[a-zA-Z0-9\s]+$/;
+                const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
                 if (!nameValue || nameValue.length < 3 || !nameRegex.test(nameValue)) {
                     this.classList.add('is-invalid');
                     this.classList.remove('is-valid');

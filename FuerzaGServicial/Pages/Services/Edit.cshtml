@@ -34,6 +34,7 @@
                        placeholder="Ej: Cambio de aceite"
                        required
                        minlength="3"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
                        maxlength="100"
                        autocomplete="off" />
                 <span asp-validation-for="Service.Name" class="text-danger small"></span>
@@ -76,6 +77,7 @@
                           required
                           minlength="3"
                           maxlength="255"
+                          pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
                           autocomplete="off"></textarea>
                 <span asp-validation-for="Service.Description" class="text-danger small"></span>
             </div>
@@ -128,7 +130,7 @@
                 let valid = true;
 
                 const nameValue = nameInput.value.trim();
-                const nameRegex = /^[a-zA-Z0-9\s]+$/;
+                const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
                 if (!nameValue || nameValue.length < 3 || !nameRegex.test(nameValue)) {
                     nameInput.classList.add('is-invalid');
                     nameErrorSpan.textContent = 'El nombre debe tener al menos 3 caracteres y solo letras/números.';
