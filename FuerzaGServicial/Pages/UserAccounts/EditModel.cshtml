@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model FuerzaGServicial.Pages.UserAccounts.EditModel
 @{
     ViewData["Title"] = "Editar Usuario";
@@ -60,14 +60,14 @@
 
             <div class="col-md-6">
                 <label asp-for="UserAccount.PhoneNumber" class="form-label">Teléfono *</label>
-                <input asp-for="UserAccount.PhoneNumber" type="tel" pattern="[0-9]{8}" required class="form-control @(ViewData.ModelState["UserAccount.PhoneNumber"]?.Errors.Count > 0 ? "is-invalid" : "")" />
+                <input asp-for="UserAccount.PhoneNumber" type="tel" pattern="[0-9]{8}" placeholder="Ej: 76543210" required class="form-control @(ViewData.ModelState["UserAccount.PhoneNumber"]?.Errors.Count > 0 ? "is-invalid" : "")" />
                 <span asp-validation-for="UserAccount.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">El teléfono debe tener exactamente 8 dígitos.</div>
             </div>
 
             <div class="col-md-6">
                 <label asp-for="UserAccount.Email" class="form-label">Correo Electrónico *</label>
-                <input asp-for="UserAccount.Email" type="email" required maxlength="255" class="form-control @(ViewData.ModelState["UserAccount.Email"]?.Errors.Count > 0 ? "is-invalid" : "")" />
+                <input asp-for="UserAccount.Email" type="email" required maxlength="255" placeholder="ejemplo@correo.com" class="form-control @(ViewData.ModelState["UserAccount.Email"]?.Errors.Count > 0 ? "is-invalid" : "")" />
                 <span asp-validation-for="UserAccount.Email" class="text-danger small"></span>
                 <div class="invalid-feedback">Ingrese un correo electrónico válido.</div>
             </div>

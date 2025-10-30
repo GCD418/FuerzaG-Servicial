@@ -29,6 +29,7 @@
             <div class="col-md-6">
                 <label asp-for="Owner.Name" class="form-label">Nombre *</label>
                 <input asp-for="Owner.Name" class="form-control"
+                       placeholder="Ingrese el nombre"
                        required minlength="3" maxlength="100"
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ ]+$"
                        title="Solo se permiten letras y espacios." />
@@ -41,6 +42,7 @@
             <div class="col-md-6">
                 <label asp-for="Owner.FirstLastname" class="form-label">Apellido Paterno *</label>
                 <input asp-for="Owner.FirstLastname" class="form-control"
+                       placeholder="Ingrese apellido paterno"
                        required minlength="2" maxlength="100"
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ ]+$"
                        title="Solo se permiten letras y espacios." />
@@ -54,6 +56,7 @@
                 <label asp-for="Owner.SecondLastname" class="form-label">Apellido Materno</label>
                 <input asp-for="Owner.SecondLastname" class="form-control"
                        minlength="2" maxlength="100"
+                       placeholder="Ingrese apellido materno (opcional)"
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ ]*$"
                        title="Solo se permiten letras y espacios si se llena." />
                 <span asp-validation-for="Owner.SecondLastname" class="text-danger small"></span>
@@ -65,7 +68,7 @@
             <div class="col-md-6">
                 <label asp-for="Owner.PhoneNumber" class="form-label">Teléfono *</label>
                 <input asp-for="Owner.PhoneNumber" class="form-control"
-                       type="tel" pattern="[0-9]{8}" required />
+                       type="tel" pattern="[0-9]{8}" required placeholder="Ej: 76543210" />
                 <span asp-validation-for="Owner.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">El teléfono debe tener exactamente 8 dígitos.</div>
             </div>
@@ -73,7 +76,8 @@
             <div class="col-md-6">
                 <label asp-for="Owner.Email" class="form-label">Correo Electrónico *</label>
                 <input asp-for="Owner.Email" class="form-control"
-                       type="email" required maxlength="255" />
+                       type="email" required maxlength="255"
+                       placeholder="ejemplo@correo.com" />
                 <span asp-validation-for="Owner.Email" class="text-danger small"></span>
                 <div class="invalid-feedback">Ingrese un correo electrónico válido.</div>
             </div>
@@ -81,7 +85,7 @@
             <div class="col-md-6">
                 <label asp-for="Owner.Ci" class="form-label">Carnet de Identidad *</label>
                 <input asp-for="Owner.Ci" class="form-control"
-                       type="text" minlength="6" maxlength="9" pattern="[0-9]{6,9}" required />
+                       type="text" minlength="6" maxlength="9" placeholder="Ej: 1234567" pattern="[0-9]{6,9}" required />
                 <span asp-validation-for="Owner.Ci" class="text-danger small"></span>
                 <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
             </div>
