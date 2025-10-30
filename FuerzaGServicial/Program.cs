@@ -17,6 +17,10 @@ using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 using UserAccountService.Domain.Services;
 using UserAccountService.Infrastructure.Persistence;
+using ServiceService.Domain.Ports;
+using ServiceService.Infrastructure.Persistence;   
+using ServiceService.Domain.Entities;
+using ServiceService.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +67,13 @@ builder.Services.AddScoped<IValidator<Owner>,  OwnerValidator>();
 builder.Services.AddScoped<TechnicianService.Application.Services.TechnicianService>();
 builder.Services.AddScoped<ITechnicianRepository, TechnicianRepository>();
 builder.Services.AddScoped<IValidator<Technician>, TechnicianValidator>();
+
+#endregion
+
+#region Service
+builder.Services.AddScoped<ServiceService.Application.Services.ServiceService>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<IValidator<Service>, ServiceValidator>();
 
 #endregion
 

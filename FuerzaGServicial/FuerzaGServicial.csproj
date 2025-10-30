@@ -9,8 +9,10 @@
     <ItemGroup>
       <ProjectReference Include="..\OwnerService\OwnerService.csproj" />
       <ProjectReference Include="..\TechnicianService\TechnicianService.csproj" />
+      <ProjectReference Include="..\ServiceService\ServiceService.csproj" />
       <ProjectReference Include="..\UserAccountService\UserAccountService.csproj" />
       <ProjectReference Include="..\CommonService\CommonService.csproj" />
+	  <ProjectReference Include="..\ServiceService\ServiceService.csproj" />
     </ItemGroup>
 
     <ItemGroup>
