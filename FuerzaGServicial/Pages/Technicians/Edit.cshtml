@@ -33,7 +33,7 @@
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$" />
                 <span asp-validation-for="Form.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El nombre debe tener al menos 3 caracteres y sólo letras.
+                    El nombre debe tener al menos 3 caracteres y solo letras.
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$" />
                 <span asp-validation-for="Form.FirstLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido paterno debe tener al menos 2 caracteres y sólo letras.
+                    El apellido paterno debe tener al menos 2 caracteres y solo letras.
                 </div>
             </div>
 
@@ -55,7 +55,7 @@
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]*$" />
                 <span asp-validation-for="Form.SecondLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido materno debe tener al menos 2 caracteres y sólo letras.
+                    El apellido materno debe tener al menos 2 caracteres y solo letras.
                 </div>
             </div>
 
@@ -91,7 +91,7 @@
                        inputmode="decimal" />
                 <span asp-validation-for="Form.BaseSalary" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    Ingrese un salario válido (solo números y hasta dos decimales).
+                    Ingrese un salario válido mayor a 0 con hasta 2 decimales.
                 </div>
             </div>
 

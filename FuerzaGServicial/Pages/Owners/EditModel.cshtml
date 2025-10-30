@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model FuerzaGServicial.Pages.Owners.EditModel
 @{
     ViewData["Title"] = "Editar Dueño";
@@ -34,7 +34,7 @@
                        title="Solo se permiten letras y espacios." />
                 <span asp-validation-for="Owner.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El nombre debe tener al menos 3 caracteres y no contener números ni caracteres especiales.
+                    El nombre debe tener al menos 3 caracteres y solo letras.
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
                        title="Solo se permiten letras y espacios." />
                 <span asp-validation-for="Owner.FirstLastname" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido paterno debe tener al menos 2 caracteres y no contener números ni caracteres especiales.
+                    El apellido paterno debe tener al menos 2 caracteres y solo letras.
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
                        title="Solo se permiten letras y espacios si se llena." />
                 <span asp-validation-for="Owner.SecondLastname" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido materno debe tener al menos 2 caracteres y no contener números ni caracteres especiales.
+                    El apellido materno debe tener al menos 2 caracteres y solo letras
                 </div>
             </div>
 
