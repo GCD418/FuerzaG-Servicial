@@ -27,11 +27,11 @@
                 <label asp-for="UserAccount.Name" class="form-label">Nombre *</label>
                 <input asp-for="UserAccount.Name" class="form-control" placeholder="Ingrese el nombre"
                        required minlength="3" maxlength="100"
-                       pattern="^[A-Za-z��������������\s]+$"
-                       title="Solo letras, espacios, guiones y ap�strofos. No se permiten n�meros ni s�mbolos." />
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
+                       title="Solo letras y espacios. No se permiten números ni símbolos." />
                 <span asp-validation-for="UserAccount.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El nombre debe tener al menos 3 caracteres y s�lo letras.
+                    El nombre debe tener al menos 3 caracteres y sólo letras.
                 </div>
             </div>
 
@@ -39,11 +39,11 @@
                 <label asp-for="UserAccount.FirstLastName" class="form-label">Apellido Paterno *</label>
                 <input asp-for="UserAccount.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
                        required minlength="2" maxlength="100"
-                       pattern="^[A-Za-z��������������\s]+$"
-                       title="Solo letras, espacios, guiones y ap�strofos. No se permiten n�meros ni s�mbolos." />
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
+                       title="Solo letras y espacios. No se permiten números ni símbolos." />
                 <span asp-validation-for="UserAccount.FirstLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido paterno debe tener al menos 2 caracteres y s�lo letras.
+                    El apellido paterno debe tener al menos 2 caracteres y sólo letras.
                 </div>
             </div>
 
@@ -51,32 +51,32 @@
                 <label asp-for="UserAccount.SecondLastName" class="form-label">Apellido Materno</label>
                 <input asp-for="UserAccount.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
                        minlength="2" maxlength="100"
-                       pattern="^[A-Za-z��������������\s]+$"
-                       title="Si lo rellena, use solo letras, espacios, guiones y ap�strofos." />
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
+                       title="Si lo rellena, use solo letras y espacios" />
                 <span asp-validation-for="UserAccount.SecondLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido materno debe tener al menos 2 caracteres y s�lo letras.
+                    El apellido materno debe tener al menos 2 caracteres y sólo letras.
                 </div>
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.PhoneNumber" class="form-label">Tel�fono *</label>
+                <label asp-for="UserAccount.PhoneNumber" class="form-label">Teléfono *</label>
                 <input asp-for="UserAccount.PhoneNumber" class="form-control" placeholder="Ej: 76543210"
                        type="tel" pattern="[0-9]{8}" required
                        value="@(Model.UserAccount.PhoneNumber == 0 ? "" : Model.UserAccount.PhoneNumber.ToString())" />
                 <span asp-validation-for="UserAccount.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El tel�fono debe tener exactamente 8 d�gitos.
+                    El teléfono debe tener exactamente 8 dígitos.
                 </div>
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.Email" class="form-label">Correo Electr�nico *</label>
+                <label asp-for="UserAccount.Email" class="form-label">Correo Electrónico *</label>
                 <input asp-for="UserAccount.Email" class="form-control" placeholder="ejemplo@correo.com"
                        type="email" required maxlength="255" />
                 <span asp-validation-for="UserAccount.Email" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    Ingrese un correo electr�nico v�lido.
+                    Ingrese un correo electrónico válido.
                 </div>
             </div>
 
@@ -86,7 +86,7 @@
                        type="text" minlength="6" maxlength="9" pattern="[0-9]{6,9}" required />
                 <span asp-validation-for="UserAccount.DocumentNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El CI debe contener entre 6 y 9 d�gitos.
+                    El CI debe contener entre 6 y 9 dígitos.
                 </div>
             </div>
 
@@ -105,7 +105,7 @@
 
             <div class="col-md-6 mt-3">
                 <label asp-for="UserAccount.UserName" class="form-label">Nombre de Usuario</label>
-                <input asp-for="UserAccount.UserName" class="form-control" readonly placeholder="Se generar� autom�ticamente" />
+                <input asp-for="UserAccount.UserName" class="form-control" readonly placeholder="Se generará automáticamente" />
             </div>
         </div>
 
@@ -149,7 +149,7 @@
             $(docInput).on('input', function () { if (this.value.length > 9) this.value = this.value.slice(0, 9); });
 
             function letraYCaracteresPermitidos(e) {
-                const allowed = /^[A-Za-z��������������\s]$/;
+                const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]$/;
                 const ch = String.fromCharCode(e.which);
                 if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
                     e.preventDefault();
