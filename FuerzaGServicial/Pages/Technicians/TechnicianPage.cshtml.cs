@@ -1,11 +1,8 @@
-using System.Collections.Generic;
-using TechnicianService.Application.Services;
 using TechnicianService.Domain.Entities;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
-using CommonService.Domain.Services.Validations;
 using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 
@@ -40,6 +37,6 @@ public class TechnicianPage : PageModel
     {
         var decryptedId = int.Parse(_protector.Unprotect(id));
         await _technicianService.DeleteById(decryptedId, _sessionManager.UserId ?? 9999);
-        return RedirectToPage("/Technicians/TechnicianPage");
+        return RedirectToPage();
     }
 }
