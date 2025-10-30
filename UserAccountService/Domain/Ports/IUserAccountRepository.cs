@@ -11,4 +11,5 @@ public interface IUserAccountRepository
     public Task<bool> DeleteByIdAsync(int id, int userId);
     public Task<UserAccount?> GetByUserName(string userName);
     public Task<bool> IsUserNameUsed(string userName);
+    public Task<bool> ChangePassword(int userId, string newPassword);
 }

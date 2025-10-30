@@ -159,7 +159,7 @@ public class UserAccountRepository : IUserAccountRepository
             Password = reader.IsDBNull(reader.GetOrdinal("password"))
                 ? null
                 : reader.GetString(
-                    reader.GetOrdinal("password")), // Para crear usuarios, existe; en edici�n puede ser NULL
+                    reader.GetOrdinal("password")),
             Role = reader.GetString(reader.GetOrdinal("role")),
             CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
             UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at"))
@@ -168,8 +168,27 @@ public class UserAccountRepository : IUserAccountRepository
             IsActive = reader.GetBoolean(reader.GetOrdinal("is_active")),
             ModifiedByUserId = reader.IsDBNull(reader.GetOrdinal("modified_by_user_id"))
                 ? null
-                : reader.GetInt32(reader.GetOrdinal("modified_by_user_id"))
+                : reader.GetInt32(reader.GetOrdinal("modified_by_user_id")),
+            IsFirstLogin = reader.GetBoolean(reader.GetOrdinal("is_first_login"))
         };
+    }
+
+    public async Task<bool> ChangePassword(int userId, string newPassword)
+    {
+        await using var connection = _dbConnectionFactory.CreateConnection();
+
+        string query =
+            "SELECT fn_update_password_account(@id, @password, @modified_by_user_id)";
+
+        await using var command = connection.CreateCommand();
+        command.CommandText = query;
+
+        AddParameter(command, "@id", userId);
+        AddParameter(command, "@password", newPassword);
+        AddParameter(command, "@modified_by_user_id", userId);
+
+        await connection.OpenAsync();
+        return Convert.ToBoolean(await command.ExecuteScalarAsync());       
     }
 
     private void AddParameter(IDbCommand command, string name, object value)

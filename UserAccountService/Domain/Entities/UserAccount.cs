@@ -30,6 +30,8 @@ public class UserAccount
     public bool IsActive { get; set; } = true;
 
     public int? ModifiedByUserId { get; set; }
+
+    public bool IsFirstLogin { get; set; } = false;
     public string FullName => $"{FirstLastName} {(SecondLastName ?? string.Empty)} {Name}";
 
 }

@@ -22,8 +22,9 @@ public class CurrentUserSession : ISessionManager
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, userAccount.Id.ToString()),
-            new Claim(ClaimTypes.Name, userAccount.UserName), 
             new Claim(ClaimTypes.Role, userAccount.Role),
+            new Claim(ClaimTypes.Name, userAccount.Name),
+            new Claim("UserName", userAccount.UserName),
             new Claim("FirstLastName", userAccount.FirstLastName),
             new Claim("SecondLastName", userAccount.SecondLastName ?? string.Empty),
             new Claim(ClaimTypes.Email, userAccount.Email ?? string.Empty) 

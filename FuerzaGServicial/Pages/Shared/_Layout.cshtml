@@ -21,6 +21,7 @@
     <!-- Bootstrap 5 y CSS del template -->
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/style.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <!-- <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/> -->
     <!-- <link rel="stylesheet" href="~/FuerzaG.styles.css" asp-append-version="true"/> -->
     
@@ -162,23 +163,24 @@
                     <div class="ml-auto">
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
-                                var username = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+                                var id = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                                var username = User.FindFirst("UserName")?.Value;
                                 var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
                                 var name = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
                                 var firstLastName = User.FindFirst("FirstLastName")?.Value;
                                 var secondLastName = User.FindFirst("SecondLastName")?.Value;
                                 var fullName = $"{name} {firstLastName} {secondLastName}".Trim();
                             
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown" id="userDropdown" style="cursor: pointer;">
-                                    <i class="fas fa-user-circle fa-lg mr-2"></i>
+                            <div class="nav-item dropdown" id="userDropdownContainer">
+                                <a href="#" class="nav-link dropdown-toggle text-light" id="userDropdown" style="cursor: pointer;">
+                                    <i class="fas fa-user-circle fa-lg me-2"></i>
                                     <span>@username</span>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown" style="min-width: 250px; transform: translateX(-60px);">
+                                <div class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown" style="min-width: 250px;">
                                     <div class="dropdown-header bg-light py-3">
-                                        <div class="d-flex align-items-center">
-                                            <i class="fas fa-user-circle fa-3x text-primary mr-3"></i>
-                                            <div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-user-circle fa-3x text-primary me-3"></i>
+                                            <div class="flex-grow-1">
                                                 <strong class="d-block">@fullName</strong>
                                                 @if (!string.IsNullOrEmpty(role))
                                                 {
@@ -190,9 +192,13 @@
                                         </div>
                                     </div>
                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-page="/UserAccounts/ChangePassword" asp-route-showModal="true">
+                                        <i class="fas fa-lock me-2"></i> Cambiar Contraseña
+                                    </a>
+                                    <div class="dropdown-divider"></div>
                                     <form method="post" asp-page="/Login" asp-page-handler="Logout" class="m-0">
                                         <button type="submit" class="dropdown-item text-danger" style="cursor: pointer;">
-                                            <i class="fas fa-sign-out-alt mr-2"></i> Cerrar Sesión
+                                            <i class="fas fa-sign-out-alt mr-2"></i>   Cerrar Sesión
                                         </button>
                                     </form>
                                 </div>
@@ -269,9 +275,10 @@
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
         
     <!-- Pre Loader -->
-    <div id="loader" class="show">
-        <div class="loader"></div>
-    </div>
+        <div id="loader" class="show">
+            <div class="loader"></div>
+        </div>
+    
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -281,7 +288,62 @@
     <script src="~/lib/counterup/counterup.min.js"></script>
     <script src="~/js/main.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/changePasswordModal.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const modalElement = document.getElementById('changePasswordModal');
+        if (!modalElement) return;
+            
+        let changePasswordModal = null;
+            
+        window.openChangePasswordModal = function() {
+            changePasswordModal = new bootstrap.Modal(modalElement, {
+                backdrop: 'static',
+                keyboard: true
+            });
+
+            const form = document.getElementById('changePasswordForm');
+            if (form) form.reset();
+            document.querySelectorAll('#changePasswordModal .alert').forEach(alert => alert.remove());
+            
+            const closeBtn = document.getElementById('closeModalBtn');
+            if (closeBtn) closeBtn.style.display = 'block';
+            
+            changePasswordModal.show();
+        };
+
+        const closeBtn = document.getElementById('closeModalBtn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                if (changePasswordModal) {
+                    changePasswordModal.hide();
+                }
+            });
+        }
+            
+        const showModal = '@(ViewData["ShowChangePasswordModal"] ?? "")' === 'True';
+        
+        if (showModal) {
+            window.openChangePasswordModal();
+        }
+    });
+        
+    function togglePasswordVisibility(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(iconId);
+        if (!passwordInput || !eyeIcon) return;
+    
+        const type = passwordInput.type === 'password' ? 'text' : 'password';
+        passwordInput.type = type;
+    
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    }
+    </script>
     </body>
 </html>
