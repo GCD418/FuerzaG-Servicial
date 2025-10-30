@@ -288,11 +288,11 @@ public class PdfReportBuilder<T> : IReportBuilder<T> where T : class
 
             column.Item().AlignRight().Text(text =>
             {
-                text.Span("Página ");
-                text.CurrentPageNumber().FontSize(8);
-                text.Span(" de ");
-                text.TotalPages().FontSize(8);
-            }).FontSize(8).FontColor("#6c757d");
+                text.Span("Página ").FontSize(8).FontColor("#6c757d");
+                text.CurrentPageNumber();
+                text.Span(" de ").FontSize(8).FontColor("#6c757d");
+                text.TotalPages();
+            });
         });
     }
 
