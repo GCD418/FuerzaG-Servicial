@@ -21,7 +21,7 @@ public class VehicleReportService
         _environment = environment;
     }
 
-    public async Task<byte[]> GenerateReportAsync(int yearFrom, int yearTo, ReportFormat format)
+    public async Task<byte[]> GenerateReportAsync(int yearFrom, int yearTo, ReportFormat format, string userFullName)
     {
         var data = await _repository.GetVehiclesByYearRangeAsync(yearFrom, yearTo);
         var dataList = data.ToList();
@@ -41,7 +41,8 @@ public class VehicleReportService
         {
             ["Total de Vehículos"] = dataList.Count.ToString(),
             ["Rango de Años"] = $"{yearFrom} - {yearTo}",
-            ["Marcas Únicas"] = dataList.Select(v => v.Marca).Distinct().Count().ToString()
+            ["Marcas Únicas"] = dataList.Select(v => v.Marca).Distinct().Count().ToString(),
+            ["Generado por"] = userFullName
         };
 
         var logoPath = Path.Combine(_environment.WebRootPath, "img", "logo-fuerzaG.png");

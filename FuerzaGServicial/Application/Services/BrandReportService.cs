@@ -24,7 +24,7 @@ public class BrandReportService
         _environment = environment;
     }
 
-    public async Task<byte[]> GenerateReportAsync(int minCount, int maxCount, ReportFormat format)
+    public async Task<byte[]> GenerateReportAsync(int minCount, int maxCount, ReportFormat format, string userFullName)
     {
         var data = await _repository.GetBrandStatisticsByVehicleCountAsync(minCount, maxCount);
         var dataList = data.ToList();
@@ -54,7 +54,8 @@ public class BrandReportService
             ["Total de Marcas"] = dataList.Count.ToString(),
             ["Total de Vehículos"] = totalVehicles.ToString(),
             ["Marca con Más Vehículos"] = dataList.First().Marca,
-            ["Cantidad Máxima"] = dataList.First().CantidadDeVehículos.ToString()
+            ["Cantidad Máxima"] = dataList.First().CantidadDeVehículos.ToString(),
+            ["Generado por"] = userFullName
         };
 
         var logoPath = Path.Combine(_environment.WebRootPath, "img", "logo-fuerzaG.png");
