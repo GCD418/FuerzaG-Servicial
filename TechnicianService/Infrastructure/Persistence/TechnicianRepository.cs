@@ -40,12 +40,12 @@ namespace TechnicianService.Infrastructure.Persistence
             return await r.ReadAsync() ? MapReaderToModel(r) : null;
         }
 
-        public async Task<bool> CreateAsync(Technician t)
+        public async Task<bool> CreateAsync(Technician t, int userId)
         {
             await using var conn = _db.CreateConnection();
             await using var cmd = conn.CreateCommand();
             cmd.CommandText =
-                "SELECT fn_insert_technician(@name,@first_lastname,@second_lastname,@phone,@email,@doc,@address,@base_salary)";
+                "SELECT fn_insert_technician(@name,@first_lastname,@second_lastname,@phone,@email,@doc,@address,@base_salary, @created_by_user_id)";
 
             AddParameter(cmd, "@name", t.Name);
             AddParameter(cmd, "@first_lastname", t.FirstLastName);
@@ -55,6 +55,7 @@ namespace TechnicianService.Infrastructure.Persistence
             AddParameter(cmd, "@doc", t.DocumentNumber);
             AddParameter(cmd, "@address", t.Address);
             AddParameter(cmd, "@base_salary", t.BaseSalary);
+            AddParameter(cmd, "@created_by_user_id", userId);
 
             await conn.OpenAsync();
             var result = await cmd.ExecuteScalarAsync();

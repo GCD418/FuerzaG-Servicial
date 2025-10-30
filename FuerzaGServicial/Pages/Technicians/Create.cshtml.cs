@@ -55,7 +55,7 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        var ok = await _technicianService.Create(Form);
+        var ok = await _technicianService.Create(Form, _sessionManager.UserId ?? 9999);
         if (!ok)
         {
             ModelState.AddModelError(string.Empty, "No se pudo crear el registro.");
@@ -72,10 +72,10 @@ public class CreateModel : PageModel
         if (lower.Contains("nombre")) return "Name";
         if (lower.Contains("primer apellido")) return "FirstLastName";
         if (lower.Contains("segundo apellido")) return "SecondLastName";
-        if (lower.Contains("teléfono") || lower.Contains("telefono")) return "PhoneNumber";
+        if (lower.Contains("telï¿½fono") || lower.Contains("telefono")) return "PhoneNumber";
         if (lower.Contains("email")) return "Email";
         if (lower.Contains("documento") || lower.Contains("ci")) return "DocumentNumber";
-        if (lower.Contains("dirección") || lower.Contains("direccion")) return "Address";
+        if (lower.Contains("direcciï¿½n") || lower.Contains("direccion")) return "Address";
         if (lower.Contains("salario")) return "BaseSalary";
 
         return string.Empty;
