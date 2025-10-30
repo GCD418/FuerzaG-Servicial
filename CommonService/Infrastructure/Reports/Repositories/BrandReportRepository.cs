@@ -55,9 +55,9 @@ public class BrandReportRepository : IBrandReportRepository
         {
             statistics.Add(new BrandStatisticsDto
             {
-                BrandName = reader.GetString(0),
-                VehicleCount = reader.GetInt32(1),
-                Percentage = reader.GetDecimal(2)
+                Marca = reader.GetString(0),
+                CantidadDeVehículos = reader.GetInt32(1),
+                Porcentaje = reader.GetDecimal(2)
             });
         }
 

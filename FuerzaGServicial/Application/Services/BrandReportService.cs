@@ -34,8 +34,8 @@ public class BrandReportService
             throw new InvalidOperationException("No se encontraron marcas en el rango de vehículos especificado.");
         }
 
-        var labels = dataList.Select(d => d.BrandName).ToList();
-        var values = dataList.Select(d => (double)d.VehicleCount).ToList();
+        var labels = dataList.Select(d => d.Marca).ToList();
+        var values = dataList.Select(d => (double)d.CantidadDeVehículos).ToList();
 
         var chartImage = _chartGenerator.GeneratePieChart(
             labels,
@@ -48,13 +48,13 @@ public class BrandReportService
             ["Cantidad Máxima"] = maxCount.ToString()
         };
 
-        var totalVehicles = dataList.Sum(d => d.VehicleCount);
+        var totalVehicles = dataList.Sum(d => d.CantidadDeVehículos);
         var footer = new Dictionary<string, string>
         {
             ["Total de Marcas"] = dataList.Count.ToString(),
             ["Total de Vehículos"] = totalVehicles.ToString(),
-            ["Marca con Más Vehículos"] = dataList.First().BrandName,
-            ["Cantidad Máxima"] = dataList.First().VehicleCount.ToString()
+            ["Marca con Más Vehículos"] = dataList.First().Marca,
+            ["Cantidad Máxima"] = dataList.First().CantidadDeVehículos.ToString()
         };
 
         var logoPath = Path.Combine(_environment.WebRootPath, "img", "logo-fuerzaG.png");

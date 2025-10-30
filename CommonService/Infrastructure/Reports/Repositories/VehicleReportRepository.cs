@@ -49,13 +49,13 @@ public class VehicleReportRepository : IVehicleReportRepository
         {
             vehicles.Add(new VehicleReportDto
             {
-                OwnerFullName = reader.GetString(0),
-                Plate = reader.IsDBNull(1) ? "N/A" : reader.GetString(1),
-                BrandName = reader.GetString(2),
-                ModelName = reader.GetString(3),
-                Year = reader.GetInt16(4),
+                NombreCompleto = reader.GetString(0),
+                Placa = reader.IsDBNull(1) ? "N/A" : reader.GetString(1),
+                Marca = reader.GetString(2),
+                Modelo = reader.GetString(3),
+                Año = reader.GetInt16(4),
                 Color = reader.GetString(5),
-                VehicleType = reader.GetString(6)
+                TipoDeVehículo = reader.GetString(6)
             });
         }
 

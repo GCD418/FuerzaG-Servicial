@@ -41,7 +41,7 @@ public class VehicleReportService
         {
             ["Total de Vehículos"] = dataList.Count.ToString(),
             ["Rango de Años"] = $"{yearFrom} - {yearTo}",
-            ["Marcas Únicas"] = dataList.Select(v => v.BrandName).Distinct().Count().ToString()
+            ["Marcas Únicas"] = dataList.Select(v => v.Marca).Distinct().Count().ToString()
         };
 
         var logoPath = Path.Combine(_environment.WebRootPath, "img", "logo-fuerzaG.png");
