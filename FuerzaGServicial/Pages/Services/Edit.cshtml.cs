@@ -1,14 +1,16 @@
 using CommonService.Domain.Services.Validations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ServiceService.Domain.Entities;
+using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 
 namespace FuerzaGServicial.Pages.Services;
 
-[Authorize(Roles = "Manager")]
+[Authorize(Roles = UserRoles.CEO)]
 public class Edit : PageModel
 {
     private readonly ServiceService.Application.Services.ServiceService _serviceService;
