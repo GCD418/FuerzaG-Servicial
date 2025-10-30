@@ -50,7 +50,7 @@ public class ServiceValidator : IValidator<Service>
             _errors.Add("El nombre del servicio debe comenzar con una letra");
         }
 
-        var prohibitedCharacters = new[] { '<', '>', '/', '\\', '|', '@', '#', '$', '%', '&', '*', '=', '+' };
+        var prohibitedCharacters = new[] { '<', '>', '/', '\\', '|', '@', '$', '%', '&', '*', '=', '+' };
         if (name.Any(c => prohibitedCharacters.Contains(c)))
         {
             _errors.Add("El nombre del servicio contiene caracteres no permitidos");
