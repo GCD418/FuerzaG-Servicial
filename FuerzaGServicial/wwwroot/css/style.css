@@ -1,6 +1,26 @@
     /*******************************/
     /********* General CSS *********/
     /*******************************/
+.modal-header-blue {
+    background-color: #202C45;
+}
+
+    .modal-header-blue .modal-title {
+        color: white;
+    }
+
+        .modal-header-blue .modal-title i {
+            color: white;
+        }
+
+    .modal-header-blue .btn-close {
+        opacity: 1 !important;
+    }
+
+        .modal-header-blue .btn-close::before,
+        .modal-header-blue .btn-close::after {
+            background-color: white !important;
+        }
     body {
         color: #444444;
         font-weight: 400;
@@ -16,7 +36,7 @@
     h6 {
         color: #202C45;
     }
-    
+
     a {
         color: #202C45;
         transition: .3s;
