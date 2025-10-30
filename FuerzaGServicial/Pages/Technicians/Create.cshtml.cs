@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TechnicianService.Domain.Entities;
+using TechnicianService.Domain.Services;
 using UserAccountService.Domain.Entities;
 using UserAccountService.Domain.Ports;
 
@@ -15,11 +16,13 @@ public class CreateModel : PageModel
     private readonly TechnicianService.Application.Services.TechnicianService _technicianService;
     private readonly ISessionManager _sessionManager;
 
+    [BindProperty]
+    public Technician Form { get; set; } = new();
+
     public List<string> ValidationErrors { get; set; } = new();
 
-    [BindProperty] public Technician Form { get; set; } = new();
-
-    public CreateModel(IValidator<Technician> validator,
+    public CreateModel(
+        IValidator<Technician> validator,
         TechnicianService.Application.Services.TechnicianService technicianService,
         ISessionManager sessionManager)
     {
@@ -28,34 +31,31 @@ public class CreateModel : PageModel
         _sessionManager = sessionManager;
     }
 
-    public void OnGet()
-    {
-    }
+    public void OnGet() { }
 
     public async Task<IActionResult> OnPostAsync()
     {
+        ModelState.Clear();
+
         var validationResult = _validator.Validate(Form);
+
         if (validationResult.IsFailure)
         {
             ValidationErrors = validationResult.Errors;
+
             foreach (var error in validationResult.Errors)
             {
-                var i = error.IndexOf('|');
-                if (i > 0 && i < error.Length - 1)
-                {
-                    var field = error[..i].Trim();
-                    var msg = error[(i + 1)..].Trim();
-                    ModelState.AddModelError($"Form.{field}", msg);
-                }
-                else ModelState.AddModelError(string.Empty, error);
+                string fieldName = MapErrorToField(error);
+                if (!string.IsNullOrEmpty(fieldName))
+                    ModelState.AddModelError($"Form.{fieldName}", error);
+                else
+                    ModelState.AddModelError(string.Empty, error);
             }
 
             return Page();
         }
 
-        if (!ModelState.IsValid) return Page();
-
-        var ok = await _technicianService.Create(Form);
+        var ok = await _technicianService.Create(Form, _sessionManager.UserId ?? 9999);
         if (!ok)
         {
             ModelState.AddModelError(string.Empty, "No se pudo crear el registro.");
@@ -63,5 +63,21 @@ public class CreateModel : PageModel
         }
 
         return RedirectToPage("/Technicians/TechnicianPage");
+    }
+
+    private string MapErrorToField(string error)
+    {
+        var lower = error.ToLower();
+
+        if (lower.Contains("nombre")) return "Name";
+        if (lower.Contains("primer apellido")) return "FirstLastName";
+        if (lower.Contains("segundo apellido")) return "SecondLastName";
+        if (lower.Contains("tel�fono") || lower.Contains("telefono")) return "PhoneNumber";
+        if (lower.Contains("email")) return "Email";
+        if (lower.Contains("documento") || lower.Contains("ci")) return "DocumentNumber";
+        if (lower.Contains("direcci�n") || lower.Contains("direccion")) return "Address";
+        if (lower.Contains("salario")) return "BaseSalary";
+
+        return string.Empty;
     }
 }

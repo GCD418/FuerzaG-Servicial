@@ -24,7 +24,6 @@
     }
 
     <form method="post" class="card card-body shadow-sm" id="serviceForm" novalidate>
-        
         <input type="hidden" asp-for="Service.Id" />
 
         <div class="row g-3">
@@ -35,12 +34,10 @@
                        placeholder="Ej: Cambio de aceite"
                        required
                        minlength="3"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
                        maxlength="100"
                        autocomplete="off" />
                 <span asp-validation-for="Service.Name" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El nombre es obligatorio y debe tener al menos 3 caracteres.
-                </div>
             </div>
 
             <div class="col-md-6">
@@ -51,9 +48,6 @@
                     <option value="Correctivo">Correctivo</option>
                 </select>
                 <span asp-validation-for="Service.Type" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    Debes seleccionar un tipo de servicio.
-                </div>
             </div>
 
             <div class="col-md-6">
@@ -61,18 +55,17 @@
                 <div class="input-group">
                     <span class="input-group-text">Bs</span>
                     <input asp-for="Service.Price"
-                           class="form-control"
                            type="text"
                            inputmode="decimal"
-                           placeholder="Ej: 1,200.50"
-                           value="@(Model.Service.Price == 0 ? "" : Model.Service.Price.ToString("F2"))"
+                           pattern="^\d+(\.\d{1,2})?$"
+                           placeholder="Ej: 1250.50"
                            required
-                           autocomplete="off" />
+                           class="form-control"
+                           id="Service_Price"
+                           autocomplete="off"
+                           oninput="this.value=this.value.replace(/[^0-9.]/g,'');" />
                 </div>
                 <span asp-validation-for="Service.Price" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El precio es obligatorio y debe ser mayor que 0.
-                </div>
             </div>
 
             <div class="col-12">
@@ -84,11 +77,9 @@
                           required
                           minlength="3"
                           maxlength="255"
+                          pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
                           autocomplete="off"></textarea>
                 <span asp-validation-for="Service.Description" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    La descripción es obligatoria y debe tener al menos 3 caracteres.
-                </div>
             </div>
         </div>
 
@@ -113,48 +104,68 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('serviceForm');
+            const nameInput = document.getElementById('Service_Name');
+            const typeSelect = document.getElementById('Service_Type');
             const priceInput = document.getElementById('Service_Price');
             const descriptionInput = document.getElementById('Service_Description');
 
-            if (priceInput) {
-                priceInput.addEventListener('input', function () {
-                    // Sólo dígitos, . y , ; sin signo negativo
-                    this.value = this.value.replace(/[^0-9.,]/g, '');
-                    if (this.value.startsWith('-')) this.value = this.value.replace('-', '');
+            const nameErrorSpan = document.querySelector('[data-valmsg-for="Service.Name"]');
+            const typeErrorSpan = document.querySelector('[data-valmsg-for="Service.Type"]');
+            const priceErrorSpan = document.querySelector('[data-valmsg-for="Service.Price"]');
+            const descriptionErrorSpan = document.querySelector('[data-valmsg-for="Service.Description"]');
 
-                    const priceStr = this.value.replace(/,/g, '').trim();
-                    const price = parseFloat(priceStr);
-                    if (!isNaN(price) && price > 0) {
-                        this.classList.remove('is-invalid');
-                    }
+            [nameInput, typeSelect, priceInput, descriptionInput].forEach(input => {
+                if (!input) return;
+                input.addEventListener('input', function () {
+                    this.classList.remove('is-invalid');
+                    const errorSpan = document.querySelector(`[data-valmsg-for="${this.id.replace('_', '.')}"]`);
+                    if (errorSpan) errorSpan.textContent = '';
                 });
-            }
-
-            if (descriptionInput) {
-                descriptionInput.addEventListener('input', function () {
-                    if (this.value.trim().length >= 3) {
-                        this.classList.remove('is-invalid');
-                    }
-                });
-            }
+            });
 
             document.getElementById('btnOpenEditModal').addEventListener('click', function () {
-                priceInput.classList.remove('is-invalid');
-                descriptionInput.classList.remove('is-invalid');
+                [nameInput, typeSelect, priceInput, descriptionInput].forEach(el => el.classList.remove('is-invalid', 'is-valid'));
+                [nameErrorSpan, typeErrorSpan, priceErrorSpan, descriptionErrorSpan].forEach(span => span.textContent = '');
 
                 let valid = true;
 
+                const nameValue = nameInput.value.trim();
+                const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$/;
+                if (!nameValue || nameValue.length < 3 || !nameRegex.test(nameValue)) {
+                    nameInput.classList.add('is-invalid');
+                    nameErrorSpan.textContent = 'El nombre debe tener al menos 3 caracteres y solo letras/números.';
+                    valid = false;
+                } else {
+                    nameInput.classList.add('is-valid');
+                }
+
+                if (!typeSelect.value) {
+                    typeSelect.classList.add('is-invalid');
+                    typeErrorSpan.textContent = 'Debes seleccionar un tipo de servicio.';
+                    valid = false;
+                } else {
+                    typeSelect.classList.add('is-valid');
+                }
+
                 const priceStr = priceInput.value.replace(/,/g, '').trim();
                 const price = parseFloat(priceStr);
-                if (isNaN(price) || price <= 0) {
+                const pricePattern = /^\d+(\.\d{1,2})?$/;
+                if (!priceStr || isNaN(price) || price <= 0 || !pricePattern.test(priceStr)) {
                     priceInput.classList.add('is-invalid');
+                    priceErrorSpan.textContent = 'Ingrese un precio válido mayor a 0 con hasta 2 decimales.';
                     valid = false;
+                } else {
+                    priceInput.classList.add('is-valid');
                 }
 
                 const description = descriptionInput.value.trim();
-                if (description.length < 3) {
+                const prohibitedChars = /[<>\/\\|]/;
+                if (!description || description.length < 3 || prohibitedChars.test(description)) {
                     descriptionInput.classList.add('is-invalid');
+                    descriptionErrorSpan.textContent = 'La descripción debe tener al menos 3 caracteres y no contener <>/\\|.';
                     valid = false;
+                } else {
+                    descriptionInput.classList.add('is-valid');
                 }
 
                 if (valid && form.checkValidity()) {

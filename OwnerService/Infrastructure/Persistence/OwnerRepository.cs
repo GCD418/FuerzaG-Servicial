@@ -47,10 +47,10 @@ public class OwnerRepository : IOwnerRepository
         return await reader.ReadAsync() ? MapReaderToModel(reader) : null;
     }
 
-    public async Task<bool> CreateAsync(Owner owner)
+    public async Task<bool> CreateAsync(Owner owner, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        string query = "SELECT fn_insert_owner(@name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @address)";
+        string query = "SELECT fn_insert_owner(@name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @address, @created_by_user_id)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;             
@@ -62,6 +62,7 @@ public class OwnerRepository : IOwnerRepository
         AddParameter(command, "@email",            owner.Email);
         AddParameter(command, "@document_number",  owner.Ci);
         AddParameter(command, "@address",          owner.Address);
+        AddParameter(command, "@created_by_user_id", userId);
 
         await connection.OpenAsync();
         var idObj = await command.ExecuteScalarAsync();        

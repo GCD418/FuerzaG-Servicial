@@ -4,82 +4,79 @@
     ViewData["Title"] = "Technicians";
 }
 
-
-<section id="owners" class="section bg-light">
+<section id="technicians" class="section bg-light">
     <div class="container">
         <div class="section-header text-center mb-5">
             <h2 class="fw-bold">Listado de Técnicos</h2>
             <p class="text-muted">Gestiona los registros de los técnicos del taller</p>
         </div>
-    
+
         <div class="d-flex justify-content-end mb-4">
             <a asp-page="./Create" class="btn btn-custom">
                 <i class="fas fa-plus-circle me-2"></i> Crear nuevo técnico
             </a>
         </div>
+
         <table class="table table-striped align-middle">
             <thead class="table-dark text-center">
-            <tr>
-                <th style="width:10%;">#</th>
-                <th style="width:25%;">Nombre Completo</th>
-                <th style="width:15%;">Teléfono</th>
-                <th style="width:30%;">Email</th>
-                <th style="width:20%;">Acciones</th>
-            </tr>
+                <tr>
+                    <th style="width:10%;">#</th>
+                    <th style="width:25%;">Nombre Completo</th>
+                    <th style="width:15%;">Teléfono</th>
+                    <th style="width:30%;">Email</th>
+                    <th style="width:20%;">Acciones</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var t in Model.Technicians.OrderBy(x => x.FirstLastName + " " + x.SecondLastName + " " + x.Name).Select((item, index) => new { item, index = index + 1 }))
-            {
-                <tr>
-                    <td class="text-center"><strong>@t.index</strong></td>
-                    <td>@t.item.FirstLastName @t.item.SecondLastName @t.item.Name</td>
-                    <td class="text-center">@t.item.PhoneNumber</td>
-                    <td>@t.item.Email</td>
-                    <td class="text-center">
-                        <a asp-page="./Edit" asp-route-id="@Model.EncryptId(t.item.Id)" class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
-                        <button type="button" class="btn btn-sm btn-danger"
-                                data-toggle="modal"
-                                data-target="#deleteModal@(t.item.Id)"
-                                data-technician-name="@t.item.Name @t.item.FirstLastName">
-                            <i class="bi bi-trash"></i> Eliminar
-                        </button>
-                    </td>
-                </tr>
-            }
+                @foreach (var t in Model.Technicians.OrderBy(x => x.FirstLastName + " " + x.SecondLastName + " " + x.Name).Select((item, index) => new { item, index = index + 1 }))
+                {
+                    <tr>
+                        <td class="text-center"><strong>@t.index</strong></td>
+                        <td>@t.item.FirstLastName @t.item.SecondLastName @t.item.Name</td>
+                        <td class="text-center">@t.item.PhoneNumber</td>
+                        <td>@t.item.Email</td>
+                        <td class="text-center">
+                            <a asp-page="./Edit" asp-route-id="@Model.EncryptId(t.item.Id)" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal@(t.item.Id)">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
-        
+
         @foreach (var t in Model.Technicians)
         {
-            <div class="modal fade" id="deleteModal@(t.Id)" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel@(t.Id)" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal fade" id="deleteModal@(t.Id)" tabindex="-1" aria-labelledby="deleteModalLabel@(t.Id)" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-0 shadow">
-                        <div class="modal-header bg-dark text-white border-0">
-                            <h5 class="modal-title text-light" id="deleteModalLabel@(t.Id)">
-                                <i class="fas fa-exclamation-triangle me-2"></i>  Confirmar eliminación
+                        <div class="modal-header modal-header-blue border-0">
+                            <h5 class="modal-title" id="deleteModalLabel@(t.Id)">
+                                <i class="fas fa-exclamation-triangle me-2"></i> Confirmar eliminación
                             </h5>
-                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
                             <p class="mb-3">
                                 ¿Está seguro de que desea eliminar al técnico <strong>@t.Name @t.FirstLastName</strong>?
                             </p>
                             <p class="text-muted small">
-                                <i class="fas fa-info-circle me-4"></i> Esta acción no se puede deshacer.
+                                <i class="fas fa-info-circle me-2"></i> Esta acción no se puede deshacer.
                             </p>
                         </div>
                         <div class="modal-footer border-0">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                 <i class="fas fa-times me-2"></i> Cancelar
                             </button>
                             <form method="post"
                                   asp-page-handler="Delete"
                                   asp-route-id="@Model.EncryptId(t.Id)"
-                                  style="display: inline;">
+                                  class="d-inline">
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fas fa-trash me-2"></i> Eliminar
                                 </button>
@@ -89,8 +86,5 @@
                 </div>
             </div>
         }
-
     </div>
-    
-    
 </section>

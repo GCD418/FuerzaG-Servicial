@@ -1,8 +1,12 @@
 using CommonService.Domain.Entities;
 using CommonService.Domain.Ports;
+using CommonService.Domain.Services;
 using CommonService.Domain.Services.Validations;
 using CommonService.Infrastructure;
 using CommonService.Infrastructure.Connection;
+using CommonService.Infrastructure.Reports;
+using CommonService.Infrastructure.Reports.Repositories;
+using FuerzaGServicial.Application.Services;
 using FuerzaGServicial.Infrastructure.Security;
 using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
@@ -36,6 +40,7 @@ builder.Services
         options.LogoutPath = "/Logout"; //TODO
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
+builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<ISessionManager, CurrentUserSession>();
@@ -89,6 +94,17 @@ builder.Services.AddScoped<IValidator<UserAccount>, UserAccountValidator>();
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IMailSender, SmtpEmailSender>();
+
+#endregion
+
+#region Reports
+
+builder.Services.AddScoped<CommonService.Domain.Services.ReportDirector>();
+builder.Services.AddScoped<CommonService.Domain.Ports.IChartGenerator, CommonService.Infrastructure.Reports.ChartGenerator>();
+builder.Services.AddScoped<CommonService.Domain.Ports.IVehicleReportRepository, CommonService.Infrastructure.Reports.Repositories.VehicleReportRepository>();
+builder.Services.AddScoped<CommonService.Domain.Ports.IBrandReportRepository, CommonService.Infrastructure.Reports.Repositories.BrandReportRepository>();
+builder.Services.AddScoped<FuerzaGServicial.Application.Services.VehicleReportService>();
+builder.Services.AddScoped<FuerzaGServicial.Application.Services.BrandReportService>();
 
 #endregion
 
