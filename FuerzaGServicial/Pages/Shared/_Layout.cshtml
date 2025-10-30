@@ -121,6 +121,7 @@
                         <a asp-page="/Owners/OwnerPage" class="nav-item nav-link @(currentPage.Contains("/Owners/OwnerPage") ? "text-danger" : "")">Clientes</a>
                         <a asp-page="/UserAccounts/UserPage" class="nav-item nav-link @(currentPage.Contains("/UserAccounts/UserPage") ? "text-danger" : "")">Usuarios</a>
                         <a asp-page="/Technicians/TechnicianPage" class="nav-item nav-link @(currentPage.Contains("/Technicians/TechnicianPage") ? "text-danger" : "")">Técnicos</a>
+                        <a asp-page="/Reports/Index" class="nav-item nav-link @(currentPage.Contains("/Reports/Index") ? "text-danger" : "")">Reportes</a>
                         <!-- Ocultar -->
                         <!--
                         @if (User?.Identity?.IsAuthenticated == true)
