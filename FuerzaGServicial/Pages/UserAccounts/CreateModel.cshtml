@@ -27,11 +27,11 @@
                 <label asp-for="UserAccount.Name" class="form-label">Nombre *</label>
                 <input asp-for="UserAccount.Name" class="form-control" placeholder="Ingrese el nombre"
                        required minlength="3" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
-                       title="Solo letras, espacios, guiones y apóstrofos. No se permiten números ni símbolos." />
+                       pattern="^[A-Za-z��������������\s]+$"
+                       title="Solo letras, espacios, guiones y ap�strofos. No se permiten n�meros ni s�mbolos." />
                 <span asp-validation-for="UserAccount.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El nombre debe tener al menos 3 caracteres y solo letras.
+                    El nombre debe tener al menos 3 caracteres y s�lo letras.
                 </div>
             </div>
 
@@ -39,11 +39,11 @@
                 <label asp-for="UserAccount.FirstLastName" class="form-label">Apellido Paterno *</label>
                 <input asp-for="UserAccount.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
                        required minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
-                       title="Solo letras, espacios, guiones y apóstrofos. No se permiten números ni símbolos." />
+                       pattern="^[A-Za-z��������������\s]+$"
+                       title="Solo letras, espacios, guiones y ap�strofos. No se permiten n�meros ni s�mbolos." />
                 <span asp-validation-for="UserAccount.FirstLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido paterno debe tener al menos 2 caracteres y solo letras.
+                    El apellido paterno debe tener al menos 2 caracteres y s�lo letras.
                 </div>
             </div>
 
