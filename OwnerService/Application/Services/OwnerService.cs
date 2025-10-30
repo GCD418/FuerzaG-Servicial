@@ -22,9 +22,9 @@ public class OwnerService
         return await _repository.GetByIdAsync(id);
     }
 
-    public async Task<bool> Create(Owner owner)
+    public async Task<bool> Create(Owner owner, int userId)
     {
-        return await _repository.CreateAsync(owner);
+        return await _repository.CreateAsync(owner, userId);
     }
 
     public async Task<bool> Update(Owner owner, int userId)

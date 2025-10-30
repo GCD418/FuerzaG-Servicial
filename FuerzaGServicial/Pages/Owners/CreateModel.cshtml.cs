@@ -56,7 +56,7 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        var isSuccess = await _ownerService.Create(Owner);
+        var isSuccess = await _ownerService.Create(Owner, _sessionManager.UserId ?? 9999);
         if (!isSuccess)
         {
             ModelState.AddModelError(string.Empty, "No se pudo crear el registro.");
