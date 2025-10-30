@@ -3,6 +3,7 @@ using FuerzaGServicial.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using UserAccountService.Domain.Ports;
 
 namespace FuerzaGServicial.Pages.Reports;
 
@@ -10,10 +11,12 @@ namespace FuerzaGServicial.Pages.Reports;
 public class BrandStatisticsModel : PageModel
 {
     private readonly BrandReportService _reportService;
+    private readonly ISessionManager _sessionManager;
 
-    public BrandStatisticsModel(BrandReportService reportService)
+    public BrandStatisticsModel(BrandReportService reportService, ISessionManager sessionManager)
     {
         _reportService = reportService;
+        _sessionManager = sessionManager;
     }
 
     [BindProperty]
@@ -55,7 +58,7 @@ public class BrandStatisticsModel : PageModel
         try
         {
             var format = Format.ToLower() == "pdf" ? ReportFormat.Pdf : ReportFormat.Excel;
-            var reportBytes = await _reportService.GenerateReportAsync(MinCount, MaxCount, format);
+            var reportBytes = await _reportService.GenerateReportAsync(MinCount, MaxCount, format, _sessionManager.FullName);
             var fileName = _reportService.GetFileName(format);
             var contentType = _reportService.GetContentType(format);
 

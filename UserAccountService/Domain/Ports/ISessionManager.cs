@@ -8,4 +8,5 @@ public interface ISessionManager
     Task Logout();
     public bool IsAuthenticated { get; }
     public int? UserId { get; }
+    public string FullName { get; }
 }

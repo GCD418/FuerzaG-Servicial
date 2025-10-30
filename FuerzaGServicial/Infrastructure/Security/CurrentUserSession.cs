@@ -60,4 +60,15 @@ public class CurrentUserSession : ISessionManager
             return null;
         }
     }
+
+    public string FullName
+    {
+        get
+        {
+            var name = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
+            var firstLastName = _httpContextAccessor.HttpContext.User.FindFirst("FirstLastName")?.Value;
+            var secondLastName = _httpContextAccessor.HttpContext.User.FindFirst("SecondLastName")?.Value;
+            return $"{name} {firstLastName} {secondLastName}";
+        }
+    }
 }
