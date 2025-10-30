@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model CreateModel
 @{
     ViewData["Title"] = "Nuevo Usuario";
@@ -31,7 +31,7 @@
                        title="Solo letras y espacios. No se permiten números ni símbolos." />
                 <span asp-validation-for="UserAccount.Name" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El nombre debe tener al menos 3 caracteres y sólo letras.
+                    El nombre debe tener al menos 3 caracteres y solo letras.
                 </div>
             </div>
 
@@ -43,7 +43,7 @@
                        title="Solo letras y espacios. No se permiten números ni símbolos." />
                 <span asp-validation-for="UserAccount.FirstLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido paterno debe tener al menos 2 caracteres y sólo letras.
+                    El apellido paterno debe tener al menos 2 caracteres y solo letras.
                 </div>
             </div>
 
@@ -55,7 +55,7 @@
                        title="Si lo rellena, use solo letras y espacios" />
                 <span asp-validation-for="UserAccount.SecondLastName" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido materno debe tener al menos 2 caracteres y sólo letras.
+                    El apellido materno debe tener al menos 2 caracteres y solo letras.
                 </div>
             </div>
 
