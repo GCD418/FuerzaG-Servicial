@@ -8,6 +8,7 @@ public interface IUserAccountRepository
     public Task<UserAccount> GetByIdAsync(int id);
     public Task<bool> CreateAsync(UserAccount userAccount);
     public Task<bool> UpdateAsync(UserAccount userAccount, int userId);
+    public Task<bool> UpdateIsFirstLoginAsync(int userId, bool isFirstLogin);
     public Task<bool> DeleteByIdAsync(int id, int userId);
     public Task<UserAccount?> GetByUserName(string userName);
     public Task<bool> IsUserNameUsed(string userName);

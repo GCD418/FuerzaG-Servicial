@@ -52,6 +52,11 @@ public class UserAccountService
         return await _repository.ChangePassword(userId, newPassword);
     }
     
+    public async Task<bool> UpdateIsFirstLoginAsync(int userId, bool isFirstLogin)
+    {
+        return await _repository.UpdateIsFirstLoginAsync(userId, isFirstLogin);
+    }
+    
     public string GenerateUserName(UserAccount userAccount)
     {
         var firstName = userAccount.Name.Split(' ')[0].ToLower();

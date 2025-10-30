@@ -27,7 +27,8 @@ public class CurrentUserSession : ISessionManager
             new Claim("UserName", userAccount.UserName),
             new Claim("FirstLastName", userAccount.FirstLastName),
             new Claim("SecondLastName", userAccount.SecondLastName ?? string.Empty),
-            new Claim(ClaimTypes.Email, userAccount.Email ?? string.Empty) 
+            new Claim(ClaimTypes.Email, userAccount.Email ?? string.Empty), 
+            new Claim("IsFirstLogin", userAccount.IsFirstLogin.ToString())
         };
 
         var identity = new ClaimsIdentity(claims, "GForceAuth", ClaimTypes.Name, ClaimTypes.Role);

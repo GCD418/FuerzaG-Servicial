@@ -282,23 +282,27 @@
         let changePasswordModal = null;
             
         window.openChangePasswordModal = function() {
+            const mustChange = '@(ViewData["MustChangePassword"] ?? "")' === 'True';
+            
             changePasswordModal = new bootstrap.Modal(modalElement, {
-                backdrop: 'static',
-                keyboard: true
+                backdrop: 'static',    
+                keyboard: !mustChange
             });
-
+            
             const form = document.getElementById('changePasswordForm');
             if (form) form.reset();
             document.querySelectorAll('#changePasswordModal .alert').forEach(alert => alert.remove());
             
             const closeBtn = document.getElementById('closeModalBtn');
-            if (closeBtn) closeBtn.style.display = 'block';
+            if (closeBtn) {
+                closeBtn.style.display = mustChange ? 'none' : 'block';
+            }
             
             changePasswordModal.show();
         };
 
         const closeBtn = document.getElementById('closeModalBtn');
-        if (closeBtn) {
+        if (closeBtn && closeBtn.style.display !== 'none') {
             closeBtn.addEventListener('click', function() {
                 if (changePasswordModal) {
                     changePasswordModal.hide();

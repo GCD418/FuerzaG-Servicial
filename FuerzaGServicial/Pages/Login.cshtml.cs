@@ -41,6 +41,12 @@ public class Login : PageModel
             return Page();
         }
 
+        var isFirstLoginClaim = User.FindFirst("IsFirstLogin")?.Value;
+        if (isFirstLoginClaim == "True")
+        {
+            return RedirectToPage("/UserAccounts/ChangePassword", new { mustChange = true });
+        }
+        
         return RedirectToPage("/Index");
     }
 

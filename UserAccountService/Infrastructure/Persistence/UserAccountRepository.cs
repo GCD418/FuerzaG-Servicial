@@ -109,6 +109,19 @@ public class UserAccountRepository : IUserAccountRepository
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
     }
 
+    public async Task<bool> UpdateIsFirstLoginAsync(int userId, bool isFirstLogin)
+    {
+        await using var connection = _dbConnectionFactory.CreateConnection();
+        string query = "UPDATE user_account SET is_first_login = @is_first_login WHERE id = @id";
+
+        await using var command = connection.CreateCommand();
+        command.CommandText = query;
+        AddParameter(command, "@is_first_login", isFirstLogin);
+        AddParameter(command, "@id", userId);
+
+        await connection.OpenAsync();
+        return await command.ExecuteNonQueryAsync() > 0;
+    }
     public async Task<UserAccount?> GetByUserName(string userName)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();

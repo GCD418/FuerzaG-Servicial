@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace FuerzaGServicial.Pages.UserAccounts
 {
@@ -30,8 +32,10 @@ namespace FuerzaGServicial.Pages.UserAccounts
             _validator = validator;
         }
 
-        public void OnGet(bool showModal = false)
+        public void OnGet(bool showModal = false, bool mustChange = false)
         {
+            mustShowModal = showModal || mustChange;
+            allowCloseModal = !mustChange;
             ViewData["ShowChangePasswordModal"] = showModal;
             ViewData["SuccessMessage"] = "";
         }
@@ -90,9 +94,30 @@ namespace FuerzaGServicial.Pages.UserAccounts
                     return Page();
                 }
                 
+                var isFirstLoginClaim = User.FindFirst("IsFirstLogin")?.Value;
+                if (isFirstLoginClaim == "True")
+                {
+                    await _userAccountService.UpdateIsFirstLoginAsync(userId, false);
+                    // Actualizar el claim en la sesión actual
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    
+                    var identity = (System.Security.Claims.ClaimsIdentity)User.Identity;
+                    var claims = User.Claims.Where(c => c.Type != "IsFirstLogin").ToList();
+                    claims.Add(new System.Security.Claims.Claim("IsFirstLogin", "False"));
+                    
+                    var newIdentity = new System.Security.Claims.ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+                        new System.Security.Claims.ClaimsPrincipal(newIdentity));
+                    
+                    // Redirigir al index después de cambio obligatorio
+                    return RedirectToPage("/Index");
+                }
+
                 successMessage = "¡Contraseña cambiada exitosamente!";
                 mustShowModal = true;
                 allowCloseModal = true;
+                ViewData["ShowChangePasswordModal"] = true;
+                ViewData["AutoCloseModal"] = true;
 
                 return Page();
             }
