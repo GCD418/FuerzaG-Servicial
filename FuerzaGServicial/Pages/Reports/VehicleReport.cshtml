@@ -4,15 +4,21 @@
     ViewData["Title"] = "Reporte de Vehículos";
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">
-                        <i class="fas fa-car"></i> Reporte de Vehículos por Rango de Años
-                    </h3>
-                </div>
+<section id="vehicle-report" class="section bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="fw-bold">Reporte de Vehículos</h2>
+            <p class="text-muted">Genera un reporte detallado de vehículos por rango de años</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-car"></i> Configuración del Reporte
+                        </h4>
+                    </div>
                 <div class="card-body">
                     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
                     {
@@ -71,7 +77,7 @@
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a asp-page="/Index" class="btn btn-secondary">
+                            <a asp-page="/Reports/Index" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Volver
                             </a>
                             <button type="submit" class="btn btn-primary">
@@ -82,20 +88,21 @@
                 </div>
             </div>
 
-            <div class="card shadow mt-4">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-question-circle"></i> Información del Reporte</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-check text-success"></i> Muestra propietario, placa, marca, modelo y año</li>
-                        <li><i class="fas fa-check text-success"></i> Filtrado por rango de años</li>
-                        <li><i class="fas fa-check text-success"></i> Incluye estadísticas en el pie del reporte</li>
-                        <li><i class="fas fa-check text-success"></i> Disponible en formato PDF y Excel</li>
-                    </ul>
+                <div class="card shadow-sm mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-question-circle"></i> Información del Reporte</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success"></i> Muestra propietario, placa, marca, modelo y año</li>
+                            <li><i class="fas fa-check text-success"></i> Filtrado por rango de años</li>
+                            <li><i class="fas fa-check text-success"></i> Incluye estadísticas en el pie del reporte</li>
+                            <li><i class="fas fa-check text-success"></i> Disponible en formato PDF y Excel</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -4,15 +4,12 @@
     ViewData["Title"] = "Reportes";
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4">
-                <i class="fas fa-file-alt"></i> Centro de Reportes
-            </h1>
-            <p class="lead">Genera reportes detallados y estadísticos del sistema FuerzaG.</p>
+<section id="reports" class="section bg-light">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="fw-bold">Centro de Reportes</h2>
+            <p class="text-muted">Genera reportes detallados y estadísticos del sistema FuerzaG</p>
         </div>
-    </div>
 
     <div class="row mt-4">
         <div class="col-md-6 mb-4">
@@ -39,7 +36,7 @@
                     </a>
                 </div>
                 <div class="card-footer text-muted">
-                    <small><i class="fas fa-table"></i> Reporte tipo: Lista ordenada</small>
+                    <small><i class="fas fa-table"></i> Tipo de reporte: Lista ordenada</small>
                 </div>
             </div>
         </div>
@@ -68,49 +65,18 @@
                     </a>
                 </div>
                 <div class="card-footer text-muted">
-                    <small><i class="fas fa-chart-bar"></i> Reporte tipo: Estadístico con gráficos</small>
+                    <small><i class="fas fa-chart-bar"></i> Tipo de Reporte: Estadístico con gráficos</small>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card shadow-sm border-info">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Información General</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6><i class="fas fa-file-pdf text-danger"></i> Formato PDF</h6>
-                            <ul>
-                                <li>Diseño profesional con logo</li>
-                                <li>Optimizado para impresión</li>
-                                <li>Incluye número de páginas</li>
-                                <li>Gráficos de alta calidad</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6><i class="fas fa-file-excel text-success"></i> Formato Excel</h6>
-                            <ul>
-                                <li>Datos editables</li>
-                                <li>Tablas con formato</li>
-                                <li>Incluye gráficos insertados</li>
-                                <li>Fácil análisis de datos</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+        <div class="row mt-4 mb-4">
+            <div class="col-12">
+                <a asp-page="/Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver al Inicio
+                </a>
             </div>
         </div>
     </div>
-
-    <div class="row mt-4 mb-4">
-        <div class="col-12">
-            <a asp-page="/Index" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Volver al Inicio
-            </a>
-        </div>
-    </div>
-</div>
+</section>
