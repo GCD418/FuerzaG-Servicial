@@ -117,11 +117,11 @@ public class OwnerRepository : IOwnerRepository
             PhoneNumber = reader.GetInt32(4),
             Email = reader.GetString(5),
             Ci = reader.GetString(6),
-            Address = reader.GetString(7),
-            CreatedAt = reader.GetDateTime(8),
-            UpdatedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(9),
-            IsActive = reader.GetBoolean(10),
-            DocumentExtension = reader.GetString(13)
+            DocumentExtension = reader.IsDBNull(7) ? null : reader.GetString(7),
+            Address = reader.GetString(8),
+            CreatedAt = reader.GetDateTime(9),
+            UpdatedAt = reader.IsDBNull(10) ? null : reader.GetDateTime(10),
+            IsActive = reader.GetBoolean(11)
         };
     }
 
