@@ -15,7 +15,7 @@ public class Owner
 
     public string Email { get; set; } = string.Empty;
 
-    public string Ci { get; set; } = string.Empty;
+    public string DocumentNumber { get; set; } = string.Empty;
     
     public string? DocumentExtension { get; set; }
 
@@ -32,7 +32,7 @@ public class Owner
     {
         get
         {
-            return DocumentExtension != null ? $"{Ci}-{DocumentExtension}" : $"{Ci}";
+            return DocumentExtension != null ? $"{DocumentNumber}-{DocumentExtension}" : $"{DocumentNumber}";
         }
     }
 }

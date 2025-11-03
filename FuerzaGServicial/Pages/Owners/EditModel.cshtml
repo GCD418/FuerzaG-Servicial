@@ -83,10 +83,10 @@
             </div>
 
             <div class="col-md-6">
-                <label asp-for="Owner.Ci" class="form-label">Carnet de Identidad *</label>
-                <input asp-for="Owner.Ci" class="form-control"
+                <label asp-for="Owner.DocumentNumber" class="form-label">Carnet de Identidad *</label>
+                <input asp-for="Owner.DocumentNumber" class="form-control"
                        type="text" minlength="6" maxlength="9" placeholder="Ej: 1234567" pattern="[0-9]{6,9}" required />
-                <span asp-validation-for="Owner.Ci" class="text-danger small"></span>
+                <span asp-validation-for="Owner.DocumentNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
             </div>
 

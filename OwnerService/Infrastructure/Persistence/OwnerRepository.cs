@@ -1,5 +1,6 @@
 using System.Data;
 using CommonService.Infrastructure.Connection;
+using Dapper;
 using OwnerService.Domain.Entities;
 using OwnerService.Domain.Ports;
 
@@ -16,35 +17,17 @@ public class OwnerRepository : IOwnerRepository
 
     public async Task<IEnumerable<Owner>> GetAllAsync()
     {
-        var owners = new List<Owner>();
         await using var connection = _dbConnectionFactory.CreateConnection();
 
         string query = "SELECT * FROM fn_get_active_owners()";
-
-        await using var command = connection.CreateCommand();
-        command.CommandText = query;         
-        
-        await connection.OpenAsync();
-
-        await using var reader = await command.ExecuteReaderAsync();
-        while (await reader.ReadAsync())
-            owners.Add(MapReaderToModel(reader));
-
-        return owners;
+        return await connection.QueryAsync<Owner>(query);
     }
 
     public async Task<Owner?> GetByIdAsync(int id)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         string query = "SELECT * FROM fn_get_owner_by_id(@id)";
-
-        await using var command = connection.CreateCommand();
-        command.CommandText = query;   
-        AddParameter(command, "@id", id);
-
-        await connection.OpenAsync();
-        await using var reader = await command.ExecuteReaderAsync();
-        return await reader.ReadAsync() ? MapReaderToModel(reader) : null;
+        return await  connection.QuerySingleOrDefaultAsync<Owner>(query, new { id = id });
     }
 
     public async Task<bool> CreateAsync(Owner owner, int userId)
@@ -60,7 +43,7 @@ public class OwnerRepository : IOwnerRepository
         AddParameter(command, "@second_last_name", owner.SecondLastname);
         AddParameter(command, "@phone_number",     owner.PhoneNumber);
         AddParameter(command, "@email",            owner.Email);
-        AddParameter(command, "@document_number",  owner.Ci);
+        AddParameter(command, "@document_number",  owner.DocumentNumber);
         AddParameter(command, "@address",          owner.Address);
         AddParameter(command, "@created_by_user_id", userId);
         AddParameter(command, "@document_extension", owner.DocumentExtension);
@@ -83,7 +66,7 @@ public class OwnerRepository : IOwnerRepository
         AddParameter(command, "@second_last_name", owner.SecondLastname);
         AddParameter(command, "@phone_number",     owner.PhoneNumber);
         AddParameter(command, "@email",            owner.Email);
-        AddParameter(command, "@document_number",  owner.Ci);
+        AddParameter(command, "@document_number",  owner.DocumentNumber);
         AddParameter(command, "@address",          owner.Address);
         AddParameter(command, "@modified_by_user_id", userId);
         AddParameter(command, "@id",               owner.Id);
@@ -116,7 +99,7 @@ public class OwnerRepository : IOwnerRepository
             SecondLastname = reader.IsDBNull(3) ? null : reader.GetString(3),
             PhoneNumber = reader.GetInt32(4),
             Email = reader.GetString(5),
-            Ci = reader.GetString(6),
+            DocumentNumber = reader.GetString(6),
             DocumentExtension = reader.IsDBNull(7) ? null : reader.GetString(7),
             Address = reader.GetString(8),
             CreatedAt = reader.GetDateTime(9),
