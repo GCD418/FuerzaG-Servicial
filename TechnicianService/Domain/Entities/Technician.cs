@@ -11,11 +11,13 @@ namespace TechnicianService.Domain.Entities
         public int PhoneNumber { get; set; }
         public string? Email { get; set; }
         public string? DocumentNumber { get; set; }
+        public string DocumentExtension { get; set; } = string.Empty;
         public string? Address { get; set; }
         public decimal? BaseSalary { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool IsActive { get; set; } = true;
         public int? ModifiedByUserId { get; set; }
+        public string FullDocumentNumber => $"{DocumentNumber}-{DocumentExtension}";
     }
 }

@@ -16,6 +16,8 @@ public class Owner
     public string Email { get; set; } = string.Empty;
 
     public string Ci { get; set; } = string.Empty;
+    
+    public string DocumentExtension { get; set; } = string.Empty;
 
     public string Address { get; set; } = string.Empty;
 
@@ -26,4 +28,5 @@ public class Owner
     public bool IsActive { get; set; } = true;
     
     public string FullName => $"{FirstLastname} {SecondLastname} {Name}";
+    public string FullDocumentNumber => $"{Ci}-{DocumentExtension}";
 }
