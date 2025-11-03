@@ -50,7 +50,7 @@ public class OwnerRepository : IOwnerRepository
     public async Task<bool> CreateAsync(Owner owner, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        string query = "SELECT fn_insert_owner(@name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @address, @created_by_user_id)";
+        string query = "SELECT fn_insert_owner(@name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @address, @created_by_user_id, @document_extension)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;             
@@ -63,6 +63,7 @@ public class OwnerRepository : IOwnerRepository
         AddParameter(command, "@document_number",  owner.Ci);
         AddParameter(command, "@address",          owner.Address);
         AddParameter(command, "@created_by_user_id", userId);
+        AddParameter(command, "@document_extension", owner.DocumentExtension);
 
         await connection.OpenAsync();
         var idObj = await command.ExecuteScalarAsync();        
@@ -72,7 +73,7 @@ public class OwnerRepository : IOwnerRepository
     public async Task<bool> UpdateAsync(Owner owner, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
-        string query = "SELECT fn_update_owner(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @address, @modified_by_user_id)";
+        string query = "SELECT fn_update_owner(@id, @name, @first_last_name, @second_last_name, @phone_number, @email, @document_number, @address, @modified_by_user_id, @document_extension)";
 
         await using var command = connection.CreateCommand();
         command.CommandText = query;           
@@ -86,6 +87,7 @@ public class OwnerRepository : IOwnerRepository
         AddParameter(command, "@address",          owner.Address);
         AddParameter(command, "@modified_by_user_id", userId);
         AddParameter(command, "@id",               owner.Id);
+        AddParameter(command, "@document_extension", owner.DocumentExtension);
 
         await connection.OpenAsync();
         return Convert.ToBoolean(await command.ExecuteScalarAsync());
@@ -118,7 +120,8 @@ public class OwnerRepository : IOwnerRepository
             Address = reader.GetString(7),
             CreatedAt = reader.GetDateTime(8),
             UpdatedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(9),
-            IsActive = reader.GetBoolean(10)
+            IsActive = reader.GetBoolean(10),
+            DocumentExtension = reader.GetString(13)
         };
     }
 
