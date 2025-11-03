@@ -107,6 +107,7 @@ namespace TechnicianService.Infrastructure.Persistence
             PhoneNumber = r["phone_number"] is DBNull ? 0 : Convert.ToInt32(r["phone_number"]),
             Email = r["email"] as string,
             DocumentNumber = r["document_number"] as string,
+            DocumentExtension= r["document_extension"] as string,
             Address = r["address"] as string,
             BaseSalary = r["base_salary"] is DBNull ? null : (decimal?)Convert.ToDecimal(r["base_salary"]),
             CreatedAt = r["created_at"] is DBNull ? null : (DateTime?)Convert.ToDateTime(r["created_at"]),

@@ -17,7 +17,7 @@ public class UserAccount
 
     public string DocumentNumber { get; set; } = string.Empty;
     
-    public string DocumentExtension { get; set; } = string.Empty;
+    public string? DocumentExtension { get; set; }
 
     public string UserName { get; set; } = string.Empty;
 
@@ -36,5 +36,12 @@ public class UserAccount
     public bool IsFirstLogin { get; set; } = false;
     public string FullName => $"{FirstLastName} {(SecondLastName ?? string.Empty)} {Name}";
 
-    public string FullDocumentNumber => $"{DocumentNumber}-{DocumentExtension}";
+    public string FullDocumentNumber
+    {
+        get
+        {
+            return DocumentExtension != null ? $"{DocumentNumber}-{DocumentExtension}" : $"{DocumentNumber}";
+        }
+    }
+    
 }
