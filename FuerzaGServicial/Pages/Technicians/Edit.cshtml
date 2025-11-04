@@ -117,7 +117,7 @@
         </div>
 
         <div class="mt-4">
-            <button type="submit" class="btn btn-dark">
+            <button type="submit" class="btn btn-dark" id="btnUpdate">
                 <i class="fas fa-save"></i> Actualizar
             </button>
             <a asp-page="/Technicians/TechnicianPage" class="btn btn-outline-secondary">
@@ -134,18 +134,18 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            const form = document.getElementById('technicianForm');
+            const btnUpdate = document.getElementById('btnUpdate');
+
             function letraPermitida(e) {
                 const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]$/;
                 const ch = String.fromCharCode(e.which);
-                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
-                    e.preventDefault();
-                }
+                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) e.preventDefault();
             }
 
             const nombreInput = $("#Form_Name")[0];
             const apellidoPInput = $("#Form_FirstLastName")[0];
             const apellidoMInput = $("#Form_SecondLastName")[0];
-
             [nombreInput, apellidoPInput, apellidoMInput].forEach(el => el && el.addEventListener("keypress", letraPermitida));
 
             $('#Form_PhoneNumber, #Form_DocumentNumber').on('keypress', function (e) {
@@ -186,6 +186,29 @@
                     field.removeClass('is-valid').addClass('is-invalid');
                     validIcon.addClass('d-none');
                     invalidIcon.removeClass('d-none');
+                }
+            });
+
+            form.addEventListener('submit', function(e) {
+                $('input, textarea').each(function () {
+                    if (!this.checkValidity()) {
+                        $(this).addClass('is-invalid').removeClass('is-valid');
+                        $(this).siblings('.valid-icon').addClass('d-none');
+                        $(this).siblings('.invalid-icon').removeClass('d-none');
+                    } else {
+                        $(this).removeClass('is-invalid').addClass('is-valid');
+                        $(this).siblings('.valid-icon').removeClass('d-none');
+                        $(this).siblings('.invalid-icon').addClass('d-none');
+                    }
+                });
+
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.classList.add('was-validated');
+                } else {
+                    btnUpdate.disabled = true;
+                    btnUpdate.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
                 }
             });
         });

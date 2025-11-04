@@ -145,7 +145,7 @@
             $('#btnSaveOwner').on('click', function () {
                 if (form.checkValidity()) {
                     const btn = $(this);
-                    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+                    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Actualizando...');
                     form.submit();
                 } else {
                     form.classList.add('was-validated');
