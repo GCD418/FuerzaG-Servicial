@@ -38,8 +38,8 @@
                         <td>@s.index</td>
                         <td>@s.service.Name</td>
                         <td>@s.service.Type</td>
-                        <td>@(s.service.Price?.ToString("N2") ?? "-")</td>
-                        <td>@s.service.Description</td>
+                        <td class="text-end">@(s.service.Price?.ToString("N2") ?? "-")</td>
+                        <td class="text-start">@s.service.Description</td>
                         <td class="text-nowrap text-center">
                             <a asp-page="/Services/Edit"
                                asp-route-id="@Model.EncryptId(s.service.Id)"
