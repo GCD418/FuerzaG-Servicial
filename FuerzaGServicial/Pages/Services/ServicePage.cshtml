@@ -26,7 +26,7 @@
                         <th style="width:5%;">#</th>
                         <th style="width:20%;">Nombre</th>
                         <th style="width:15%;">Tipo</th>
-                        <th style="width:10%;">Precio</th>
+                        <th style="width:10%;">Precio (Bs.)</th>
                         <th style="width:30%;">Descripción</th>
                         <th style="width:10%;">Acciones</th>
                     </tr>
@@ -38,7 +38,7 @@
                         <td>@s.index</td>
                         <td>@s.service.Name</td>
                         <td>@s.service.Type</td>
-                        <td>@(s.service.Price?.ToString("C2") ?? "-")</td>
+                        <td>@(s.service.Price?.ToString("N2") ?? "-")</td>
                         <td>@s.service.Description</td>
                         <td class="text-nowrap text-center">
                             <a asp-page="/Services/Edit"
