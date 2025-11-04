@@ -19,6 +19,7 @@ namespace TechnicianService.Domain.Services
             ValidateDocumentNumber(entity.DocumentNumber);
             ValidateAddress(entity.Address);
             ValidateBaseSalary(entity.BaseSalary);
+            ValidateDocumentExtension(entity.DocumentExtension);
 
             return _errors.Count == 0
                 ? Result.Success()
@@ -112,6 +113,30 @@ namespace TechnicianService.Domain.Services
             if (value is null) { _errors.Add("El salario base es requerido"); return; }
             if (value < 0) _errors.Add("El salario base no puede ser negativo");
             if (value > 1_000_000) _errors.Add("El salario base es excesivo");
+        }
+
+        private void ValidateDocumentExtension(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return;
+
+            if (value.Length != 2)
+            {
+                _errors.Add("El complemento debe tener exactamente 2 caracteres (ej. 1A).");
+                return;
+            }
+
+            char first = value[0];
+            char second = value[1];
+
+            if (first < '1' || first > '9')
+            {
+                _errors.Add("El primer carácter del complemento debe ser un dígito entre 1 y 9.");
+            }
+
+            if (second < 'A' || second > 'Z')
+            {
+                _errors.Add("El segundo carácter del complemento debe ser una letra mayúscula A-Z.");
+            }
         }
     }
 }
