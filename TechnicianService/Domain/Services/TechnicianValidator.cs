@@ -7,18 +7,18 @@ namespace TechnicianService.Domain.Services
     {
         private readonly List<string> _errors = [];
 
-        public Result Validate(Technician entity)
+        public Result Validate(Technician technician)
         {
             _errors.Clear();
 
-            ValidateName(entity.Name);
-            ValidateFirstLastName(entity.FirstLastName);
-            ValidateSecondLastName(entity.SecondLastName);
-            ValidatePhoneNumber(entity.PhoneNumber);
-            ValidateEmail(entity.Email);
-            ValidateDocumentNumber(entity.DocumentNumber);
-            ValidateAddress(entity.Address);
-            ValidateBaseSalary(entity.BaseSalary);
+            ValidateName(technician.Name);
+            ValidateFirstLastName(technician.FirstLastName);
+            ValidateSecondLastName(technician.SecondLastName);
+            ValidatePhoneNumber(technician.PhoneNumber);
+            ValidateEmail(technician.Email);
+            ValidateDocumentNumber(technician.DocumentNumber);
+            ValidateAddress(technician.Address);
+            ValidateBaseSalary(technician.BaseSalary);
 
             return _errors.Count == 0
                 ? Result.Success()
@@ -40,33 +40,33 @@ namespace TechnicianService.Domain.Services
             if (name.Any(c => ProhibitedChars.Contains(c))) _errors.Add("El nombre contiene caracteres no permitidos");
         }
 
-        private void ValidateFirstLastName(string? value)
+        private void ValidateFirstLastName(string? firstLastName)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(firstLastName))
             {
                 _errors.Add("El primer apellido es requerido");
                 return;
             }
-            if (value.Length < 2) _errors.Add("Debe tener al menos 2 caracteres");
-            if (value.Length > 100) _errors.Add("No puede superar los 100 caracteres");
-            if (value.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
+            if (firstLastName.Length < 2) _errors.Add("Debe tener al menos 2 caracteres");
+            if (firstLastName.Length > 100) _errors.Add("No puede superar los 100 caracteres");
+            if (firstLastName.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
         }
 
-        private void ValidateSecondLastName(string? value)
+        private void ValidateSecondLastName(string? secontLastName)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(secontLastName))
             {
                 return;
             }
-            if (value.Length < 2) _errors.Add("Debe tener al menos 2 caracteres");
-            if (value.Length > 100) _errors.Add("No puede superar los 100 caracteres");
-            if (value.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
+            if (secontLastName.Length < 2) _errors.Add("Debe tener al menos 2 caracteres");
+            if (secontLastName.Length > 100) _errors.Add("No puede superar los 100 caracteres");
+            if (secontLastName.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
         }
 
-        private void ValidatePhoneNumber(int value)
+        private void ValidatePhoneNumber(int phoneNumber)
         {
-            if (value <= 0) { _errors.Add("El teléfono es requerido"); return; }
-            var len = value.ToString().Length;
+            if (phoneNumber <= 0) { _errors.Add("El teléfono es requerido"); return; }
+            var len = phoneNumber.ToString().Length;
             if (len < 7 || len > 12) _errors.Add("El teléfono debe tener entre 7 y 12 dígitos");
         }
 
@@ -82,35 +82,35 @@ namespace TechnicianService.Domain.Services
             if (email.Any(c => ProhibitedChars.Contains(c))) _errors.Add("El email contiene caracteres no permitidos");
         }
 
-        private void ValidateDocumentNumber(string? value)
+        private void ValidateDocumentNumber(string? documentNumber)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(documentNumber))
             {
                 _errors.Add("El número de documento es requerido");
                 return;
             }
-            if (value.Length < 5) _errors.Add("Debe tener al menos 5 caracteres");
-            if (value.Length > 50) _errors.Add("No puede superar los 50 caracteres");
-            if (value.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
+            if (documentNumber.Length < 5) _errors.Add("Debe tener al menos 5 caracteres");
+            if (documentNumber.Length > 50) _errors.Add("No puede superar los 50 caracteres");
+            if (documentNumber.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
         }
 
-        private void ValidateAddress(string? value)
+        private void ValidateAddress(string? address)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(address))
             {
                 _errors.Add("La dirección es requerida");
                 return;
             }
-            if (value.Length < 5) _errors.Add("Debe tener al menos 5 caracteres");
-            if (value.Length > 200) _errors.Add("No puede superar los 200 caracteres");
-            if (value.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
+            if (address.Length < 5) _errors.Add("Debe tener al menos 5 caracteres");
+            if (address.Length > 200) _errors.Add("No puede superar los 200 caracteres");
+            if (address.Any(c => ProhibitedChars.Contains(c))) _errors.Add("Contiene caracteres no permitidos");
         }
 
-        private void ValidateBaseSalary(decimal? value)
+        private void ValidateBaseSalary(decimal? baseSalary)
         {
-            if (value is null) { _errors.Add("El salario base es requerido"); return; }
-            if (value < 0) _errors.Add("El salario base no puede ser negativo");
-            if (value > 1_000_000) _errors.Add("El salario base es excesivo");
+            if (baseSalary is null) { _errors.Add("El salario base es requerido"); return; }
+            if (baseSalary < 0) _errors.Add("El salario base no puede ser negativo");
+            if (baseSalary > 1_000_000) _errors.Add("El salario base es excesivo");
         }
     }
 }
