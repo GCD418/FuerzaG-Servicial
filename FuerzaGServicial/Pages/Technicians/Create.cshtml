@@ -33,7 +33,7 @@
                     <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none"><i class="fas fa-check-circle"></i></span>
                     <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none"><i class="fas fa-times-circle"></i></span>
                     <div class="invalid-feedback">
-                        El nombre debe tener al menos 3 caracteres y solo letras..
+                        El nombre debe tener al menos 3 caracteres y solo letras.
                     </div>
                 </div>
                 <span asp-validation-for="Form.Name" class="text-danger small"></span>
@@ -74,7 +74,7 @@
             <div class="col-md-6">
                 <label asp-for="Form.PhoneNumber" class="form-label">Teléfono *</label>
                 <input asp-for="Form.PhoneNumber" class="form-control" placeholder="Ej: 76543210"
-                       type="tel" pattern="[0-9]{8}" required value=""/>
+                       type="tel" pattern="[0-9]{8}" required value="" />
                 <span asp-validation-for="Form.PhoneNumber" class="text-danger small"></span>
                 <div class="invalid-feedback">
                     El teléfono debe tener exactamente 8 dígitos.
@@ -133,7 +133,7 @@
         </div>
 
         <div class="mt-4">
-            <button type="button" class="btn btn-dark" id="btnOpenModal">
+            <button type="submit" class="btn btn-dark" id="btnSave">
                 <i class="fas fa-save"></i> Guardar
             </button>
             <a asp-page="/Technicians/TechnicianPage" class="btn btn-outline-secondary">
@@ -145,14 +145,13 @@
             <small class="text-muted">* Campos obligatorios</small>
         </div>
     </form>
-
-    @await Html.PartialAsync("_ConfirmSaveModal")
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
             const form = document.getElementById('technicianForm');
+            const btnSave = document.getElementById('btnSave');
 
             $('input[type="tel"], input[asp-for="Form.DocumentNumber"]').on('keypress', function (e) {
                 if (e.which < 48 || e.which > 57) e.preventDefault();
@@ -183,12 +182,10 @@
                 baseSalaryInput.addEventListener("keypress", function (e) {
                     const ch = String.fromCharCode(e.which);
                     const allowed = /^[0-9.]$/;
-
                     if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
                         e.preventDefault();
                         return;
                     }
-
                     if (ch === '.' && this.value.includes('.')) {
                         e.preventDefault();
                     }
@@ -216,21 +213,27 @@
                 }
             });
 
-            $('#btnOpenModal').on('click', function () {
-                if (form.checkValidity()) {
-                    var modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
-                    modal.show();
-                } else {
-                    form.classList.add('was-validated');
-                }
-            });
+            form.addEventListener('submit', function(e) {
+                $('input, textarea').each(function () {
+                    if (!this.checkValidity()) {
+                        $(this).addClass('is-invalid').removeClass('is-valid');
+                        $(this).siblings('.valid-icon').addClass('d-none');
+                        $(this).siblings('.invalid-icon').removeClass('d-none');
+                    } else {
+                        $(this).removeClass('is-invalid').addClass('is-valid');
+                        $(this).siblings('.valid-icon').removeClass('d-none');
+                        $(this).siblings('.invalid-icon').addClass('d-none');
+                    }
+                });
 
-            $('#confirmSaveBtn').on('click', function () {
-                const confirmBtn = $(this);
-                confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
-                modal.hide();
-                form.submit();
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    form.classList.add('was-validated');
+                } else {
+                    btnSave.disabled = true;
+                    btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                }
             });
         });
     </script>
