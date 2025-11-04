@@ -134,7 +134,6 @@
 
             const inputs = [nombreInput, apellidoInput, segundoApellidoInput, docInput, phoneInput, emailInput, roleSelect];
 
-            // Validar solo números en teléfono y documento
             [phoneInput, docInput].forEach(input => {
                 input.addEventListener('keypress', function (e) {
                     if (e.which < 48 || e.which > 57) e.preventDefault();
@@ -145,7 +144,6 @@
                 });
             });
 
-            // Validar solo letras y espacios
             function letraYCaracteresPermitidos(e) {
                 const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]$/;
                 const ch = String.fromCharCode(e.which);
@@ -153,25 +151,23 @@
             }
             [nombreInput, apellidoInput, segundoApellidoInput].forEach(input => input.addEventListener('keypress', letraYCaracteresPermitidos));
 
-            // Generar nombre de usuario dinámicamente
             function generarUsername() {
                 const nombre = nombreInput?.value.trim().toLowerCase() || "";
-                const apellido = apellidoInput?.value.trim().toLowerCase() || "";
+                let apellido = apellidoInput?.value.trim().toLowerCase() || "";
                 const doc = docInput?.value.trim() || "";
+                apellido = apellido.replace(/\s+/g, '');
                 usernameInput.value = (nombre && apellido && doc.length >= 3)
-                    ? `${nombre.charAt(0)}.${apellido}${doc.slice(-3)}`
-                    : "";
+                ? `${nombre.charAt(0)}.${apellido}${doc.slice(-3)}`
+                : "";
             }
-            [nombreInput, apellidoInput, docInput].forEach(el => el && el.addEventListener("input", generarUsername));
+                [nombreInput, apellidoInput, docInput].forEach(el => el && el.addEventListener("input", generarUsername)); 
 
-            // Limpiar clases al escribir
             inputs.forEach(input => {
                 input.addEventListener('input', function () {
                     this.classList.remove('is-invalid', 'is-valid');
                 });
             });
 
-            // Click en botón Guardar
             btnGuardar.addEventListener('click', function () {
                 let valid = true;
 
@@ -180,7 +176,6 @@
                     const value = input.value.trim();
                     const pattern = input.getAttribute('pattern') ? new RegExp(input.getAttribute('pattern')) : null;
 
-                    // Validación opcional para Apellido Materno
                     if (input.id === 'UserAccount_SecondLastName') {
                         if (value) {
                             if ((input.minLength && value.length < parseInt(input.minLength)) || (pattern && !pattern.test(value))) {
@@ -193,7 +188,6 @@
                         return;
                     }
 
-                    // Validación general
                     if (input.hasAttribute('required') && !value) {
                         valid = false;
                         input.classList.add('is-invalid');
