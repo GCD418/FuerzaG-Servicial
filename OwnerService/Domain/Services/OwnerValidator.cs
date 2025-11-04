@@ -15,7 +15,7 @@ public class OwnerValidator : IValidator<Owner>
         entity.FirstLastname = entity.FirstLastname?.Trim() ?? string.Empty;
         entity.SecondLastname = entity.SecondLastname?.Trim();
         entity.Email = entity.Email?.Trim() ?? string.Empty;
-        entity.Ci = entity.Ci?.Trim() ?? string.Empty;
+        entity.DocumentNumber = entity.DocumentNumber?.Trim() ?? string.Empty;
         entity.Address = entity.Address?.Trim() ?? string.Empty;
         
         ValidateName(entity.Name);
@@ -23,7 +23,7 @@ public class OwnerValidator : IValidator<Owner>
         ValidateSecondLastname(entity.SecondLastname);
         ValidatePhoneNumber(entity.PhoneNumber);
         ValidateEmail(entity.Email);
-        ValidateCi(entity.Ci);
+        ValidateCi(entity.DocumentNumber);
         ValidateAddress(entity.Address);
         
         return _errors.Count == 0

@@ -1,5 +1,5 @@
-﻿using System.Data;
-using CommonService.Infrastructure.Connection;
+﻿using CommonService.Infrastructure.Connection;
+using Dapper;
 using ServiceService.Domain.Entities;
 using ServiceService.Domain.Ports;
 
@@ -16,122 +16,59 @@ public class ServiceRepository : IServiceRepository
 
     public async Task<IEnumerable<Service>> GetAllAsync()
     {
-        var services = new List<Service>();
         await using var connection = _dbConnectionFactory.CreateConnection();
-
         const string query = "SELECT * FROM fn_get_active_services()";
-
-        await using var command = connection.CreateCommand();
-        command.CommandText = query;
-
-        await connection.OpenAsync();
-        await using var reader = await command.ExecuteReaderAsync();
-
-        while (await reader.ReadAsync())
-            services.Add(MapReaderToModel(reader));
-
-        return services;
+        return await connection.QueryAsync<Service>(query);
     }
 
     public async Task<Service?> GetByIdAsync(int id)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT * FROM fn_get_service_by_id(@id)";
-
-        await using var command = connection.CreateCommand();
-        command.CommandText = query;
-        AddParameter(command, "@id", id);
-
-        await connection.OpenAsync();
-        await using var reader = await command.ExecuteReaderAsync();
-
-        return await reader.ReadAsync() ? MapReaderToModel(reader) : null;
+        return await connection.QuerySingleOrDefaultAsync<Service>(query, new { id });
     }
 
     public async Task<bool> CreateAsync(Service service, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_insert_service(@name, @type, @price, @description, @created_by_user_id)";
-
-        await using var command = connection.CreateCommand();
-        command.CommandText = query;
-
-        AddParameter(command, "@name", service.Name);
-        AddParameter(command, "@type", service.Type);
-        AddParameter(command, "@price", service.Price);
-        AddParameter(command, "@description", service.Description);
-        AddParameter(command, "@created_by_user_id", userId);
-
-        await connection.OpenAsync();
-        var result = await command.ExecuteScalarAsync();
-
-        return Convert.ToInt32(result) > 0;
-        
+        var parameters = new
+        {
+            name = service.Name,
+            type = service.Type,
+            price = service.Price,
+            description = service.Description,
+            created_by_user_id = userId
+        };
+        var newId = await connection.ExecuteScalarAsync<int>(query, parameters);
+        return newId > 0;
     }
 
     public async Task<bool> UpdateAsync(Service service, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_update_service(@id, @name, @type, @price, @description, @modified_by_user_id)";
-
-        await using var command = connection.CreateCommand();
-        command.CommandText = query;
-
-        AddParameter(command, "@id", service.Id);
-        AddParameter(command, "@name", service.Name);
-        AddParameter(command, "@type", service.Type);
-        AddParameter(command, "@price", service.Price);
-        AddParameter(command, "@description", service.Description);
-        AddParameter(command, "@modified_by_user_id", userId);
-
-        await connection.OpenAsync();
-        var result = await command.ExecuteScalarAsync();
-
-        return Convert.ToBoolean(result);
+        var parameters = new
+        {
+            id = service.Id,
+            name = service.Name,
+            type = service.Type,
+            price = service.Price,
+            description = service.Description,
+            modified_by_user_id = userId
+        };
+        return await connection.ExecuteScalarAsync<bool>(query, parameters);
     }
 
     public async Task<bool> DeleteByIdAsync(int id, int userId)
     {
         await using var connection = _dbConnectionFactory.CreateConnection();
         const string query = "SELECT fn_soft_delete_service(@id, @modified_by_user_id)";
-
-        await using var command = connection.CreateCommand();
-        command.CommandText = query;
-
-        AddParameter(command, "@id", id);
-        AddParameter(command, "@modified_by_user_id", userId);
-
-        await connection.OpenAsync();
-        var result = await command.ExecuteScalarAsync();
-
-        return Convert.ToBoolean(result);
-    }
-
-    private Service MapReaderToModel(IDataReader reader)
-    {
-        return new Service
+        var parameters = new
         {
-            Id = reader.GetInt32(reader.GetOrdinal("id")),
-            Name = reader.GetString(reader.GetOrdinal("name")),
-            Type = reader.GetString(reader.GetOrdinal("type")),
-            Price = reader.GetDecimal(reader.GetOrdinal("price")),
-            Description = reader.GetString(reader.GetOrdinal("description")),
-            CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
-            UpdatedAt = reader.IsDBNull(reader.GetOrdinal("updated_at"))
-                ? null
-                : reader.GetDateTime(reader.GetOrdinal("updated_at")),
-            IsActive = reader.GetBoolean(reader.GetOrdinal("is_active")),
-            ModifiedByUserId = reader.IsDBNull(reader.GetOrdinal("modified_by_user_id"))
-                ? null
-                : reader.GetInt32(reader.GetOrdinal("modified_by_user_id"))
+            id,
+            modified_by_user_id = userId
         };
-    }
-
-    private static void AddParameter(IDbCommand command, string name, object value)
-    {
-        var parameter = command.CreateParameter();
-        parameter.ParameterName = name;
-        parameter.Value = value ?? DBNull.Value;
-        command.Parameters.Add(parameter);
+        return await connection.ExecuteScalarAsync<bool>(query, parameters);
     }
 }
