@@ -84,7 +84,7 @@
         </div>
 
         <div class="mt-4 d-flex gap-2">
-            <button type="button" class="btn btn-dark" id="btnOpenEditModal">
+            <button type="button" class="btn btn-dark" id="btnSaveService">
                 <i class="fas fa-save me-1"></i> Actualizar
             </button>
             <a asp-page="/Services/ServicePage" class="btn btn-outline-secondary">
@@ -96,8 +96,6 @@
             <small class="text-muted">* Campos obligatorios</small>
         </div>
     </form>
-
-    @await Html.PartialAsync("_ConfirmEditModal")
 </div>
 
 @section Scripts {
@@ -123,7 +121,7 @@
                 });
             });
 
-            document.getElementById('btnOpenEditModal').addEventListener('click', function () {
+            document.getElementById('btnSaveService').addEventListener('click', function () {
                 [nameInput, typeSelect, priceInput, descriptionInput].forEach(el => el.classList.remove('is-invalid', 'is-valid'));
                 [nameErrorSpan, typeErrorSpan, priceErrorSpan, descriptionErrorSpan].forEach(span => span.textContent = '');
 
@@ -169,22 +167,13 @@
                 }
 
                 if (valid && form.checkValidity()) {
-                    const modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
-                    modal.show();
+                    const btn = this;
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
+                    form.submit();
                 } else {
                     form.classList.add('was-validated');
                 }
-            });
-
-            document.getElementById('confirmEditBtn').addEventListener('click', function () {
-                const confirmBtn = this;
-                confirmBtn.disabled = true;
-                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
-
-                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmEditModal'));
-                modal.hide();
-
-                form.submit();
             });
         });
     </script>
