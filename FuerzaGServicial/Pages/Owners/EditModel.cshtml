@@ -61,7 +61,7 @@
                        title="Solo se permiten letras y espacios si se llena." />
                 <span asp-validation-for="Owner.SecondLastname" class="text-danger small"></span>
                 <div class="invalid-feedback">
-                    El apellido materno debe tener al menos 2 caracteres y solo letras
+                    El apellido materno debe tener al menos 2 caracteres y solo letras.
                 </div>
             </div>
 
@@ -101,7 +101,7 @@
         </div>
 
         <div class="mt-4">
-            <button type="button" class="btn btn-dark" id="btnOpenEditModal">
+            <button type="button" class="btn btn-dark" id="btnSaveOwner">
                 <i class="fas fa-save"></i> Actualizar
             </button>
             <a asp-page="/Owners/OwnerPage" class="btn btn-outline-secondary">
@@ -109,8 +109,6 @@
             </a>
         </div>
     </form>
-
-    @await Html.PartialAsync("_ConfirmEditModal")
 </div>
 
 @section Scripts {
@@ -144,21 +142,14 @@
 
             [nombreInput, apellidoInput, segundoApellidoInput].forEach(el => el && el.addEventListener("keypress", letraPermitida));
 
-            $('#btnOpenEditModal').on('click', function () {
+            $('#btnSaveOwner').on('click', function () {
                 if (form.checkValidity()) {
-                    var modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
-                    modal.show();
+                    const btn = $(this);
+                    btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
+                    form.submit();
                 } else {
                     form.classList.add('was-validated');
                 }
-            });
-
-            $('#confirmEditBtn').on('click', function () {
-                const confirmBtn = $(this);
-                confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-                var modal = bootstrap.Modal.getInstance(document.getElementById('confirmEditModal'));
-                modal.hide();
-                form.submit();
             });
         });
     </script>
