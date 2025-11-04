@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model FuerzaGServicial.Pages.Owners.CreateModel
 @{
     ViewData["Title"] = "Nuevo Dueño";
@@ -34,75 +34,10 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <label asp-for="Owner.FirstLastname" class="form-label">Apellido Paterno *</label>
-                <input asp-for="Owner.FirstLastname" class="form-control" placeholder="Ingrese apellido paterno"
-                       required minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]+$"
-                       title="Solo letras y espacios. No se permiten números ni símbolos." />
-                <span asp-validation-for="Owner.FirstLastname" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El apellido paterno debe tener al menos 2 caracteres y solo letras.
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="Owner.SecondLastname" class="form-label">Apellido Materno</label>
-                <input asp-for="Owner.SecondLastname" class="form-control" placeholder="Ingrese apellido materno (opcional)"
-                       minlength="2" maxlength="100"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñüÜ\s]*$"
-                       title="Solo letras y espacios. No se permiten números ni símbolos." />
-                <span asp-validation-for="Owner.SecondLastname" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El apellido materno debe tener al menos 2 caracteres y solo letras.
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="Owner.PhoneNumber" class="form-label">Teléfono *</label>
-                <input asp-for="Owner.PhoneNumber" class="form-control" placeholder="Ej: 76543210"
-                       type="tel" pattern="[0-9]{8}" required
-                       value="@(Model.Owner.PhoneNumber == 0 ? "" : Model.Owner.PhoneNumber.ToString())" />
-                <span asp-validation-for="Owner.PhoneNumber" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El teléfono debe tener exactamente 8 dígitos.
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="Owner.Email" class="form-label">Correo Electrónico *</label>
-                <input asp-for="Owner.Email" class="form-control" placeholder="ejemplo@correo.com"
-                       type="email" required maxlength="255" />
-                <span asp-validation-for="Owner.Email" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    Ingrese un correo electrónico válido.
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <label asp-for="Owner.DocumentNumber" class="form-label">Carnet de Identidad *</label>
-                <input asp-for="Owner.DocumentNumber" class="form-control" placeholder="Ej: 1234567"
-                       type="text" minlength="6" maxlength="9" pattern="[0-9]{6,9}" required />
-                <span asp-validation-for="Owner.DocumentNumber" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El CI debe contener entre 6 y 9 dígitos.
-                </div>
-            </div>
-
-            <div class="col-12">
-                <label asp-for="Owner.Address" class="form-label">Dirección *</label>
-                <textarea asp-for="Owner.Address" class="form-control" rows="2"
-                          placeholder="Ingrese la dirección completa"
-                          required minlength="5" maxlength="100"></textarea>
-                <span asp-validation-for="Owner.Address" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    La dirección debe tener al menos 5 caracteres y máximo 100.
-                </div>
-            </div>
         </div>
 
         <div class="mt-4">
-            <button type="button" class="btn btn-dark" id="btnOpenModal">
+            <button type="submit" class="btn btn-dark" id="btnSubmit">
                 <i class="fas fa-save"></i> Guardar
             </button>
             <a asp-page="/Owners/OwnerPage" class="btn btn-outline-secondary">
@@ -114,13 +49,11 @@
             <small class="text-muted">* Campos obligatorios</small>
         </div>
     </form>
-
-    @await Html.PartialAsync("_ConfirmSaveModal")
 </div>
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var form = document.getElementById('ownerForm');
 
             const phoneInput = document.getElementById("Owner_PhoneNumber");
@@ -128,17 +61,17 @@
 
             [phoneInput, ciInput].forEach(input => {
                 if (input) {
-                    input.addEventListener('keypress', function(e) {
+                    input.addEventListener('keypress', function (e) {
                         if (e.which < 48 || e.which > 57) e.preventDefault();
                     });
                 }
             });
 
-            phoneInput?.addEventListener('input', function() {
+            phoneInput?.addEventListener('input', function () {
                 if (this.value.length > 8) this.value = this.value.slice(0, 8);
             });
 
-            ciInput?.addEventListener('input', function() {
+            ciInput?.addEventListener('input', function () {
                 if (this.value.length > 9) this.value = this.value.slice(0, 9);
             });
 
@@ -154,22 +87,17 @@
 
             [nombreInput, apellidoInput, segundoApellidoInput].forEach(el => el && el.addEventListener("keypress", letraPermitida));
 
-            $('#btnOpenModal').on('click', function() {
-                if (form.checkValidity()) {
-                    var modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
-                    modal.show();
-                } else {
+            $('#btnSubmit').on('click', function (e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     form.classList.add('was-validated');
+                } else {
+                    form.submit();
                 }
-            });
-
-            $('#confirmSaveBtn').on('click', function() {
-                const confirmBtn = $(this);
-                confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
-                modal.hide();
-                form.submit();
             });
         });
     </script>
+
+    <partial name="_ValidationScriptsPartial" />
 }
