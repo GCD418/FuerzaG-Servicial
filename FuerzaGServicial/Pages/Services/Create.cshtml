@@ -18,7 +18,7 @@
                        placeholder="Ej: Cambio de aceite"
                        required
                        minlength="3"
-                       maxlength="100" 
+                       maxlength="100"
                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s0-9%#()]+$" />
                 <span asp-validation-for="Service.Name" class="text-danger small"></span>
             </div>
@@ -69,7 +69,7 @@
         </div>
 
         <div class="mt-4 d-flex gap-2">
-            <button type="button" class="btn btn-dark" id="btnOpenModal">
+            <button type="submit" class="btn btn-dark" id="btnSave">
                 <i class="fas fa-save me-1"></i> Guardar
             </button>
             <a asp-page="/Services/ServicePage" class="btn btn-outline-secondary">
@@ -81,14 +81,14 @@
             <small class="text-muted">* Campos obligatorios</small>
         </div>
     </form>
-
-    @await Html.PartialAsync("_ConfirmSaveModal")
 </div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('serviceForm');
+            const btnSave = document.getElementById('btnSave');
+
             const priceInput = document.getElementById('Service_Price');
             const descriptionInput = document.getElementById('Service_Description');
             const nameInput = document.getElementById('Service_Name');
@@ -156,33 +156,23 @@
                 }
             });
 
-            document.getElementById('btnOpenModal').addEventListener('click', function () {
-                let valid = true;
-
+            form.addEventListener('submit', function(e) {
                 nameInput.dispatchEvent(new Event('input'));
                 priceInput.dispatchEvent(new Event('input'));
                 typeSelect.dispatchEvent(new Event('change'));
                 descriptionInput.dispatchEvent(new Event('input'));
 
-                [nameInput, typeSelect, priceInput, descriptionInput].forEach(el => {
-                    if (el.classList.contains('is-invalid')) valid = false;
-                });
+                const inputs = [nameInput, typeSelect, priceInput, descriptionInput];
+                const valid = inputs.every(el => !el.classList.contains('is-invalid'));
 
-                if (valid && form.checkValidity()) {
-                    const modal = new bootstrap.Modal(document.getElementById('confirmSaveModal'));
-                    modal.show();
-                } else {
+                if (!valid) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     form.classList.add('was-validated');
+                } else {
+                    btnSave.disabled = true;
+                    btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
                 }
-            });
-
-            document.getElementById('confirmSaveBtn').addEventListener('click', function () {
-                const confirmBtn = this;
-                confirmBtn.disabled = true;
-                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
-                const modal = bootstrap.Modal.getInstance(document.getElementById('confirmSaveModal'));
-                modal.hide();
-                form.submit();
             });
         });
     </script>
