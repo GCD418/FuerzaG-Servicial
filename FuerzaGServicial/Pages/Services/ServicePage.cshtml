@@ -20,16 +20,16 @@
         
 
         <div class="table-responsive shadow-sm rounded-3">
-            <table class="table align-middle text-center">
+            <table id="servicesTable" class="table align-middle text-center" data-datatable>
                 <thead class="table-dark">
-                    <tr>
-                        <th style="width:5%;">#</th>
-                        <th style="width:20%;">Nombre</th>
-                        <th style="width:15%;">Tipo</th>
-                        <th style="width:10%;">Precio</th>
-                        <th style="width:30%;">Descripción</th>
-                        <th style="width:10%;">Acciones</th>
-                    </tr>
+                <tr>
+                    <th style="width:5%;">#</th>
+                    <th style="width:20%;">Nombre</th>
+                    <th style="width:15%;">Tipo</th>
+                    <th style="width:10%;">Precio (Bs.)</th>
+                    <th style="width:30%;">Descripción</th>
+                    <th style="width:10%;">Acciones</th>
+                </tr>
                 </thead>
                 <tbody>
                 @foreach (var s in Model.Services.Select((service, index) => new { service, index = index + 1 }))
@@ -38,8 +38,8 @@
                         <td>@s.index</td>
                         <td>@s.service.Name</td>
                         <td>@s.service.Type</td>
-                        <td>@(s.service.Price?.ToString("C2") ?? "-")</td>
-                        <td>@s.service.Description</td>
+                        <td class="text-end">@(s.service.Price?.ToString("N2") ?? "-")</td>
+                        <td class="text-start">@s.service.Description</td>
                         <td class="text-nowrap text-center">
                             <a asp-page="/Services/Edit"
                                asp-route-id="@Model.EncryptId(s.service.Id)"
@@ -57,13 +57,6 @@
                     </tr>
                 }
                 </tbody>
-                <tfoot class="table-light">
-                    <tr>
-                        <td colspan="7" class="text-end" style="font-weight: 400 !important;">
-                            <strong>@Model.Services.Count()</strong> registro(s) encontrado(s)
-                        </td>
-                    </tr>
-                </tfoot>
             </table>
 
             @foreach (var s in Model.Services)
@@ -110,3 +103,22 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable('#servicesTable')) {
+                $('#servicesTable').DataTable().destroy();
+            }
+            
+            DataTableHelper.init('#servicesTable', {
+                columnDefs: [
+                    { orderable: false, targets: 5 },
+                    { type: 'num', targets: 0 } 
+                ],
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+}
+
