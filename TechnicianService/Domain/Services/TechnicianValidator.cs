@@ -56,7 +56,6 @@ namespace TechnicianService.Domain.Services
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                _errors.Add("El segundo apellido es requerido");
                 return;
             }
             if (value.Length < 2) _errors.Add("Debe tener al menos 2 caracteres");
