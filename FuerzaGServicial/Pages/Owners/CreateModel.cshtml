@@ -85,17 +85,16 @@
 
 @section Scripts {
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        $(document).ready(function () {
             const form = document.getElementById('ownerForm');
-            const btnGuardar = document.getElementById('btnSave');
-            const inputs = Array.from(form.querySelectorAll('input, textarea'));
+            const btnSave = $('#btnSave');
 
-            ['Owner_PhoneNumber', 'Owner_DocumentNumber'].forEach(id => {
+            ['Owner_PhoneNumber','Owner_DocumentNumber'].forEach(id => {
                 const input = document.getElementById(id);
-                input.addEventListener('keypress', e => { if (e.which < 48 || e.which > 57) e.preventDefault(); });
+                input.addEventListener('keypress', e => { if(e.which < 48 || e.which > 57) e.preventDefault(); });
                 input.addEventListener('input', () => {
                     const max = input.id === 'Owner_PhoneNumber' ? 8 : 9;
-                    if (input.value.length > max) input.value = input.value.slice(0, max);
+                    if(input.value.length > max) input.value = input.value.slice(0, max);
                     validarCampo(input);
                 });
             });
@@ -105,7 +104,7 @@
                 input.addEventListener('keypress', e => {
                     const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]$/;
                     const ch = String.fromCharCode(e.which);
-                    if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) e.preventDefault();
+                    if(!allowed.test(ch) && e.which !== 8 && e.which !== 0) e.preventDefault();
                 });
                 input.addEventListener('input', () => validarCampo(input));
             });
@@ -120,22 +119,27 @@
                 const pattern = input.getAttribute('pattern') ? new RegExp(input.getAttribute('pattern')) : null;
                 input.classList.remove('is-invalid','is-valid');
 
-                if ((input.id === 'Owner_SecondLastname' || input.id === 'Owner_DocumentExtension') && !value) return;
+                if ((input.id === 'Owner_SecondLastname' || input.id === 'Owner_DocumentExtension') && !value) {
+                    input.classList.add('is-valid');
+                    return;
+                }
 
-                if (input.hasAttribute('required') && !value) input.classList.add('is-invalid');
-                else if (pattern && value && !pattern.test(value)) input.classList.add('is-invalid');
-                else if (input.minLength && value.length < parseInt(input.minLength)) input.classList.add('is-invalid');
-                else if (value) input.classList.add('is-valid');
+                if (input.hasAttribute('required') && !value) {
+                    input.classList.add('is-invalid');
+                } else if (pattern && value && !pattern.test(value)) {
+                    input.classList.add('is-invalid');
+                } else if (input.minLength && value && value.length < parseInt(input.minLength)) {
+                    input.classList.add('is-invalid');
+                } else if (value) {
+                    input.classList.add('is-valid');
+                }
             }
 
-            btnGuardar.addEventListener('click', () => {
-                let valid = true;
-                inputs.forEach(input => validarCampo(input));
-                if (form.querySelectorAll('.is-invalid').length > 0) valid = false;
-
-                if(valid){
-                    btnGuardar.disabled = true;
-                    btnGuardar.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
+            btnSave.on('click', function () {
+                Array.from(form.querySelectorAll('input, textarea')).forEach(input => validarCampo(input));
+                if (form.querySelectorAll('.is-invalid').length === 0) {
+                    btnSave.prop('disabled', true);
+                    btnSave.html('<i class="fas fa-spinner fa-spin me-1"></i> Guardando...');
                     form.submit();
                 }
             });
