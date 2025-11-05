@@ -75,7 +75,8 @@ public class CreateModel : PageModel
         if (lower.Contains("tel�fono") || lower.Contains("telefono")) return "PhoneNumber";
         if (lower.Contains("email")) return "Email";
         if (lower.Contains("documento") || lower.Contains("ci")) return "DocumentNumber";
-        if (lower.Contains("direcci�n") || lower.Contains("direccion")) return "Address";
+        if (lower.Contains("complemeto")) return "Comeplement";
+        if (lower.Contains("dirección") || lower.Contains("direccion")) return "Address";
         if (lower.Contains("salario")) return "BaseSalary";
 
         return string.Empty;

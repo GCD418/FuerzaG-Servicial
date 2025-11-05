@@ -86,11 +86,25 @@
             </div>
 
             <div class="col-md-6">
-                <label asp-for="Form.DocumentNumber" class="form-label">Carnet de Identidad *</label>
-                <input asp-for="Form.DocumentNumber" id="Form_DocumentNumber" class="form-control" type="text"
-                       minlength="6" maxlength="9" pattern="[0-9]{6,9}" required placeholder="Ej: 1234567" />
-                <span asp-validation-for="Form.DocumentNumber" class="text-danger small"></span>
-                <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
+                <div class="row g-2 align-items-start">
+                    <div class="col-md-8">
+                        <label asp-for="Form.DocumentNumber" class="form-label">Carnet de Identidad *</label>
+                        <input asp-for="Form.DocumentNumber" id="Form_DocumentNumber" class="form-control" type="text"
+                               minlength="6" maxlength="9" pattern="[0-9]{6,9}" required placeholder="Ej: 1234567"/>
+                        <span asp-validation-for="Form.DocumentNumber" class="text-danger small"></span>
+                        <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="Form.DocumentExtension" class="form-label">Complemento</label>
+                        <input asp-for="Form.DocumentExtension" id="Form_Complement" class="form-control" placeholder="Ej: 1A"
+                               maxlength="2" minlength="2" pattern="^([1-9][A-Z])?$"
+                               title="Formato: dígito 1-9 seguido de letra mayúscula (ej. 1A)" />
+                        <span asp-validation-for="Form.DocumentExtension" class="text-danger small"></span>
+                        <div class="invalid-feedback">
+                            Formato: dígito 1-9 seguido de letra mayúscula.
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-6">

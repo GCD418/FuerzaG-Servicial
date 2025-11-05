@@ -98,6 +98,7 @@ public class EditModel : PageModel
         if (errorLower.Contains("teléfono") || errorLower.Contains("telefono")) return "PhoneNumber";
         if (errorLower.Contains("documento") || errorLower.Contains("ci") || errorLower.Contains("carnet")) return "DocumentNumber";
         if (errorLower.Contains("rol")) return "Role";
+        if (errorLower.Contains("complemento")) return "DocumentComplement";
 
         return string.Empty; // errores generales
     }

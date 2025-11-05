@@ -99,6 +99,9 @@ public class EditModel : PageModel
 
         if (errorLower.Contains("dirección"))
             return "Address";
+        
+        if (errorLower.Contains("complemento"))
+            return "Complement";
 
         return string.Empty;
     }

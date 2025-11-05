@@ -23,6 +23,7 @@ public class UserAccountValidator : IValidator<UserAccount>
         ValidatePhoneNumber(entity.PhoneNumber);
         ValidateEmail(entity.Email);
         ValidateDocumentNumber(entity.DocumentNumber);
+        ValidateDocumentExtension(entity.DocumentExtension);
         
         return _errors.Count == 0
             ? Result.Success()
@@ -187,6 +188,30 @@ public class UserAccountValidator : IValidator<UserAccount>
         if (!documentNumberClean.Any(char.IsDigit))
         {
             _errors.Add("El carnet de identidad debe contener al menos un número");
+        }
+    }
+    
+    private void ValidateDocumentExtension(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return;
+
+        if (value.Length != 2)
+        {
+            _errors.Add("El complemento debe tener exactamente 2 caracteres (ej. 1A).");
+            return;
+        }
+
+        char first = value[0];
+        char second = value[1];
+
+        if (first < '1' || first > '9')
+        {
+            _errors.Add("El primer carácter del complemento debe ser un dígito entre 1 y 9.");
+        }
+
+        if (second < 'A' || second > 'Z')
+        {
+            _errors.Add("El segundo carácter del complemento debe ser una letra mayúscula A-Z.");
         }
     }
 }
