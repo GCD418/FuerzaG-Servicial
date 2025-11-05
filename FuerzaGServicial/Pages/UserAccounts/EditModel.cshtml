@@ -73,12 +73,26 @@
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.DocumentNumber" class="form-label">CI / Documento *</label>
-                <input asp-for="UserAccount.DocumentNumber" type="text" minlength="6" maxlength="9" placeholder="Ej: 1234567" pattern="[0-9]{6,9}" required class="form-control @(ViewData.ModelState["UserAccount.DocumentNumber"]?.Errors.Count > 0 ? "is-invalid" : "")" />
-                <span asp-validation-for="UserAccount.DocumentNumber" class="text-danger small"></span>
-                <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
+                <div class="row g-2 align-items-start">
+                    <div class="col-md-8">
+                        <label asp-for="UserAccount.DocumentNumber" class="form-label">CI / Documento *</label>
+                        <input asp-for="UserAccount.DocumentNumber" type="text" minlength="6" maxlength="9" placeholder="Ej: 1234567" pattern="[0-9]{6,9}" required class="form-control @(ViewData.ModelState["UserAccount.DocumentNumber"]?.Errors.Count > 0 ? "is-invalid" : "")"/>
+                        <span asp-validation-for="UserAccount.DocumentNumber" class="text-danger small"></span>
+                        <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="UserAccount.DocumentExtension" class="form-label">Complemento</label>
+                        <input asp-for="UserAccount.DocumentExtension" id="Form_Complement" class="form-control" placeholder="Ej: 1A"
+                               maxlength="2" minlength="2" pattern="^[1-9][A-Z]$"
+                               title="Formato: dígito 1-9 seguido de letra mayúscula (ej. 1A)" />
+                        <span asp-validation-for="UserAccount.DocumentExtension" class="text-danger small"></span>
+                        <div class="invalid-feedback">
+                            Formato: dígito 1-9 seguido de letra mayúscula.
+                        </div>
+                    </div>
+                </div>
             </div>
-
+            
             <div class="col-md-6">
                 <label asp-for="UserAccount.Role" class="form-label">Rol *</label>
                 <select asp-for="UserAccount.Role" class="form-select @(ViewData.ModelState["UserAccount.Role"]?.Errors.Count > 0 ? "is-invalid" : "")" required>
