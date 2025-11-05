@@ -87,6 +87,9 @@ public class CreateModel : PageModel
 
         if (errorLower.Contains("rol"))
             return "Role";
+        
+        if (errorLower.Contains("complemento"))
+            return "DocumentComplement";
 
         return string.Empty;
     }
