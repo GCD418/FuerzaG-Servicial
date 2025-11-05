@@ -1,4 +1,4 @@
-@page
+﻿@page
 @model FuerzaGServicial.Pages.Owners.CreateModel
 @{
     ViewData["Title"] = "Nuevo Dueño";
@@ -93,7 +93,7 @@
                     <div class="col-md-4">
                         <label asp-for="Owner.DocumentExtension" class="form-label">Complemento</label>
                         <input asp-for="Owner.DocumentExtension" id="Form_Complement" class="form-control" placeholder="Ej: 1A"
-                               maxlength="2" minlength="2" pattern="^[1-9][A-Z]$"
+                               maxlength="2" minlength="2" pattern="^([1-9][A-Z])?$"
                                title="Formato: dígito 1-9 seguido de letra mayúscula (ej. 1A)" />
                         <span asp-validation-for="Owner.DocumentExtension" class="text-danger small"></span>
                         <div class="invalid-feedback">
