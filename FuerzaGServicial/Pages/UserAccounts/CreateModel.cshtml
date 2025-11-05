@@ -190,13 +190,14 @@
 
             function generarUsername() {
                 const nombre = nombreInput?.value.trim().toLowerCase() || "";
-                const apellido = apellidoInput?.value.trim().toLowerCase() || "";
+                let apellido = apellidoInput?.value.trim().toLowerCase() || "";
                 const doc = docInput?.value.trim() || "";
+                apellido = apellido.replace(/\s+/g, '');
                 usernameInput.value = (nombre && apellido && doc.length >= 3)
-                    ? `${nombre.charAt(0)}.${apellido}${doc.slice(-3)}`
-                    : "";
+                ? `${nombre.charAt(0)}.${apellido}${doc.slice(-3)}`
+                : "";
             }
-            [nombreInput, apellidoInput, docInput].forEach(el => el && el.addEventListener("input", generarUsername));
+                [nombreInput, apellidoInput, docInput].forEach(el => el && el.addEventListener("input", generarUsername));
             
         });
     </script>
