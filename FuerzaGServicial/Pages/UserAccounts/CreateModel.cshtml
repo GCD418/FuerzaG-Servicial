@@ -81,12 +81,26 @@
             </div>
 
             <div class="col-md-6">
-                <label asp-for="UserAccount.DocumentNumber" class="form-label">CI / Documento *</label>
-                <input asp-for="UserAccount.DocumentNumber" class="form-control" placeholder="Ej: 1234567"
-                       type="text" minlength="6" maxlength="9" pattern="[0-9]{6,9}" required />
-                <span asp-validation-for="UserAccount.DocumentNumber" class="text-danger small"></span>
-                <div class="invalid-feedback">
-                    El CI debe contener entre 6 y 9 dígitos.
+                <div class="row g-2 align-items-start">
+                    <div class="col-md-8">
+                        <label asp-for="UserAccount.DocumentNumber" class="form-label">CI / Documento *</label>
+                        <input asp-for="UserAccount.DocumentNumber" class="form-control" placeholder="Ej: 1234567"
+                               type="text" minlength="6" maxlength="9" pattern="[0-9]{6,9}" required/>
+                        <span asp-validation-for="UserAccount.DocumentNumber" class="text-danger small"></span>
+                        <div class="invalid-feedback">
+                            El CI debe contener entre 6 y 9 dígitos.
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="UserAccount.DocumentExtension" class="form-label">Complemento</label>
+                        <input asp-for="UserAccount.DocumentExtension" id="Form_Complement" class="form-control" placeholder="Ej: 1A"
+                               maxlength="2" minlength="2" pattern="^[1-9][A-Z]$"
+                               title="Formato: dígito 1-9 seguido de letra mayúscula (ej. 1A)" />
+                        <span asp-validation-for="UserAccount.DocumentExtension" class="text-danger small"></span>
+                        <div class="invalid-feedback">
+                            Formato: dígito 1-9 seguido de letra mayúscula.
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -183,6 +197,34 @@
                     : "";
             }
             [nombreInput, apellidoInput, docInput].forEach(el => el && el.addEventListener("input", generarUsername));
+            
+            
+            const complementInput = document.getElementById("Form_Complement");
+
+            if (complementInput) {
+                complementInput.addEventListener("keypress", function (e) {
+                    const pos = this.value.length;
+                    const ch = String.fromCharCode(e.which || e.keyCode);
+                    if (pos === 0) {
+                        if (!/^[1-9]$/.test(ch)) e.preventDefault();
+                    } else if (pos === 1) {
+                        if (!/^[A-Za-z]$/.test(ch)) e.preventDefault();
+                    } else {
+                        e.preventDefault();
+                    }
+                });
+    
+                complementInput.addEventListener("input", function () {
+                    this.value = this.value.slice(0, 2);
+    
+                    const v = this.value;
+                    let out = "";
+                    if (v.length > 0 && /^[1-9]$/.test(v[0])) out += v[0];
+                    if (v.length > 1 && /^[A-Z]$/.test(v[1])) out += v[1];
+                    if (this.value !== out) this.value = out;
+                });
+                
+            }
         });
     </script>
 }
