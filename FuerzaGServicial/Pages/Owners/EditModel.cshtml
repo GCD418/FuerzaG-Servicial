@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Editar Dueño";
 }
+
 <div class="container mt-4 mb-5">
     <h2 class="mb-3">Editar Dueño</h2>
 
@@ -87,7 +88,8 @@
                     <div class="col-md-8">
                         <label asp-for="Owner.DocumentNumber" class="form-label">Carnet de Identidad *</label>
                         <input asp-for="Owner.DocumentNumber" class="form-control"
-                               type="text" minlength="6" maxlength="9" placeholder="Ej: 1234567" pattern="[0-9]{6,9}" required/>
+                               type="text" minlength="6" maxlength="9" placeholder="Ej: 1234567"
+                               pattern="[0-9]{6,9}" required />
                         <span asp-validation-for="Owner.DocumentNumber" class="text-danger small"></span>
                         <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
                     </div>
@@ -103,7 +105,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-12">
                 <label asp-for="Owner.Address" class="form-label">Dirección *</label>
                 <textarea asp-for="Owner.Address" class="form-control" rows="2"
@@ -115,7 +117,7 @@
         </div>
 
         <div class="mt-4">
-            <button type="button" class="btn btn-dark" id="btnOpenEditModal">
+            <button type="button" class="btn btn-dark" id="btnUpdate">
                 <i class="fas fa-save"></i> Actualizar
             </button>
             <a asp-page="/Owners/OwnerPage" class="btn btn-outline-secondary">
@@ -123,16 +125,15 @@
             </a>
         </div>
     </form>
-
-    @await Html.PartialAsync("_ConfirmEditModal")
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
             const form = document.getElementById('ownerForm');
+            const btnUpdate = $('#btnUpdate');
 
-            $('input[type="tel"], input[asp-for="Owner.Ci"]').on('keypress', function (e) {
+            $('input[type="tel"], input[asp-for="Owner.DocumentNumber"]').on('keypress', function (e) {
                 if (e.which < 48 || e.which > 57) e.preventDefault();
             });
 
@@ -140,7 +141,7 @@
                 if (this.value.length > 8) this.value = this.value.slice(0, 8);
             });
 
-            $('input[asp-for="Owner.Ci"]').on('input', function () {
+            $('input[asp-for="Owner.DocumentNumber"]').on('input', function () {
                 if (this.value.length > 9) this.value = this.value.slice(0, 9);
             });
 
@@ -152,27 +153,32 @@
                 }
             }
 
-            const nombreInput = document.getElementById("Owner_Name");
-            const apellidoInput = document.getElementById("Owner_FirstLastname");
-            const segundoApellidoInput = document.getElementById("Owner_SecondLastname");
+            [ "Owner_Name", "Owner_FirstLastname", "Owner_SecondLastname" ].forEach(id => {
+                const el = document.getElementById(id);
+                el && el.addEventListener("keypress", letraPermitida);
+            });
 
-            [nombreInput, apellidoInput, segundoApellidoInput].forEach(el => el && el.addEventListener("keypress", letraPermitida));
-
-            $('#btnOpenEditModal').on('click', function () {
-                if (form.checkValidity()) {
-                    var modal = new bootstrap.Modal(document.getElementById('confirmEditModal'));
-                    modal.show();
+            $('#ownerForm input, #ownerForm textarea').on('input', function () {
+                if (this.checkValidity()) {
+                    $(this).removeClass('is-invalid');
                 } else {
-                    form.classList.add('was-validated');
+                    $(this).addClass('is-invalid');
                 }
             });
 
-            $('#confirmEditBtn').on('click', function () {
-                const confirmBtn = $(this);
-                confirmBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Guardando...');
-                var modal = bootstrap.Modal.getInstance(document.getElementById('confirmEditModal'));
-                modal.hide();
-                form.submit();
+            btnUpdate.on('click', function (e) {
+                e.preventDefault();
+                let formValid = form.checkValidity();
+                if (formValid) {
+                    btnUpdate.prop('disabled', true)
+                             .html('<i class="fas fa-spinner fa-spin"></i> Actualizando...');
+                    form.submit();
+                } else {
+                    $(form).addClass('was-validated');
+                    $('#ownerForm input, #ownerForm textarea').each(function () {
+                        if (!this.checkValidity()) $(this).addClass('is-invalid');
+                    });
+                }
             });
         });
     </script>

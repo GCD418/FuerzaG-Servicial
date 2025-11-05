@@ -7,20 +7,6 @@
 <div class="container mt-4 mb-5">
     <h2 class="mb-3">Editar Técnico</h2>
 
-    @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Any() == true)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <h6 class="alert-heading mb-2"><i class="fas fa-exclamation-triangle"></i> Errores generales:</h6>
-            <ul class="mb-0 small">
-                @foreach (var error in ViewData.ModelState[""].Errors)
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
     <form method="post" class="card card-body shadow-sm" id="technicianForm" novalidate>
         <input type="hidden" asp-for="EncryptedId" />
         <input type="hidden" asp-for="Form.Id" />
@@ -90,7 +76,7 @@
                     <div class="col-md-8">
                         <label asp-for="Form.DocumentNumber" class="form-label">Carnet de Identidad *</label>
                         <input asp-for="Form.DocumentNumber" id="Form_DocumentNumber" class="form-control" type="text"
-                               minlength="6" maxlength="9" pattern="[0-9]{6,9}" required placeholder="Ej: 1234567"/>
+                               minlength="6" maxlength="9" pattern="[0-9]{6,9}" required placeholder="Ej: 1234567" />
                         <span asp-validation-for="Form.DocumentNumber" class="text-danger small"></span>
                         <div class="invalid-feedback">El CI debe contener entre 6 y 9 dígitos.</div>
                     </div>
@@ -131,8 +117,9 @@
         </div>
 
         <div class="mt-4">
-            <button type="submit" class="btn btn-dark">
-                <i class="fas fa-save"></i> Actualizar
+            <button type="submit" id="btnSubmit" class="btn btn-dark">
+                <i class="fas fa-save"></i> <span class="btn-text">Actualizar</span>
+                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
             </button>
             <a asp-page="/Technicians/TechnicianPage" class="btn btn-outline-secondary">
                 <i class="fas fa-times"></i> Cancelar
@@ -151,9 +138,7 @@
             function letraPermitida(e) {
                 const allowed = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]$/;
                 const ch = String.fromCharCode(e.which);
-                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) {
-                    e.preventDefault();
-                }
+                if (!allowed.test(ch) && e.which !== 8 && e.which !== 0) e.preventDefault();
             }
 
             const nombreInput = $("#Form_Name")[0];
@@ -201,6 +186,23 @@
                     validIcon.addClass('d-none');
                     invalidIcon.removeClass('d-none');
                 }
+            });
+
+            $('#technicianForm').on('submit', function(e) {
+                e.preventDefault();
+                const form = this;
+
+                if (!form.checkValidity()) {
+                    $(form).addClass('was-validated');
+                    return;
+                }
+
+                const btn = $('#btnSubmit');
+                btn.prop('disabled', true);
+                btn.find('.btn-text').text('Actualizando...');
+                btn.find('.spinner-border').removeClass('d-none');
+
+                form.submit();
             });
         });
     </script>
