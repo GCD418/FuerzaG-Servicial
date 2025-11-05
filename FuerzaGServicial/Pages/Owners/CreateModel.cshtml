@@ -184,31 +184,6 @@
                 form.submit();
             });
             
-            const complementInput = document.getElementById("Form_Complement");
-
-            if (complementInput) {
-                complementInput.addEventListener("keypress", function (e) {
-                    const pos = this.value.length;
-                    const ch = String.fromCharCode(e.which || e.keyCode);
-                    if (pos === 0) {
-                        if (!/^[1-9]$/.test(ch)) e.preventDefault();
-                    } else if (pos === 1) {
-                        if (!/^[A-Za-z]$/.test(ch)) e.preventDefault();
-                    } else {
-                        e.preventDefault();
-                    }
-                });
-    
-                complementInput.addEventListener("input", function () {
-                    this.value = this.value.slice(0, 2);
-    
-                    const v = this.value;
-                    let out = "";
-                    if (v.length > 0 && /^[1-9]$/.test(v[0])) out += v[0];
-                    if (v.length > 1 && /^[A-Z]$/.test(v[1])) out += v[1];
-                    if (this.value !== out) this.value = out;
-                });
-            }
         });
     </script>
 }
