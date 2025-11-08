@@ -12,20 +12,12 @@
             <!-- Nombre -->
             <div class="col-md-6">
                 <label asp-for="Form.Name" class="form-label">Nombre *</label>
-                <div class="input-group has-validation position-relative">
-                    <input asp-for="Form.Name" class="form-control" placeholder="Ingrese nombre"
-                           required minlength="3" maxlength="100"
-                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
-                           title="Solo se permiten letras y espacios." />
-                    <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none">
-                        <i class="fas fa-check-circle"></i>
-                    </span>
-                    <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none">
-                        <i class="fas fa-times-circle"></i>
-                    </span>
-                    <div class="invalid-feedback">
-                        El nombre debe tener al menos 3 caracteres y solo letras.
-                    </div>
+                <input asp-for="Form.Name" class="form-control" placeholder="Ingrese nombre"
+                    required minlength="3" maxlength="100"
+                    pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
+                    title="Solo se permiten letras y espacios." />
+                <div class="invalid-feedback">
+                    El nombre debe tener al menos 3 caracteres y solo letras.
                 </div>
                 <span asp-validation-for="Form.Name" class="text-danger small"></span>
             </div>
@@ -33,20 +25,14 @@
             <!-- Apellido Paterno -->
             <div class="col-md-6">
                 <label asp-for="Form.FirstLastName" class="form-label">Apellido Paterno *</label>
-                <div class="input-group has-validation position-relative">
-                    <input asp-for="Form.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
-                           required minlength="2" maxlength="100"
-                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
-                           title="Solo se permiten letras y espacios." />
-                    <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none">
-                        <i class="fas fa-check-circle"></i>
-                    </span>
-                    <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none">
-                        <i class="fas fa-times-circle"></i>
-                    </span>
-                    <div class="invalid-feedback">
-                        El apellido paterno debe tener al menos 2 caracteres y solo letras.
-                    </div>
+                
+                <input asp-for="Form.FirstLastName" class="form-control" placeholder="Ingrese apellido paterno"
+                        required minlength="2" maxlength="100"
+                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+$"
+                        title="Solo se permiten letras y espacios." />
+                
+                <div class="invalid-feedback">
+                    El apellido paterno debe tener al menos 2 caracteres y solo letras.
                 </div>
                 <span asp-validation-for="Form.FirstLastName" class="text-danger small"></span>
             </div>
@@ -54,21 +40,16 @@
             <!-- Apellido Materno -->
             <div class="col-md-6">
                 <label asp-for="Form.SecondLastName" class="form-label">Apellido Materno</label>
-                <div class="input-group has-validation position-relative">
-                    <input asp-for="Form.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
-                           minlength="2" maxlength="100"
-                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]*$"
-                           title="Solo se permiten letras y espacios si se llena." />
-                    <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none">
-                        <i class="fas fa-check-circle"></i>
-                    </span>
-                    <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none">
-                        <i class="fas fa-times-circle"></i>
-                    </span>
-                    <div class="invalid-feedback">
-                        El apellido materno debe tener al menos 2 caracteres y solo letras.
-                    </div>
+                
+                <input asp-for="Form.SecondLastName" class="form-control" placeholder="Ingrese apellido materno (opcional)"
+                        minlength="2" maxlength="100"
+                        pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]*$"
+                        title="Solo se permiten letras y espacios si se llena." />
+                
+                <div class="invalid-feedback">
+                    El apellido materno debe tener al menos 2 caracteres y solo letras.
                 </div>
+                
                 <span asp-validation-for="Form.SecondLastName" class="text-danger small"></span>
             </div>
 
@@ -122,21 +103,16 @@
             <!-- Salario -->
             <div class="col-md-6">
                 <label asp-for="Form.BaseSalary" class="form-label">Salario Base (Bs.-)*</label>
-                <div class="input-group has-validation position-relative">
-                    <input asp-for="Form.BaseSalary" class="form-control" placeholder="Ej: 2500.00"
-                           required pattern="^\d+(\.\d{1,2})?$"
-                           title="Solo se permiten números y un punto decimal (hasta dos decimales)."
-                           inputmode="decimal" />
-                    <span class="valid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-success d-none">
-                        <i class="fas fa-check-circle"></i>
-                    </span>
-                    <span class="invalid-icon position-absolute end-0 top-50 translate-middle-y pe-3 text-danger d-none">
-                        <i class="fas fa-times-circle"></i>
-                    </span>
-                    <div class="invalid-feedback">
-                        Ingrese un salario válido mayor a 0 con hasta 2 decimales.
-                    </div>
+                
+                <input asp-for="Form.BaseSalary" class="form-control" placeholder="Ej: 2500.00"
+                        required pattern="^\d+(\.\d{1,2})?$"
+                        title="Solo se permiten números y un punto decimal (hasta dos decimales)."
+                        inputmode="decimal" />
+                
+                <div class="invalid-feedback">
+                    Ingrese un salario válido mayor a 0 con hasta 2 decimales.
                 </div>
+                
                 <span asp-validation-for="Form.BaseSalary" class="text-danger small"></span>
             </div>
 
